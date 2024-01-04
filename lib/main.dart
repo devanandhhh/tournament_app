@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/splash_screen.dart';
+import 'package:tournament_creator/screens/splash_Screen/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());

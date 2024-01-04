@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:tournament_creator/screens/create_tournament/reuse_widgets/reuse_widgets.dart';
 
 class CreateTournament extends StatefulWidget {
   CreateTournament({super.key});
@@ -24,14 +25,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow[100],
-      appBar: AppBar(
-        backgroundColor: Colors.yellow[100],
-        title: Text(
-          'Create Tournament', 
-          style: TextStyle(
-              color: Colors.teal, fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: appbardecorations(name: "Create Tournament"),
       body: SingleChildScrollView(
         child: Form(
           key: formkey,
