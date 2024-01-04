@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "270657701930",
+    "project_id": "tournamentapp-df1f0",
+    "storage_bucket": "tournamentapp-df1f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270657701930:android:308eec1cba3724959fdb53",
+        "android_client_info": {
+          "package_name": "com.example.tournament_creator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5t9UDlPGezIbscAFGEkBZg2BIUan-F58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
