@@ -237,7 +237,11 @@ class _CreateTournamentState extends State<CreateTournament> {
                               messengerScaffold(
                                   text: "Please Select Limit of team",
                                   ctx: context);
-                            } else {
+                            }
+                            if (limitsCN != null &&
+                                categoryCN != null &&
+                                selectImage != null 
+                               ) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                       backgroundColor: Colors.green,
@@ -249,7 +253,6 @@ class _CreateTournamentState extends State<CreateTournament> {
                               await FirebaseFirestore.instance
                                   .collection('tournament_details')
                                   .add({
-                                    
                                 'TournamentName': tournamentNameController.text,
                                 "Date": dateController.text,
                                 "Category": categoryCN,
@@ -260,6 +263,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                               dateController.clear();
                               categoryController.clear();
                               limitController.clear();
+                              Navigator.of(context).pop();
                             }
                           }
                         },
