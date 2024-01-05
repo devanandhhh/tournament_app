@@ -54,7 +54,8 @@ class _TournmentListState extends State<TournmentList> {
                                       content: Column(children: [
                                         editingtextform(
                                             labeltxt: 'Tournament Name',
-                                            controller: tournamentNameController),
+                                            controller:
+                                                tournamentNameController),
                                         editingtextform(
                                             labeltxt: 'Date',
                                             controller: dateController)
@@ -70,7 +71,7 @@ class _TournmentListState extends State<TournmentList> {
                                               await FirebaseFirestore.instance
                                                   .collection(
                                                       'tournament_details')
-                                                  .doc()
+                                                  .doc(docs.id)
                                                   .update({
                                                 'TournamentName':
                                                     tournamentNameController
@@ -80,8 +81,12 @@ class _TournmentListState extends State<TournmentList> {
                                               tournamentNameController.clear();
                                               dateController.clear();
 
-                                              Navigator.of(context).pop(); 
-                                              print( 'data edited sucessfully ');
+                                              Navigator.of(context).pop();
+                                              print('data edited sucessfully ');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Updated data Sucessfully '),backgroundColor: Colors.green,));
                                             },
                                             child: const Text('Save'))
                                       ],
