@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/fav_screen/fav_screen.dart';
+import 'package:tournament_creator/screens/create_tounament/create_tournament.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/list_tournify.dart';
-import 'package:tournament_creator/screens/create_tournament/create_tournament.dart';
-import 'package:tournament_creator/screens/create_tournament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/search_Screen/search_screen.dart';
 
@@ -17,91 +17,63 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.all(38.0),
+            padding: const EdgeInsets.all(38.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Tournament Creator',
-                    style: TextStyle(
-                        color: Colors.teal,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 27),
-                  ),
+                  headingtext(text: 'Tournament Creator'),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (ctx) => FavouiteScreen()));
+                      navigatorPush(
+                          ctx: context, screen: const FavouiteScreen());
                     },
-                    child: Icon(
-                      Icons.favorite_border,
-                      size: 30,
-                    ),
+                    child: iconSize30(icondata: Icons.favorite_border),
                   )
                 ]),
           ),
           Padding(
-              padding: EdgeInsets.all(30.0),
+              padding: const EdgeInsets.all(30.0),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (ctx) => SearchScreen()));
+                  navigatorPush(ctx: context, screen: const SearchScreen());
                 },
                 child: searchbarContainer(searchIteam: "Search"),
               )),
-          Padding(
-            padding: const EdgeInsets.all(34.0),
-            child: Text(
-              'Hello!',
-              style: TextStyle(
-                color: Colors.teal,
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          const Padding(
+              padding: EdgeInsets.all(34.0),
+              child: Text(
+                ' Hello!',
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
           Expanded(
               child: Container(
             width: 400,
             height: 400,
-            decoration: BoxDecoration(
-                color: Colors.teal,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(58),
-                    topRight: Radius.circular(58))),
+            decoration: tealclrbox(),
             child: SingleChildScrollView(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 70,
-                    ),
+                    sizedbox70(),
                     bgblacktext(text1: 'All out'),
                     bgblacktext(text1: 'All game'),
                     bgblacktext(text1: 'All Season'),
-                    SizedBox(
-                      height: 80,
-                    ),
+                    sizedbox70(),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => CreateTournament()));
+                        navigatorPush(ctx: context, screen: CreateTournament());
                       },
                       child: containerButtons(name: "Create Tournament"),
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
+                   sizedbox30(),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => TournmentList()));
+                        navigatorPush(
+                            ctx: context, screen: const TournmentList());
                       },
                       child: containerButtons(name: 'Tournament List'),
                     )

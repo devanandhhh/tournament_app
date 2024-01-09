@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/create_tournament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 
 class TournmentList extends StatefulWidget {
@@ -82,26 +82,54 @@ class _TournmentListState extends State<TournmentList> {
                                               dateController.clear();
 
                                               Navigator.of(context).pop();
-                                              print('data edited sucessfully ');
+                                              print('Data edited sucessfully ');
                                               ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          'Updated data Sucessfully '),backgroundColor: Colors.green,));
+                                                  .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Updated data Sucessfully '),
+                                                backgroundColor: Colors.green,
+                                              ));
                                             },
                                             child: const Text('Save'))
                                       ],
                                     );
                                   });
                             },
-                            icon: Icon(Icons.edit)),
+                            icon: const Icon(Icons.edit)),
                         IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection('tournament_details')
-                                .doc(docs.id)
-                                .delete();
+                          icon:const Icon(Icons.delete),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: ((BuildContext context) => AlertDialog(
+                                      title: const Text('Delete Tournament'),
+                                      content: Text(
+                                          'Are you sure you want to delete?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Cancel')),
+                                        TextButton(
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                              await FirebaseFirestore.instance
+                                                  .collection(
+                                                      'tournament_details')
+                                                  .doc(docs.id)
+                                                  .delete();
+
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          'Delete Successfully')));
+                                            },
+                                            child: Text('Ok'))
+                                      ],
+                                    )));
                           },
+                        
                         ),
                       ],
                     ),

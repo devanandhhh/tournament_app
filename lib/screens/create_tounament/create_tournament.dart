@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/screens/create_tournament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 class CreateTournament extends StatefulWidget {
-  CreateTournament({super.key});
+  const CreateTournament({super.key});
 
   @override
   State<CreateTournament> createState() => _CreateTournamentState();
@@ -23,6 +23,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   var categoryController = TextEditingController();
   final dateController = TextEditingController();
   var limitController = TextEditingController();
+  final placeController = TextEditingController();
   File? selectImage;
   @override
   Widget build(BuildContext context) {
@@ -33,11 +34,11 @@ class _CreateTournamentState extends State<CreateTournament> {
         child: Form(
           key: formkey,
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(13.0),
             child: Column(children: [
               CircleAvatar(
                 backgroundColor: Colors.teal,
-                maxRadius: 81,
+                maxRadius: 51,
                 backgroundImage: const AssetImage('assets/addimage2.png'),
                 child: GestureDetector(
                   onTap: () async {
@@ -64,22 +65,11 @@ class _CreateTournamentState extends State<CreateTournament> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Enter Tournament Name',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  hintText(hintTxt: 'Enter Tournament Name'),
+                  sizedbox10(),
                   TextFormField(
                     controller: tournamentNameController,
-                    decoration: InputDecoration(
-                        //  hintText: 'Tournament Name ',
-                        filled: true,
-                        fillColor: const Color.fromARGB(255, 216, 214, 198),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none)),
+                    decoration: inputdecorationtxtFormField(),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Tournament Name Required';
@@ -87,16 +77,22 @@ class _CreateTournamentState extends State<CreateTournament> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 10,
+                  sizedbox10(),
+                  hintText(hintTxt: 'Enter Your Place '),
+                  sizedbox10(),
+                  TextFormField(
+                    controller: placeController,
+                    decoration: inputdecorationtxtFormField(),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Place is Required';
+                      }
+                      return null;
+                    },
                   ),
-                  const Text(
-                    'Select Date ',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  sizedbox10(),
+                  hintText(hintTxt: 'Select Date'),
+                  sizedbox10(),
                   TextFormField(
                     controller: dateController,
                     onTap: () async {
@@ -130,16 +126,9 @@ class _CreateTournamentState extends State<CreateTournament> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    'Select Category ',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  sizedbox10(),
+                  hintText(hintTxt: 'Select Category'),
+                  sizedbox10(),
                   DropdownButtonFormField(
                     //value:,
                     decoration: InputDecoration(
@@ -161,16 +150,9 @@ class _CreateTournamentState extends State<CreateTournament> {
                     },
                     hint: const Text('Select category'),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    'Select Limit of Teams',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  sizedbox10(),
+                  hintText(hintTxt: 'Select Limit of Teams'),
+                  sizedbox10(),
                   DropdownButtonFormField(
                     decoration: InputDecoration(
                         filled: true,
@@ -193,96 +175,75 @@ class _CreateTournamentState extends State<CreateTournament> {
                     }).toList(),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 60,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              color: Colors.teal,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: const Center(
-                              child: Text(
-                            'Clear',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold),
-                          )),
-                        ),
-                      ),
+                          onTap: () {
+                            tournamentNameController.clear();
+                            dateController.clear();
+                            placeController.clear();
+                            categoryController.clear();
+                            limitController.clear();
+                          },
+                          child: containerButtonCR(txt: 'Clear')),
                       InkWell(
-                        onTap: () async {
-                          if (formkey.currentState!.validate()) {
-                            if (selectImage == null) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text(
-                                  'You Must Select an Image',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor: Colors.red,
-                              ));
-                            }
-                            if (categoryCN == null) {
-                              messengerScaffold(
-                                  text: "Please Select Category", ctx: context);
-                            }
-                            if (limitsCN == null) {
-                              messengerScaffold(
-                                  text: "Please Select Limit of team",
-                                  ctx: context);
-                            }
-                            if (limitsCN != null &&
-                                categoryCN != null &&
-                                selectImage != null 
-                               ) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      backgroundColor: Colors.green,
-                                      content: Text(
-                                        'Successfully Created ',
-                                        style: TextStyle(color: Colors.white),
-                                      )));
+                          onTap: () async {
+                            if (formkey.currentState!.validate()) {
+                              if (selectImage == null) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text(
+                                    'You Must Select an Image',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                              if (categoryCN == null) {
+                                messengerScaffold(
+                                    text: "Please Select Category",
+                                    ctx: context);
+                              }
+                              if (limitsCN == null) {
+                                messengerScaffold(
+                                    text: "Please Select Limit of team",
+                                    ctx: context);
+                              }
+                              if (limitsCN != null &&
+                                  categoryCN != null &&
+                                  selectImage != null) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                        backgroundColor: Colors.green,
+                                        content: Text(
+                                          'Successfully Created ',
+                                          style: TextStyle(color: Colors.white),
+                                        )));
 
-                              await FirebaseFirestore.instance
-                                  .collection('tournament_details')
-                                  .add({
-                                'TournamentName': tournamentNameController.text,
-                                "Date": dateController.text,
-                                "Category": categoryCN,
-                                "LimitOfTeam": limitsCN
-                              });
+                                await FirebaseFirestore.instance
+                                    .collection('tournament_details')
+                                    .add({
+                                  'TournamentName':
+                                      tournamentNameController.text,
+                                  "Place": placeController.text,
+                                  "Date": dateController.text,
+                                  "Category": categoryCN,
+                                  "LimitOfTeam": limitsCN
+                                });
 
-                              tournamentNameController.clear();
-                              dateController.clear();
-                              categoryController.clear();
-                              limitController.clear();
-                              Navigator.of(context).pop();
+                                tournamentNameController.clear();
+                                dateController.clear();
+                                placeController.clear();
+                                categoryController.clear();
+                                limitController.clear();
+                                Navigator.of(context).pop();
+                              }
                             }
-                          }
-                        },
-                        child: Container(
-                          height: 60,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              color: Colors.teal,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: const Center(
-                              child: Text(
-                            'Create',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold),
-                          )),
-                        ),
-                      )
+                          },
+                          child: containerButtonCR(txt: 'Create'))
                     ],
                   )
                 ],
