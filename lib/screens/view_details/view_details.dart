@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 
 class ViewTournamentDetails extends StatelessWidget {
-   ViewTournamentDetails(
+  ViewTournamentDetails(
       {super.key,
+      required this.imageView,
       required this.name,
       required this.place,
       required this.date,
       required this.category,
       required this.limit});
+  String imageView;
   String name;
   String place;
   String date;
@@ -29,10 +35,48 @@ class ViewTournamentDetails extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(18.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Tournament Name'),
-            Text(name),
+          child: Column(children: [
+            CircleAvatar(
+              backgroundColor: Colors.teal,
+              maxRadius: 90,
+              child: ClipOval(
+                child: Image.file(
+                  File(imageView),
+                  fit: BoxFit.cover,
+                  height: 170,
+                  width: 170,
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                sizedbox10(),
+                Container(
+                  height: 350,
+                  width: 380,
+                  
+                  child: Column(
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      sizedbox10(),
+                      Text('Tournament Name',style:stylefont()),
+                      sizedbox10(),
+                      Text(name,style:styleTeal()), sizedbox10(),
+                      Text('Date',style: stylefont(),),sizedbox10(),
+                      Text(date,style: styleTeal(),),sizedbox10(),
+                      Text('Place',style: stylefont(),),sizedbox10(),
+                      Text(place,style: styleTeal(),),sizedbox10(),
+                      Text('Category',style: stylefont(),),sizedbox10(),
+                      Text(category,style: styleTeal(),),sizedbox10(),
+                      Text("Limit Of Teams",style: stylefont(),),sizedbox10(),
+                      Text(limit,style: styleTeal(),),sizedbox10(),
+                      
+                    ],
+                  ),
+                )
+              ],
+            ),
           ]),
         ),
       )),

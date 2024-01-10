@@ -75,7 +75,7 @@ class _TournmentListState extends State<TournmentList> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ViewTournamentDetails(
+                                            ViewTournamentDetails(imageView: image,
                                                 name: tournamentName,
                                                 place: place,
                                                 date: date,
