@@ -24,7 +24,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   final dateController = TextEditingController();
   var limitController = TextEditingController();
   final placeController = TextEditingController();
-  File? selectImage;
+  String? selectImage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,19 +42,16 @@ class _CreateTournamentState extends State<CreateTournament> {
                 backgroundImage: const AssetImage('assets/addimage2.png'),
                 child: GestureDetector(
                   onTap: () async {
-                    File? pickImage = await pickImageFromGallery();
+                    String? pickImage = await pickImageFromGallery();
                     setState(() {
                       selectImage = pickImage;
                     });
                   },
                   child: selectImage != null
                       ? ClipOval(
-                          child: Image.file(
-                            selectImage!,
-                            fit: BoxFit.cover,
+                          child:Image.file(File(selectImage!) , fit: BoxFit.cover,
                             width: 150,
-                            height: 150,
-                          ),
+                            height: 150,),
                         )
                       : null,
                 ),
@@ -226,12 +223,14 @@ class _CreateTournamentState extends State<CreateTournament> {
                                 await FirebaseFirestore.instance
                                     .collection('tournament_details')
                                     .add({
+                                      "TournamentImage":selectImage,
                                   'TournamentName':
                                       tournamentNameController.text,
                                   "Place": placeController.text,
                                   "Date": dateController.text,
                                   "Category": categoryCN,
-                                  "LimitOfTeam": limitsCN
+                                  "LimitOfTeam": limitsCN,
+
                                 });
 
                                 tournamentNameController.clear();
@@ -255,11 +254,11 @@ class _CreateTournamentState extends State<CreateTournament> {
     );
   }
 
-  Future<File?> pickImageFromGallery() async {
+  Future<String?> pickImageFromGallery() async {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      return File(pickedImage.path);
+      return pickedImage.path;
     }
     return null;
   }
