@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/fav_screen/fav_screen.dart';
+import 'package:tournament_creator/screens/addNotes/add_notes.dart';
 import 'package:tournament_creator/screens/create_tounament/create_tournament.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/list_tournify.dart';
@@ -22,12 +23,25 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   headingtext(text: 'Tournament Creator'),
-                  InkWell(
-                    onTap: () {
-                      navigatorPush(
-                          ctx: context, screen: const FavouiteScreen());
-                    },
-                    child: iconSize30(icondata: Icons.favorite_border),
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          navigatorPush(
+                              ctx: context, screen: const FavouiteScreen());
+                        },
+                        child: iconSize30(icondata: Icons.favorite_border),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          navigatorPush(ctx: context, screen:  AddNotes());
+                        },
+                        child: iconSize30(icondata: Icons.edit),
+                      )
+                    ],
                   )
                 ]),
           ),
@@ -69,7 +83,7 @@ class HomeScreen extends StatelessWidget {
                       },
                       child: containerButtons(name: "Create Tournament"),
                     ),
-                   sizedbox30(),
+                    sizedbox30(),
                     InkWell(
                       onTap: () {
                         navigatorPush(
