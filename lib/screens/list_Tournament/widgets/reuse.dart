@@ -12,13 +12,13 @@ editingtextform({required String labeltxt, required controller}) {
 alertDialog1({required ctx, required docss}) {
   return AlertDialog(
     title: const Text('Delete Tournament'),
-    content: Text('Are you sure you want to delete?'),
+    content: const Text('Are you sure you want to delete?'),
     actions: [
       TextButton(
           onPressed: () {
             Navigator.of(ctx).pop();
           },
-          child: Text('Cancel')),
+          child:const Text('Cancel')),
       TextButton(
           onPressed: () async {
             Navigator.of(ctx).pop();
@@ -30,7 +30,7 @@ alertDialog1({required ctx, required docss}) {
             ScaffoldMessenger.of(ctx).showSnackBar(
                 const SnackBar(content: Text('Delete Successfully')));
           },
-          child: Text('Ok'))
+          child:const Text('Ok'))
     ],
   );
 }

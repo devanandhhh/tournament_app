@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:tournament_creator/hive_model/notes.dart';
+import 'package:tournament_creator/main.dart';
+//import 'package:hive/hive.dart';
+//import 'package:tournament_creator/hive_model/notes.dart';
 import 'package:tournament_creator/screens/addNotes/create_notes.dart';
-//import 'package:tournament_creator/screens/addNotes/create_notes.dart';
+import 'package:tournament_creator/screens/addNotes/view_notes.dart';
+import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 // ignore: must_be_immutable
 class AddNotes extends StatefulWidget {
-  AddNotes({super.key});
+  const AddNotes({super.key});
 
   @override
   State<AddNotes> createState() => _AddNotesState();
@@ -13,11 +19,10 @@ class AddNotes extends StatefulWidget {
 
 class _AddNotesState extends State<AddNotes> {
   TextEditingController titleController = TextEditingController();
-
   TextEditingController contentController = TextEditingController();
-Future <void>createNote(Map<String,dynamic>newNote)async{
- 
-}
+  Box databox = Hive.box(hivekey);
+  // Future<void> createNote(Map<String, dynamic> newNote) async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,48 +34,141 @@ Future <void>createNote(Map<String,dynamic>newNote)async{
             child: Icon(Icons.add),
             backgroundColor: Colors.teal,
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateNotes()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CreateNotes()));
             }),
+      ),
+      body: databox.isEmpty
+          ? Center(
+              child: Text('No data available',style: fontW17(),),
+            )
+          : ListView.separated(
+              itemCount: databox.length,
+              itemBuilder: ((context, index) {
+                String key = databox.keyAt(index).toString();
+                Notes? notes = databox.get(key);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(
+                      notes!.title!,
+                      style: fontW17(),
+                    ),
+                    trailing: PopupMenuButton(
+                      icon:const Icon(Icons.more_vert),
+                      itemBuilder: (context) {
+                        return [
+                          PopupMenuItem(
+                            child: Text('View'),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewScreen(
+                                            notes: notes,
+                                          )));
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Text('Edit'),
+                            onTap: () {
+                              editbuttonClick(key, notes);
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Text('Delete'),
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) => AlertDialog(
+                                        title:const Text('Delete Note'),
+                                        content:const Text(
+                                            'Are you sure you want to delete?'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                navigatorPOP(context);
+                                              },
+                                              child: Text('Cancel')),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                databox.deleteAt(index);
+                                                setState(() {});
+                                                scaffoldmessenger(context);
+                                              },
+                                              child: Text('Ok '))
+                                        ],
+                                      )));
+                            },
+                          ),
+                        ];
+                      },
+                    ),
+                    tileColor: Colors.amber[100],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+              }),
+              separatorBuilder: (context, index) => const SizedBox(),
+            ),
+    );
+  }
+
+  editbuttonClick(String key, Notes? notes) {
+    titleController.text = notes!.title!;
+    contentController.text = notes.content!;
+
+    // alertdialogEdit(titleController, contentController, context, key);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit Notes'),
+        content: SingleChildScrollView(
+          child: Column(children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'Title'),
+            ),
+            sizedbox10(),
+            TextField(
+              maxLines: null,
+              controller: contentController,
+              decoration:const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'Content'),
+            ),
+            // )
+          ]),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                navigatorPOP(context);
+              },
+              child: const Text('Cancel')),
+          TextButton(
+              onPressed: () {
+                navigatorPOP(context);
+                setState(() {});
+                updateToDataBase(
+                  key,
+                  titleController.text,
+                  contentController.text,
+                );
+              },
+              child: const Text('Save')),
+        ],
       ),
     );
   }
 
-  // showForm(BuildContext ctx, int? iteamkey) async {
-  //   showModalBottomSheet(
-  //       context: ctx,
-  //       builder: (_) {
-  //         return Container(
-  //           padding: EdgeInsets.only(
-  //               bottom: MediaQuery.of(ctx).viewInsets.bottom,
-  //               top: 15,
-  //               left: 15,
-  //               right: 15),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             crossAxisAlignment: CrossAxisAlignment.end,
-  //             children: [
-  //               TextField(
-  //                 controller: titleController,
-  //                 decoration: InputDecoration(hintText: 'Title'),
-  //               ),
-  //               sizedbox10(),
-  //               TextField(
-  //                 controller: contentController,
-  //                 decoration: InputDecoration(hintText: 'Type here....'),
-  //               ),sizedbox10(),
-  //               ElevatedButton(onPressed: ()async{
-  //                 createNote({'title':titleController,'content':contentController});
-  //                 titleController.clear();
-  //                 contentController.clear();
-  //                 Navigator.of(ctx).pop();
-  //               }, 
-  //               child: Text('Save'))
-  //             ],
-  //           ),
-  //         );
-  //       });
-  // }
+  textbutton1(ctx) {
+    TextButton(
+        onPressed: () {
+          navigatorPOP(ctx);
+        },
+        child: const Text('Cancel'));
+  }
 }
