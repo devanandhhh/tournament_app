@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
+import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/view_details/view_details.dart';
 
 class TournmentList extends StatefulWidget {
@@ -51,7 +52,9 @@ class _TournmentListState extends State<TournmentList> {
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Firstscreen(title:tournamentName,)));
+                      },
                       leading: CircleAvatar(
                         backgroundColor: Colors.teal,
                         child: ClipOval(
