@@ -21,11 +21,12 @@ alertDialog1({required ctx, required docss}) {
           child:const Text('Cancel')),
       TextButton(
           onPressed: () async {
+            
             Navigator.of(ctx).pop();
             await FirebaseFirestore.instance
                 .collection('tournament_details')
                 .doc(docss.id)
-                .delete();
+                .delete(); 
 
             ScaffoldMessenger.of(ctx).showSnackBar(
                 const SnackBar(content: Text('Delete Successfully')));

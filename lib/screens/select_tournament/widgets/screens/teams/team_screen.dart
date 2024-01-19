@@ -1,18 +1,193 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_team.dart';
+import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_details.dart';
 
+// ignore: must_be_immutable
 class Teamscreen extends StatelessWidget {
-  const Teamscreen({super.key});
-
+  Teamscreen({super.key, this.doc1});
+// ignore: prefer_typing_uninitialized_variables
+  var doc1;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(context,MaterialPageRoute(builder: (context)=>AddTeam()));
-       },
-       backgroundColor: Colors.teal,
-       child: Icon(Icons.add),),backgroundColor: Colors.yellow[100],
-       
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddTeam(
+                        docss: doc1,
+                      )));
+        },
+        backgroundColor: Colors.teal,
+        child: Icon(Icons.add),
+      ),
+      backgroundColor: Colors.yellow[100],
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('tournament_details')
+            .doc(doc1)
+            .collection('team_details')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Text('No data available'),
+            );
+          }
+          return ListView.separated(
+              itemBuilder: (context, index) {
+                var doc2 = snapshot.data!.docs[index];
+                String teamImage = doc2['teamImage'] ?? "";
+                String teamName = doc2['teamName'];
+                String managerName = doc2['managerName'];
+                String phoneNumber = doc2['phoneNumber'];
+                String place = doc2['place'];
+
+                TextEditingController teamNameController =
+                    TextEditingController(text: teamName);
+                TextEditingController managerNameController =
+                    TextEditingController(text: managerName);
+                TextEditingController phoneNumberController =
+                    TextEditingController(text: phoneNumber);
+                TextEditingController placeController =
+                    TextEditingController(text: place);
+
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.teal,
+                    radius: 30,
+                    child: ClipOval(
+                        child: teamImage.isEmpty
+                            ? null
+                            : Image.file(
+                                File(teamImage),
+                                fit: BoxFit.cover,
+                                width: 50,
+                                height: 50,
+                              )),
+                  ),
+                  title: Text(teamName),
+                  subtitle: Text(managerName),
+                  trailing: PopupMenuButton(
+                    icon: Icon(Icons.more_vert),
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(child: Text('View'),onTap: () {
+                          navigatorPush(ctx: context, screen: ViewTeamDetails(imageview:teamImage , teamName: teamName, managerName: managerName, phoneNumber: phoneNumber, placeName: place));
+                        },),
+                        PopupMenuItem(
+                          child: Text('Edit'),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Edit Team Data'),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundColor: Colors.teal,
+                                            radius: 55,
+                                            child:teamImage.isEmpty?null: ClipOval(
+                                                child: Image.file(
+                                              File(teamImage),
+                                              fit: BoxFit.cover,
+                                              width: 100,
+                                              height: 100,
+                                            )),
+                                          ),
+                                          sizedbox30(),
+                                          TextFormField(
+                                            controller: teamNameController,
+                                            decoration:
+                                                decorationshowdiag('Team Name'),
+                                          ),
+                                          sizedbox30(),
+                                          TextFormField(
+                                            controller: managerNameController,
+                                            decoration: decorationshowdiag(
+                                                'Manager Name'),
+                                          ),
+                                          sizedbox30(),
+                                          TextFormField(
+                                            controller: phoneNumberController,
+                                            decoration: decorationshowdiag(
+                                                'Phone number'),
+                                          ),
+                                          sizedbox30(),
+                                          TextFormField(
+                                            controller: placeController,
+                                            decoration:
+                                                decorationshowdiag('Place'),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            navigatorPOP(context);
+                                          },
+                                          child: const Text('Cancel')),
+                                      TextButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection(
+                                                    'tournament_details')
+                                                .doc(doc1)
+                                                .collection('team_details')
+                                                .doc(doc2.id)
+                                                .update({
+                                              "teamName":
+                                                  teamNameController.text,
+                                              'managerName':
+                                                  managerNameController.text,
+                                              'phoneNumber':
+                                                  phoneNumberController.text,
+                                              'place': placeController.text
+                                            });
+
+                                            teamNameController.clear();
+                                            managerNameController.clear();
+                                            phoneNumberController.clear();
+                                            placeController.clear();
+                                            navigatorPOP(context);
+                                          },
+                                          child: const Text('Save'))
+                                    ],
+                                  );
+                                });
+                          },
+                        ),
+                        PopupMenuItem(
+                          child: Text('Delete'),
+                          onTap: () async {
+                           alertdialog2(context, doc1, doc2);
+                           
+                          },
+                        )
+                      ];
+                    },
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: snapshot.data!.docs.length);
+        },
+      ),
     );
+    
   }
+  
 }

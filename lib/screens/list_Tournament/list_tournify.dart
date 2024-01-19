@@ -53,16 +53,17 @@ class _TournmentListState extends State<TournmentList> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Firstscreen(title:tournamentName,)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Firstscreen(title:tournamentName,doc1: docs.id,)));
                       },
                       leading: CircleAvatar(
+                        radius: 30,
                         backgroundColor: Colors.teal,
                         child: ClipOval(
                             child: Image.file(
                           File(image),
                           fit: BoxFit.cover,
-                          width: 35,
-                          height: 35,
+                          width: 50,
+                          height: 50,
                         )),
                       ),
                       title: Text(tournamentName),
@@ -188,10 +189,8 @@ class _TournmentListState extends State<TournmentList> {
                                                   'Category': categoryy,
                                                   'LimitOfTeam': limits
                                                 });
-                                                tournamentNameController
-                                                    .clear();
+                                                tournamentNameController.clear();
                                                 dateController.clear();
-
                                                 Navigator.of(context).pop();
                                                 dataSucessSnackbar();
                                                 ScaffoldMessenger.of(context)
@@ -212,80 +211,12 @@ class _TournmentListState extends State<TournmentList> {
                                     builder: ((BuildContext context) =>
                                         alertDialog1(
                                             ctx: context, docss: docs)));
+                                           
                               },
                             )
                           ];
                         },
                       ),
-                      // trailing: Row(
-                      //   mainAxisSize: MainAxisSize.min,
-                      //   children: [
-                      //     IconButton(
-                      //         onPressed: () {
-                      //           showDialog(
-                      //               context: context,
-                      //               builder: (BuildContext context) {
-                      //                 return AlertDialog(
-                      //                   title: Text('Edit Data'),
-                      //                   content: Column(children: [
-                      //                     editingtextform(
-                      //                         labeltxt: 'Tournament Name',
-                      //                         controller:
-                      //                             tournamentNameController),
-                      //                     editingtextform(
-                      //                         labeltxt: 'Date',
-                      //                         controller: dateController)
-                      //                   ]),
-                      //                   actions: [
-                      //                     TextButton(
-                      //                         onPressed: () {
-                      //                           Navigator.of(context).pop();
-                      //                         },
-                      //                         child: const Text('Cancel')),
-                      //                     TextButton(
-                      //                         onPressed: () async {
-                      //                           await FirebaseFirestore.instance
-                      //                               .collection(
-                      //                                   'tournament_details')
-                      //                               .doc(docs.id)
-                      //                               .update({
-                      //                             'TournamentName':
-                      //                                 tournamentNameController
-                      //                                     .text,
-                      //                             'Date': dateController.text
-                      //                           });
-                      //                           tournamentNameController
-                      //                               .clear();
-                      //                           dateController.clear();
-
-                      //                           Navigator.of(context).pop();
-                      //                           print(
-                      //                               'Data edited sucessfully ');
-                      //                           ScaffoldMessenger.of(context)
-                      //                               .showSnackBar(
-                      //                                   const SnackBar(
-                      //                             content: Text(
-                      //                                 'Updated data Sucessfully '),
-                      //                             backgroundColor: Colors.green,
-                      //                           ));
-                      //                         },
-                      //                         child: const Text('Save'))
-                      //                   ],
-                      //                 );
-                      //               });
-                      //         },
-                      //         icon: const Icon(Icons.edit)),
-                      //     IconButton(
-                      //       icon: const Icon(Icons.delete),
-                      //       onPressed: () {
-                      //         showDialog(
-                      //             context: context,
-                      //             builder: ((BuildContext context) =>
-                      //                 alertDialog1(ctx: context, docss: docs)));
-                      //       },
-                      //     ),
-                      //   ],
-                      // ),
                       tileColor: Colors.amber[100],
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
@@ -297,4 +228,5 @@ class _TournmentListState extends State<TournmentList> {
           },
         ));
   }
+ 
 }

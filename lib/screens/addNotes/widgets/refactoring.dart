@@ -18,7 +18,7 @@ fontW17() {
       fontSize: 18, letterSpacing: 2, fontWeight: FontWeight.w500);
 }
 
-scaffoldmessenger(ctx) {
+scaffoldmessenger(BuildContext ctx) {
   return ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
     content: Text('Delete Sucessfully'),
     backgroundColor: Colors.green,
@@ -29,9 +29,15 @@ navigatorPOP(ctx) {
   return Navigator.of(ctx).pop();
 }
 
+updateToDataBase(String key, String titleText, String contentText) {
+  final title = titleText;
+  final content = contentText;
+  update(Notes(title: title, content: content, key: key));
+}
 
-updateToDataBase(String key,String titleText, String contentText){
-final title=titleText;
-final content=contentText;
-update(Notes(title: title, content: content,key: key));
+scaffoldmessAdded(ctx) {
+  return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+    content: Text('Added sucessfully'),
+    backgroundColor: Colors.green,
+  ));
 }

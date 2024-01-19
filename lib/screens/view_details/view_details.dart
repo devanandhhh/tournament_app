@@ -53,7 +53,7 @@ class ViewTournamentDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 sizedbox10(),
-                Container(
+                SizedBox(
                   height: 350,
                   width: 380,
                   

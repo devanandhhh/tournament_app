@@ -71,6 +71,7 @@ class CreateNotes extends StatelessWidget {
                     onTap: (){
                      savedata(Notes(title: titleController.text, content: noteController.text));
                      Navigator.of(context).pop();
+                   
                     },
                     child: Container(
                       height: 70,

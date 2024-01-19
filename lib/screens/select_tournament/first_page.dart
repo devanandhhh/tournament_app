@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
+import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/match_screen.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/team_screen.dart';
 //import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
+// ignore: must_be_immutable
 class Firstscreen extends StatelessWidget {
-  const Firstscreen({super.key, required this.title});
+   Firstscreen({super.key, required this.title, this.doc1});
 // ignore: prefer_typing_uninitialized_variables
   final title;
-
+// ignore: prefer_typing_uninitialized_variables
+var doc1;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -32,11 +35,9 @@ class Firstscreen extends StatelessWidget {
               ],
             ),
           ),
-          body: const TabBarView(children: [
-            Teamscreen(),
-            Center(
-              child: Text('Mathes are here'),
-            ),
+          body:  TabBarView(children: [
+            Teamscreen(doc1: doc1,),
+            Matchscreen(),
             Center(
               child: Text('players are here'),
             )
