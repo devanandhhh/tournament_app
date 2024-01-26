@@ -22,14 +22,15 @@ alertDialog1({required ctx, required docss}) {
       TextButton(
           onPressed: () async {
             
-            Navigator.of(ctx).pop();
             await FirebaseFirestore.instance
                 .collection('tournament_details')
-                .doc(docss.id)
+                .doc(docss)
                 .delete(); 
+                Navigator.of(ctx).pop();
 
             ScaffoldMessenger.of(ctx).showSnackBar(
                 const SnackBar(content: Text('Delete Successfully')));
+              //  Navigator.of(ctx).pop();
           },
           child:const Text('Ok'))
     ],
@@ -51,3 +52,4 @@ Future<String?> pickImageFromGallery() async {
     }
     return null;
   }
+ 

@@ -38,31 +38,34 @@ textfontsize17({required String text}) {
 }
 
 decorationshowdiag(String text) {
-  return InputDecoration(border: OutlineInputBorder(), labelText: text);
+  return InputDecoration(border: const OutlineInputBorder(), labelText: text);
 }
 
-alertdialog2(ctx,doc1,doc2) {
+alertdialog2(ctx, doc1, doc2) {
   return showDialog(
       context: ctx,
       builder: (context) {
-        return
-        AlertDialog(
-            title: Text('Delete Team'),
-            content: Text('Are you sure you want to delete Team '),
+        return AlertDialog(
+            title: const Text('Delete Team'),
+            content: const Text('Are you sure you want to delete Team '),
             actions: [
-              TextButton(onPressed: () {
-                navigatorPOP(ctx);
-              }, child: Text('Cancel')),
-              TextButton(onPressed: () async{
-                navigatorPOP(ctx);
-                await FirebaseFirestore.instance
-                                .collection('tournament_details')
-                                .doc(doc1)
-                                .collection('team_details')
-                                .doc(doc2.id)
-                                .delete();
-                                scaffoldmessenger(ctx);
-              }, child: Text('Ok'))
+              TextButton(
+                  onPressed: () {
+                    navigatorPOP(ctx);
+                  },
+                  child: const Text('Cancel')),
+              TextButton(
+                  onPressed: () async {
+                    navigatorPOP(ctx);
+                    await FirebaseFirestore.instance
+                        .collection('tournament_details')
+                        .doc(doc1)
+                        .collection('team_details')
+                        .doc(doc2.id)
+                        .delete();
+                    scaffoldmessenger(ctx);
+                  },
+                  child: const Text('Ok'))
             ]);
       });
 }

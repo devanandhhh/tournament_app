@@ -15,11 +15,14 @@ class TournmentList extends StatefulWidget {
 }
 
 class _TournmentListState extends State<TournmentList> {
+  final GlobalKey<ScaffoldMessengerState> scaffoldkey = GlobalKey();
+
   List categories = ['7s', '9s', '11s'];
   List limitOfTeams = ['8 teams', '16 teams', '32 teams'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: scaffoldkey,
         appBar: appbardecorations(name: "Tournament List "),
         backgroundColor: Colors.yellow[100],
         body: StreamBuilder(
@@ -37,7 +40,7 @@ class _TournmentListState extends State<TournmentList> {
                   var docs = snapshot.data!.docs[index];
                   String tournamentName = docs['TournamentName'] ?? "";
                   String date = docs['Date'] ?? "";
-                  String image = docs['TournamentImage'];
+                  String image = docs['TournamentImage']??'';
                   String place = docs['Place'];
                   String categoryy = docs['Category'];
                   String limits = docs['LimitOfTeam'];
@@ -53,7 +56,13 @@ class _TournmentListState extends State<TournmentList> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Firstscreen(title:tournamentName,doc1: docs.id,)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Firstscreen(
+                                      title: tournamentName,
+                                      doc1: docs.id,
+                                    )));
                       },
                       leading: CircleAvatar(
                         radius: 30,
@@ -79,7 +88,8 @@ class _TournmentListState extends State<TournmentList> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ViewTournamentDetails(imageView: image,
+                                            ViewTournamentDetails(
+                                                imageView: image,
                                                 name: tournamentName,
                                                 place: place,
                                                 date: date,
@@ -96,78 +106,83 @@ class _TournmentListState extends State<TournmentList> {
                                       return AlertDialog(
                                         scrollable: true,
                                         title: const Text('Edit Data'),
-                                        content: Column(children: [
-                                          CircleAvatar(
-                                            backgroundImage:
-                                                FileImage(File(image)),
-                                            maxRadius: 70,
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                String? pickimage =
-                                                    await pickImageFromGallery();
-                                                setState(() {
-                                                  image = pickimage!;
-                                                });
-                                              },
-                                              child: ClipOval(
-                                                  child: Image.file(
-                                                File(image),
-                                                fit: BoxFit.cover,
-                                                width: 140,
-                                                height: 140,
-                                              )),
-                                            ),
+                                        content:StatefulBuilder(
+                                          builder: (context, setState) => 
+                                           SingleChildScrollView (
+                                            child: Column(children: [
+                                              CircleAvatar(
+                                                backgroundImage:
+                                                    FileImage(File(image)),
+                                                maxRadius: 70,
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    String? pickimage =
+                                                        await pickImageFromGallery();
+                                                    setState(() {
+                                                      image = pickimage!;
+                                                    });
+                                                  },
+                                                  // child: ClipOval(
+                                                  //     child: Image.file(
+                                                  //   File(image),
+                                                  //   fit: BoxFit.cover,
+                                                  //   width: 140,
+                                                  //   height: 140,
+                                                  // )),
+                                                ),
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  editingtextform(
+                                                      labeltxt: 'Tournament Name',
+                                                      controller:
+                                                          tournamentNameController),
+                                                  editingtextform(
+                                                      labeltxt: 'Date',
+                                                      controller: dateController),
+                                                  editingtextform(
+                                                      labeltxt: "Place",
+                                                      controller: placeController),
+                                                  sizedbox10(),
+                                                  const Text('Category'),
+                                                  DropdownButtonFormField(
+                                                      hint: Text(categoryy),
+                                                      items: categories.map((e) {
+                                                        return DropdownMenuItem(
+                                                            value: e,
+                                                            child: Text(e));
+                                                      }).toList(),
+                                                      onChanged: (value) {
+                                                        //   setState(() {
+                                                        //   categoryy=value.toString();
+                                                        // });
+                                                        if (categoryy != value) {
+                                                          categoryy =
+                                                              value.toString();
+                                                        }
+                                                      }),
+                                                  sizedbox10(),
+                                                  const Text('Limit of Team'),
+                                                  DropdownButtonFormField(
+                                                      hint: Text(limits),
+                                                      items: limitOfTeams.map((e) {
+                                                        return DropdownMenuItem(
+                                                          value: e,
+                                                          child: Text(e),
+                                                        );
+                                                      }).toList(),
+                                                      onChanged: (value) {
+                                                        if (limits != value) {
+                                                          limits = value.toString();
+                                                        }
+                                                      })
+                                                ],
+                                              ),
+                                            ]),
                                           ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              editingtextform(
-                                                  labeltxt: 'Tournament Name',
-                                                  controller:
-                                                      tournamentNameController),
-                                              editingtextform(
-                                                  labeltxt: 'Date',
-                                                  controller: dateController),
-                                              editingtextform(
-                                                  labeltxt: "Place",
-                                                  controller: placeController),
-                                              sizedbox10(),
-                                              const Text('Category'),
-                                              DropdownButtonFormField(
-                                                  hint: Text(categoryy),
-                                                  items: categories.map((e) {
-                                                    return DropdownMenuItem(
-                                                        value: e,
-                                                        child: Text(e));
-                                                  }).toList(),
-                                                  onChanged: (value) {
-                                                    //   setState(() {
-                                                    //   categoryy=value.toString();
-                                                    // });
-                                                    if (categoryy != value) {
-                                                      categoryy =
-                                                          value.toString();
-                                                    }
-                                                  }),
-                                              sizedbox10(),
-                                              const Text('Limit of Team'),
-                                              DropdownButtonFormField(
-                                                  hint: Text(limits),
-                                                  items: limitOfTeams.map((e) {
-                                                    return DropdownMenuItem(
-                                                      child: Text(e),
-                                                      value: e,
-                                                    );
-                                                  }).toList(),
-                                                  onChanged: (value) {
-                                                    if (limits != value) {
-                                                      limits = value.toString();
-                                                    }
-                                                  })
-                                            ],
-                                          ),
-                                        ]),
+                                        ),
                                         actions: [
                                           TextButton(
                                               onPressed: () {
@@ -181,18 +196,23 @@ class _TournmentListState extends State<TournmentList> {
                                                         'tournament_details')
                                                     .doc(docs.id)
                                                     .update({
+                                                      'TournamentImage':image,
                                                   'TournamentName':
                                                       tournamentNameController
                                                           .text,
                                                   'Date': dateController.text,
                                                   "Place": placeController.text,
                                                   'Category': categoryy,
-                                                  'LimitOfTeam': limits
+                                                  'LimitOfTeam': limits,
+                                                 
                                                 });
-                                                tournamentNameController.clear();
+                                                tournamentNameController
+                                                    .clear();
                                                 dateController.clear();
+                                                // ignore: use_build_context_synchronously
                                                 Navigator.of(context).pop();
                                                 dataSucessSnackbar();
+                                                // ignore: use_build_context_synchronously
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                         updateSucessSnackbar());
@@ -209,9 +229,32 @@ class _TournmentListState extends State<TournmentList> {
                                 showDialog(
                                     context: context,
                                     builder: ((BuildContext context) =>
-                                        alertDialog1(
-                                            ctx: context, docss: docs)));
-                                           
+                                            alertDialog1(
+                                                ctx: context, docss: docs.id)
+//                                         AlertDialog(
+//     title: const Text('Delete Tournament'),
+//     content: const Text('Are you sure you want to delete?'),
+//     actions: [
+//       TextButton(
+//           onPressed: () {
+//             Navigator.of(context).pop();
+//           },
+//           child:const Text('Cancel')),
+//       TextButton(
+//           onPressed: () async {
+
+//             Navigator.of(context).pop();
+//             await deletedocument(docs.id);
+// dispose();
+//             // ignore: use_build_context_synchronously
+//             ScaffoldMessenger.of(context).showSnackBar(
+//                 const SnackBar(content: Text('Delete Successfully')));
+//               //  Navigator.of(ctx).pop();
+//           },
+//           child:const Text('Ok'))
+//     ],
+//   )
+                                        ));
                               },
                             )
                           ];
@@ -228,5 +271,18 @@ class _TournmentListState extends State<TournmentList> {
           },
         ));
   }
- 
+  // @override
+  // void dispose() {
+  //  print('delete sucessfully');
+  //   super.dispose();
+  // }
+//   Future<void> deletedocument(String docs)async{
+// try{await  FirebaseFirestore.instance
+//                 .collection('tournament_details')
+//                 .doc(docs)
+//                 .delete();
+//                 scaffoldkey.currentState?.showSnackBar(SnackBar(content: Text('delete')));
+//   }
+//   catch (e){print(e);}
+// }
 }

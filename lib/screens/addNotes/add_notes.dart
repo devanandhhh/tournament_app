@@ -31,16 +31,19 @@ class _AddNotesState extends State<AddNotes> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FloatingActionButton(
-            child: Icon(Icons.add),
             backgroundColor: Colors.teal,
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => CreateNotes()));
-            }),
+            },
+            child: const Icon(Icons.add)),
       ),
       body: databox.isEmpty
           ? Center(
-              child: Text('No data available',style: fontW17(),),
+              child: Text(
+                'No data available',
+                style: fontW17(),
+              ),
             )
           : ListView.separated(
               itemCount: databox.length,
@@ -55,11 +58,11 @@ class _AddNotesState extends State<AddNotes> {
                       style: fontW17(),
                     ),
                     trailing: PopupMenuButton(
-                      icon:const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) {
                         return [
                           PopupMenuItem(
-                            child: Text('View'),
+                            child: const Text('View'),
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -70,26 +73,26 @@ class _AddNotesState extends State<AddNotes> {
                             },
                           ),
                           PopupMenuItem(
-                            child: Text('Edit'),
+                            child: const Text('Edit'),
                             onTap: () {
                               editbuttonClick(key, notes);
                             },
                           ),
                           PopupMenuItem(
-                            child: Text('Delete'),
+                            child: const Text('Delete'),
                             onTap: () {
                               showDialog(
                                   context: context,
                                   builder: ((context) => AlertDialog(
-                                        title:const Text('Delete Note'),
-                                        content:const Text(
+                                        title: const Text('Delete Note'),
+                                        content: const Text(
                                             'Are you sure you want to delete?'),
                                         actions: [
                                           TextButton(
                                               onPressed: () {
                                                 navigatorPOP(context);
                                               },
-                                              child: Text('Cancel')),
+                                              child: const Text('Cancel')),
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
@@ -97,7 +100,7 @@ class _AddNotesState extends State<AddNotes> {
                                                 setState(() {});
                                                 scaffoldmessenger(context);
                                               },
-                                              child: Text('Ok '))
+                                              child: const Text('Ok '))
                                         ],
                                       )));
                             },
@@ -124,7 +127,7 @@ class _AddNotesState extends State<AddNotes> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit Notes'),
+        title: const Text('Edit Notes'),
         content: SingleChildScrollView(
           child: Column(children: [
             TextField(
@@ -136,7 +139,7 @@ class _AddNotesState extends State<AddNotes> {
             TextField(
               maxLines: null,
               controller: contentController,
-              decoration:const InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(), hintText: 'Content'),
             ),
             // )
