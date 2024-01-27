@@ -1,6 +1,9 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
+import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 
 tabtext(text) {
   return Tab(
@@ -68,4 +71,53 @@ alertdialog2(ctx, doc1, doc2) {
                   child: const Text('Ok'))
             ]);
       });
+}
+
+addTeamtxtController(TextEditingController teamController, String hinttext) {
+  return TextFormField(
+    controller: teamController,
+    decoration: const InputDecoration(border: OutlineInputBorder()),
+    validator: (value) => value == null || value.isEmpty ? hinttext : null,
+  );
+}
+
+savebutton(document1,document2,document3ID,playerphoto,playerNameEditController,playerAgeEditController,playerid,ctx){
+  return  TextButton(
+                                                    onPressed: () async {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'tournament_details')
+                                                          .doc(document1)
+                                                          .collection(
+                                                              'team_details')
+                                                          .doc(document2)
+                                                          .collection(
+                                                              'player_details')
+                                                          .doc(document3ID)
+                                                          .update({
+                                                        'PlayerPhoto':
+                                                            playerphoto,
+                                                        'PlayerName':
+                                                            playerNameEditController
+                                                                .text,
+                                                        'DateOfBirth':
+                                                            playerAgeEditController
+                                                                .text,
+                                                        'PlayerId': playerid
+                                                      });
+                                                      playerNameEditController
+                                                          .clear();
+                                                      playerAgeEditController
+                                                          .clear();
+                                                      // ignore: use_build_context_synchronously
+                                                      ScaffoldMessenger.of(
+                                                              ctx)
+                                                          .showSnackBar(
+                                                              updateSucessSnackbar());
+
+                                                      // ignore: use_build_context_synchronously
+                                                      navigatorPOP(ctx);
+                                                    },
+                                                    child: const Text('Save'));
 }

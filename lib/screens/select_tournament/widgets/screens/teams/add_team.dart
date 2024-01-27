@@ -39,7 +39,7 @@ class _AddTeamState extends State<AddTeam> {
         child: SingleChildScrollView(
           child: Column(children: [
             CircleAvatar(
-                backgroundImage: AssetImage('assets/addimage.png'),
+                backgroundImage: const AssetImage('assets/addimage.png'),
                 radius: 70,
                 child: GestureDetector(
                     onTap: () async {
@@ -66,44 +66,22 @@ class _AddTeamState extends State<AddTeam> {
                   sizedbox30(),
                   textfontsize17(text: "Team Name"),
                   sizedbox10(),
-                  TextFormField(
-                    controller: teamNameController,
-                    decoration: InputDecoration(border: OutlineInputBorder()),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Team Name is Required'
-                        : null,
-                  ),
+                  addTeamtxtController(
+                      teamNameController, "Team Name is Required"),
                   sizedbox10(),
                   textfontsize17(text: 'Manager Name'),
                   sizedbox10(),
-                  TextFormField(
-                    controller: managerNameController,
-                    decoration: InputDecoration(border: OutlineInputBorder()),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Manager Name is Required'
-                        : null,
-                  ),
+                  addTeamtxtController(
+                      managerNameController, 'Manager Name is Required'),
                   sizedbox10(),
                   textfontsize17(text: "Phone Number"),
                   sizedbox10(),
-                  TextFormField(
-                    controller: phoneNumberController,
-                    keyboardType: TextInputType.number ,
-                    decoration: InputDecoration(border: OutlineInputBorder()),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Phone Number is Required'
-                        : null,
-                  ),
+                  addTeamtxtController(
+                      phoneNumberController, 'Phone Number is Required'),
                   sizedbox10(),
                   textfontsize17(text: 'Place'),
                   sizedbox10(),
-                  TextFormField(
-                    controller: placeController,
-                    decoration: InputDecoration(border: OutlineInputBorder()),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Place is Required'
-                        : null,
-                  ),
+                  addTeamtxtController(placeController, 'Place is Required')
                 ],
               ),
             ),
@@ -112,7 +90,6 @@ class _AddTeamState extends State<AddTeam> {
               child: containerButtonCR(txt: 'Add Team'),
               onTap: () async {
                 if (formKey.currentState!.validate()) {
-                  
                   await FirebaseFirestore.instance
                       .collection('tournament_details')
                       .doc(widget.docss)
@@ -122,19 +99,17 @@ class _AddTeamState extends State<AddTeam> {
                     'managerName': managerNameController.text,
                     'phoneNumber': phoneNumberController.text,
                     'place': placeController.text,
-                    'teamImage':seletedImage
+                    'teamImage': seletedImage
                   });
                   teamNameController.clear();
                   managerNameController.clear();
                   phoneNumberController.clear();
                   placeController.clear();
-                  seletedImage=null;
+                  seletedImage = null;
 
-                 // ignore: use_build_context_synchronously
-                 scaffoldmessAdded(context);
-                 setState(() {
-                   
-                 });
+                  // ignore: use_build_context_synchronously
+                  scaffoldmessAdded(context);
+                  setState(() {});
                 }
               },
             )
