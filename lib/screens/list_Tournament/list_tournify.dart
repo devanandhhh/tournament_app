@@ -231,29 +231,7 @@ class _TournmentListState extends State<TournmentList> {
                                     builder: ((BuildContext context) =>
                                             alertDialog1(
                                                 ctx: context, docss: docs.id)
-//                                         AlertDialog(
-//     title: const Text('Delete Tournament'),
-//     content: const Text('Are you sure you want to delete?'),
-//     actions: [
-//       TextButton(
-//           onPressed: () {
-//             Navigator.of(context).pop();
-//           },
-//           child:const Text('Cancel')),
-//       TextButton(
-//           onPressed: () async {
 
-//             Navigator.of(context).pop();
-//             await deletedocument(docs.id);
-// dispose();
-//             // ignore: use_build_context_synchronously
-//             ScaffoldMessenger.of(context).showSnackBar(
-//                 const SnackBar(content: Text('Delete Successfully')));
-//               //  Navigator.of(ctx).pop();
-//           },
-//           child:const Text('Ok'))
-//     ],
-//   )
                                         ));
                               },
                             )

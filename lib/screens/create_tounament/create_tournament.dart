@@ -95,8 +95,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                     onTap: () async {
                       DateTime? picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2024),
+                        //  initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2100));
                       if (picked != null) {
                         final formatDate =

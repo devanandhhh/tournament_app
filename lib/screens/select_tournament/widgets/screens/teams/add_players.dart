@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -155,7 +156,7 @@ class _AddplayersState extends State<Addplayers> {
                 InkWell(
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      if (playerImage!=null || playerID !=null) {
+                      if (playerImage != null || playerID != null) {
                         await FirebaseFirestore.instance
                             .collection('tournament_details')
                             .doc(widget.doc1)
@@ -286,8 +287,8 @@ class _AddplayersState extends State<Addplayers> {
                                                                 await pickImageFromGallery();
                                                             setState(
                                                               () {
-                                                                playerImage =
-                                                                    editdetails;
+                                                                playerphoto =
+                                                                    editdetails!;
                                                               },
                                                             );
                                                           },
@@ -320,7 +321,8 @@ class _AddplayersState extends State<Addplayers> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Text('Player proof'),
+                                                          const Text(
+                                                              'Player proof'),
                                                           sizedbox10(),
                                                           SizedBox(
                                                             width: 300,
@@ -361,54 +363,25 @@ class _AddplayersState extends State<Addplayers> {
                                                       navigatorPOP(context);
                                                     },
                                                     child:
-                                                        const Text('Cancel')),
-                                                savebutton(
-                                                    widget.doc1,
-                                                    widget.doc2,
-                                                    doc3.id,
-                                                    playerphoto,
-                                                    playerNameEditController,
-                                                    playerAgeEditController,
-                                                    playerid,
-                                                    context) 
-                                                // TextButton(
-                                                //     onPressed: () async {
-                                                //       await FirebaseFirestore
-                                                //           .instance
-                                                //           .collection(
-                                                //               'tournament_details')
-                                                //           .doc(widget.doc1)
-                                                //           .collection(
-                                                //               'team_details')
-                                                //           .doc(widget.doc2)
-                                                //           .collection(
-                                                //               'player_details')
-                                                //           .doc(doc3.id)
-                                                //           .update({
-                                                //         'PlayerPhoto':
-                                                //             playerphoto,
-                                                //         'PlayerName':
-                                                //             playerNameEditController
-                                                //                 .text,
-                                                //         'DateOfBirth':
-                                                //             playerAgeEditController
-                                                //                 .text,
-                                                //         'PlayerId': playerid
-                                                //       });
-                                                //       playerNameEditController
-                                                //           .clear();
-                                                //       playerAgeEditController
-                                                //           .clear();
-                                                //       // ignore: use_build_context_synchronously
-                                                //       ScaffoldMessenger.of(
-                                                //               context)
-                                                //           .showSnackBar(
-                                                //               updateSucessSnackbar());
-
-                                                //       // ignore: use_build_context_synchronously
-                                                //       navigatorPOP(context);
-                                                //     },
-                                                //     child: const Text('Save'))
+                                                        const Text('Cancel')),                                       
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      await DatabaseFunctions.editPlayer(
+                                                          document1:
+                                                              widget.doc1,
+                                                          document2:
+                                                              widget.doc2,
+                                                          document3ID: doc3.id,
+                                                          playerphoto:
+                                                              playerphoto,
+                                                          playerNameEditController:
+                                                              playerNameEditController,
+                                                          playerAgeEditController:
+                                                              playerAgeEditController,
+                                                          playerid: playerid,
+                                                          ctx: context);
+                                                    },
+                                                    child: const Text('Save'))
                                               ],
                                             );
                                           });
@@ -433,21 +406,16 @@ class _AddplayersState extends State<Addplayers> {
                                                     child: Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'tournament_details')
-                                                          .doc(widget.doc1)
-                                                          .collection(
-                                                              'team_details')
-                                                          .doc(widget.doc2)
-                                                          .collection(
-                                                              'player_details')
-                                                          .doc(doc3.id)
-                                                          .delete();
-                                                      navigatorPOP(context);
-                                                      scaffoldmessenger(
-                                                          context);
+                                                      await DatabaseFunctions
+                                                          .deletePlayer(
+                                                              document1:
+                                                                  widget.doc1,
+                                                              document2:
+                                                                  widget.doc2,
+                                                              documentID:
+                                                                  doc3.id,
+                                                              ctx: context);
+                                                    
                                                     },
                                                     child: const Text('Ok'))
                                               ],
