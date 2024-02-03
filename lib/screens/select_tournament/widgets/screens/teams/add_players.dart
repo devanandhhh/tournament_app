@@ -19,6 +19,7 @@ class Addplayers extends StatefulWidget {
   var doc1;
 // ignore: prefer_typing_uninitialized_variables
   var doc2;
+  
   @override
   State<Addplayers> createState() => _AddplayersState();
 }
@@ -29,6 +30,8 @@ class _AddplayersState extends State<Addplayers> {
   TextEditingController playerAgeController = TextEditingController();
   String? playerImage;
   String? playerID;
+    String? seletedImage;
+
 
   @override
   Widget build(BuildContext context) {
@@ -361,6 +364,10 @@ class _AddplayersState extends State<Addplayers> {
                                                 TextButton(
                                                     onPressed: () {
                                                       navigatorPOP(context);
+                                                      setState(() {
+                                                      seletedImage=playerphoto;
+                                                      });
+
                                                     },
                                                     child:
                                                         const Text('Cancel')),                                       

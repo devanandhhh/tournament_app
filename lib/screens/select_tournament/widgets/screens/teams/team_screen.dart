@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
@@ -11,10 +12,17 @@ import 'package:tournament_creator/screens/select_tournament/widgets/screens/tea
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_details.dart';
 
 // ignore: must_be_immutable
-class Teamscreen extends StatelessWidget {
+class Teamscreen extends StatefulWidget {
   Teamscreen({super.key, this.doc1});
 // ignore: prefer_typing_uninitialized_variables
   var doc1;
+
+  @override
+  State<Teamscreen> createState() => _TeamscreenState();
+}
+
+class _TeamscreenState extends State<Teamscreen> {
+String? seletedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,7 @@ class Teamscreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => AddTeam(
-                        docss: doc1,
+                        docss: widget.doc1,
                       )));
         },
         backgroundColor: Colors.teal,
@@ -35,7 +43,7 @@ class Teamscreen extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('tournament_details')
-            .doc(doc1)
+            .doc(widget.doc1)
             .collection('team_details')
             .snapshots(),
         builder: (context, snapshot) {
@@ -47,7 +55,7 @@ class Teamscreen extends StatelessWidget {
           return ListView.separated(
               itemBuilder: (context, index) {
                 var doc2 = snapshot.data!.docs[index];
-                String teamImage = doc2['teamImage'] ?? "";
+                String teamImage = doc2['teamImage'] ;
                 String teamName = doc2['teamName'];
                 String managerName = doc2['managerName'];
                 String phoneNumber = doc2['phoneNumber'];
@@ -68,7 +76,7 @@ class Teamscreen extends StatelessWidget {
                         ctx: context,
                         screen: Addplayers(
                           title: teamName,
-                          doc1: doc1,
+                          doc1: widget.doc1,
                           doc2: doc2.id,
                         ));
                   },
@@ -134,15 +142,7 @@ class Teamscreen extends StatelessWidget {
                                                   },
                                                 )
 
-                                                //  teamImage.isEmpty
-                                                //     ? null
-                                                //     : ClipOval(
-                                                //         child: Image.file(
-                                                //         File(teamImage),
-                                                //         fit: BoxFit.cover,
-                                                //         width: 100,
-                                                //         height: 100,
-                                                //       )),
+                                                
                                                 ),
                                             sizedbox30(),
                                             TextFormField(
@@ -176,26 +176,27 @@ class Teamscreen extends StatelessWidget {
                                       TextButton(
                                           onPressed: () {
                                             navigatorPOP(context);
+                                            setState(() {
+                                              
+                                              seletedImage=teamImage;
+                                            });
                                           },
                                           child: const Text('Cancel')),
                                       TextButton(
                                           onPressed: () async {
-                                            await FirebaseFirestore.instance
-                                                .collection(
-                                                    'tournament_details')
-                                                .doc(doc1)
-                                                .collection('team_details')
-                                                .doc(doc2.id)
-                                                .update({
-                                               'teamImage':teamImage,
-                                              "teamName":
-                                                  teamNameController.text,
-                                              'managerName':
-                                                  managerNameController.text,
-                                              'phoneNumber':
-                                                  phoneNumberController.text,
-                                              'place': placeController.text
-                                            });
+                                            await DatabaseFunctions.editTeam(
+                                                document1: widget.doc1,
+                                                document2ID: doc2.id,
+                                                teamImage: teamImage,
+                                                teamNameController:
+                                                    teamNameController,
+                                                managerNameController:
+                                                    managerNameController,
+                                                phoneNumberController:
+                                                    phoneNumberController,
+                                                placeController:
+                                                    placeController);
+                                          
 
                                             teamNameController.clear();
                                             managerNameController.clear();
@@ -218,7 +219,7 @@ class Teamscreen extends StatelessWidget {
                         PopupMenuItem(
                           child: const Text('Delete'),
                           onTap: () async {
-                            alertdialog2(context, doc1, doc2);
+                            alertdialog2(context, widget.doc1, doc2);
                           },
                         )
                       ];

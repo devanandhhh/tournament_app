@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/select_tournament/first_page.dart';
@@ -16,7 +17,7 @@ class TournmentList extends StatefulWidget {
 
 class _TournmentListState extends State<TournmentList> {
   final GlobalKey<ScaffoldMessengerState> scaffoldkey = GlobalKey();
-
+  String? selectedImage;
   List categories = ['7s', '9s', '11s'];
   List limitOfTeams = ['8 teams', '16 teams', '32 teams'];
   @override
@@ -38,13 +39,18 @@ class _TournmentListState extends State<TournmentList> {
             return ListView.separated(
                 itemBuilder: (context, index) {
                   var docs = snapshot.data!.docs[index];
-                  String tournamentName = docs['TournamentName'] ?? "";
-                  String date = docs['Date'] ?? "";
-                  String image = docs['TournamentImage']??'';
+                  List<String> viewDetails = [];
+                  //List<String> detailsView = [];
+                  String tournamentName = docs['TournamentName'];
+                  String date = docs['Date'];
+                  String image = docs['TournamentImage'];
                   String place = docs['Place'];
                   String categoryy = docs['Category'];
                   String limits = docs['LimitOfTeam'];
 
+                  selectedImage = image;
+                  viewDetails.addAll(
+                      [image, tournamentName, place, date, categoryy, limits]);
                   TextEditingController tournamentNameController =
                       TextEditingController(text: docs['TournamentName']);
                   TextEditingController dateController =
@@ -60,9 +66,9 @@ class _TournmentListState extends State<TournmentList> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Firstscreen(
-                                      title: tournamentName,
-                                      doc1: docs.id,
-                                    )));
+                                    title: tournamentName,
+                                    doc1: docs.id,
+                                    details: viewDetails)));
                       },
                       leading: CircleAvatar(
                         radius: 30,
@@ -106,9 +112,9 @@ class _TournmentListState extends State<TournmentList> {
                                       return AlertDialog(
                                         scrollable: true,
                                         title: const Text('Edit Data'),
-                                        content:StatefulBuilder(
-                                          builder: (context, setState) => 
-                                           SingleChildScrollView (
+                                        content: StatefulBuilder(
+                                          builder: (context, setState) =>
+                                              SingleChildScrollView(
                                             child: Column(children: [
                                               CircleAvatar(
                                                 backgroundImage:
@@ -122,13 +128,6 @@ class _TournmentListState extends State<TournmentList> {
                                                       image = pickimage!;
                                                     });
                                                   },
-                                                  // child: ClipOval(
-                                                  //     child: Image.file(
-                                                  //   File(image),
-                                                  //   fit: BoxFit.cover,
-                                                  //   width: 140,
-                                                  //   height: 140,
-                                                  // )),
                                                 ),
                                               ),
                                               Column(
@@ -136,29 +135,31 @@ class _TournmentListState extends State<TournmentList> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   editingtextform(
-                                                      labeltxt: 'Tournament Name',
+                                                      labeltxt:
+                                                          'Tournament Name',
                                                       controller:
                                                           tournamentNameController),
                                                   editingtextform(
                                                       labeltxt: 'Date',
-                                                      controller: dateController),
+                                                      controller:
+                                                          dateController),
                                                   editingtextform(
                                                       labeltxt: "Place",
-                                                      controller: placeController),
+                                                      controller:
+                                                          placeController),
                                                   sizedbox10(),
                                                   const Text('Category'),
                                                   DropdownButtonFormField(
                                                       hint: Text(categoryy),
-                                                      items: categories.map((e) {
+                                                      items:
+                                                          categories.map((e) {
                                                         return DropdownMenuItem(
                                                             value: e,
                                                             child: Text(e));
                                                       }).toList(),
                                                       onChanged: (value) {
-                                                        //   setState(() {
-                                                        //   categoryy=value.toString();
-                                                        // });
-                                                        if (categoryy != value) {
+                                                        if (categoryy !=
+                                                            value) {
                                                           categoryy =
                                                               value.toString();
                                                         }
@@ -167,7 +168,8 @@ class _TournmentListState extends State<TournmentList> {
                                                   const Text('Limit of Team'),
                                                   DropdownButtonFormField(
                                                       hint: Text(limits),
-                                                      items: limitOfTeams.map((e) {
+                                                      items:
+                                                          limitOfTeams.map((e) {
                                                         return DropdownMenuItem(
                                                           value: e,
                                                           child: Text(e),
@@ -175,7 +177,8 @@ class _TournmentListState extends State<TournmentList> {
                                                       }).toList(),
                                                       onChanged: (value) {
                                                         if (limits != value) {
-                                                          limits = value.toString();
+                                                          limits =
+                                                              value.toString();
                                                         }
                                                       })
                                                 ],
@@ -187,25 +190,25 @@ class _TournmentListState extends State<TournmentList> {
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
+                                                setState(() {
+                                                  selectedImage = image;
+                                                });
                                               },
                                               child: const Text('Cancel')),
                                           TextButton(
                                               onPressed: () async {
-                                                await FirebaseFirestore.instance
-                                                    .collection(
-                                                        'tournament_details')
-                                                    .doc(docs.id)
-                                                    .update({
-                                                      'TournamentImage':image,
-                                                  'TournamentName':
-                                                      tournamentNameController
-                                                          .text,
-                                                  'Date': dateController.text,
-                                                  "Place": placeController.text,
-                                                  'Category': categoryy,
-                                                  'LimitOfTeam': limits,
-                                                 
-                                                });
+                                                await DatabaseFunctions
+                                                    .editTournament(
+                                                        documentId: docs.id,
+                                                        tournamentImage: image,
+                                                        tournamentNameController:
+                                                            tournamentNameController,
+                                                        dateController:
+                                                            dateController,
+                                                        placeController:
+                                                            placeController,
+                                                        category: categoryy,
+                                                        limits: limits);
                                                 tournamentNameController
                                                     .clear();
                                                 dateController.clear();
@@ -229,10 +232,8 @@ class _TournmentListState extends State<TournmentList> {
                                 showDialog(
                                     context: context,
                                     builder: ((BuildContext context) =>
-                                            alertDialog1(
-                                                ctx: context, docss: docs.id)
-
-                                        ));
+                                        alertDialog1(
+                                            ctx: context, docss: docs.id)));
                               },
                             )
                           ];

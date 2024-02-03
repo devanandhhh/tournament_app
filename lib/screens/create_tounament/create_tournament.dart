@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 class CreateTournament extends StatefulWidget {
@@ -49,9 +49,12 @@ class _CreateTournamentState extends State<CreateTournament> {
                   },
                   child: selectImage != null
                       ? ClipOval(
-                          child:Image.file(File(selectImage!) , fit: BoxFit.cover,
+                          child: Image.file(
+                            File(selectImage!),
+                            fit: BoxFit.cover,
                             width: 150,
-                            height: 150,),
+                            height: 150,
+                          ),
                         )
                       : null,
                 ),
@@ -95,7 +98,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                     onTap: () async {
                       DateTime? picked = await showDatePicker(
                           context: context,
-                        //  initialDate: DateTime.now(),
+                          //  initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate: DateTime(2100));
                       if (picked != null) {
@@ -219,25 +222,22 @@ class _CreateTournamentState extends State<CreateTournament> {
                                           'Successfully Created ',
                                           style: TextStyle(color: Colors.white),
                                         )));
-
-                                await FirebaseFirestore.instance
-                                    .collection('tournament_details')
-                                    .add({
-                                      "TournamentImage":selectImage,
-                                  'TournamentName':
-                                      tournamentNameController.text,
-                                  "Place": placeController.text,
-                                  "Date": dateController.text,
-                                  "Category": categoryCN,
-                                  "LimitOfTeam": limitsCN,
-
-                                });
+                      
+                                await DatabaseFunctions.addTournament(
+                                    selectImage: selectImage,
+                                    tournamentNameController:
+                                        tournamentNameController,
+                                    placeController: placeController,
+                                    dateController: dateController,
+                                    category: categoryCN,
+                                    limits: limitsCN);
 
                                 tournamentNameController.clear();
                                 dateController.clear();
                                 placeController.clear();
                                 categoryController.clear();
                                 limitController.clear();
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();
                               }
                             }

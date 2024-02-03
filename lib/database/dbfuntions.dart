@@ -51,4 +51,84 @@ class DatabaseFunctions {
     navigatorPOP(ctx);
     scaffoldmessenger(ctx);
   }
+
+  static addTournament(
+      {required selectImage,
+      required tournamentNameController,
+      required placeController,
+      required dateController,
+      required category,
+      required limits}) async {
+    await FirebaseFirestore.instance.collection('tournament_details').add({
+      "TournamentImage": selectImage,
+      'TournamentName': tournamentNameController.text,
+      "Place": placeController.text,
+      "Date": dateController.text,
+      "Category": category,
+      "LimitOfTeam": limits,
+    });
+  }
+
+  static editTournament(
+      {required documentId,
+      required tournamentImage,
+      required tournamentNameController,
+      required dateController,
+      required placeController,
+      required category,
+      required limits}) async {
+    await FirebaseFirestore.instance
+        .collection('tournament_details')
+        .doc(documentId)
+        .update({
+      'TournamentImage': tournamentImage,
+      'TournamentName': tournamentNameController.text,
+      'Date': dateController.text,
+      "Place": placeController.text,
+      'Category': category,
+      'LimitOfTeam': limits,
+    });
+  }
+
+  static addTeam(
+      {required document1,
+      required teamNameController,
+      required managerNameController,
+      required phoneNumberController,
+      required placeController,
+      required imageSeleted}) async {
+    await FirebaseFirestore.instance
+        .collection('tournament_details')
+        .doc(document1)
+        .collection('team_details')
+        .add({
+      'teamName': teamNameController.text,
+      'managerName': managerNameController.text,
+      'phoneNumber': phoneNumberController.text,
+      'place': placeController.text,
+      'teamImage': imageSeleted
+    });
+  }
+
+  static editTeam(
+      {required document1,
+      required document2ID,
+      required teamImage,
+      required teamNameController,
+      required managerNameController,
+      required phoneNumberController,
+      required placeController}) async {
+    await FirebaseFirestore.instance
+        .collection('tournament_details')
+        .doc(document1)
+        .collection('team_details')
+        .doc(document2ID)
+        .update({
+      'teamImage': teamImage,
+      "teamName": teamNameController.text,
+      'managerName': managerNameController.text,
+      'phoneNumber': phoneNumberController.text,
+      'place': placeController.text
+    });
+  }
 }

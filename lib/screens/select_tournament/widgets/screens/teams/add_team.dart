@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -76,8 +76,9 @@ class _AddTeamState extends State<AddTeam> {
                   sizedbox10(),
                   textfontsize17(text: "Phone Number"),
                   sizedbox10(),
-                  addTeamtxtController(
-                      phoneNumberController, 'Phone Number is Required'),
+                  addTeamPhoneController(
+                      numbercontroller: phoneNumberController,
+                      hintText: 'Phone Number is Required'),
                   sizedbox10(),
                   textfontsize17(text: 'Place'),
                   sizedbox10(),
@@ -90,17 +91,14 @@ class _AddTeamState extends State<AddTeam> {
               child: containerButtonCR(txt: 'Add Team'),
               onTap: () async {
                 if (formKey.currentState!.validate()) {
-                  await FirebaseFirestore.instance
-                      .collection('tournament_details')
-                      .doc(widget.docss)
-                      .collection('team_details')
-                      .add({
-                    'teamName': teamNameController.text,
-                    'managerName': managerNameController.text,
-                    'phoneNumber': phoneNumberController.text,
-                    'place': placeController.text,
-                    'teamImage': seletedImage
-                  });
+                  await DatabaseFunctions.addTeam(
+                      document1: widget.docss,
+                      teamNameController: teamNameController,
+                      managerNameController: managerNameController,
+                      phoneNumberController: phoneNumberController,
+                      placeController: placeController,
+                      imageSeleted: seletedImage);
+                 
                   teamNameController.clear();
                   managerNameController.clear();
                   phoneNumberController.clear();

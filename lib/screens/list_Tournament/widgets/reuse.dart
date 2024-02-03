@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,21 +19,20 @@ alertDialog1({required ctx, required docss}) {
           onPressed: () {
             Navigator.of(ctx).pop();
           },
-          child:const Text('Cancel')),
+          child: const Text('Cancel')),
       TextButton(
           onPressed: () async {
-            
             await FirebaseFirestore.instance
                 .collection('tournament_details')
                 .doc(docss)
-                .delete(); 
-                Navigator.of(ctx).pop();
+                .delete();
+            Navigator.of(ctx).pop();
 
             ScaffoldMessenger.of(ctx).showSnackBar(
                 const SnackBar(content: Text('Delete Successfully')));
-              //  Navigator.of(ctx).pop();
+            //  Navigator.of(ctx).pop();
           },
-          child:const Text('Ok'))
+          child: const Text('Ok'))
     ],
   );
 }
@@ -44,12 +44,24 @@ updateSucessSnackbar() {
     backgroundColor: Colors.green,
   );
 }
+
 Future<String?> pickImageFromGallery() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      return pickedImage.path;
-    }
-    return null;
+  final pickedImage =
+      await ImagePicker().pickImage(source: ImageSource.gallery);
+  if (pickedImage != null) {
+    return pickedImage.path;
   }
- 
+  return null;
+}
+
+editingtextformDecorated({required controller}) {
+  return TextFormField(
+    controller: controller,
+    decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        fillColor: Colors.yellow[100],
+        filled: true),
+  );
+}
+
+

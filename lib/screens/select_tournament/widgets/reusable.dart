@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
-import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 
 tabtext(text) {
   return Tab(
@@ -79,69 +78,13 @@ addTeamtxtController(TextEditingController teamController, String hinttext) {
   );
 }
 
-// savebutton(document1, document2, document3ID, playerphoto,
-//     playerNameEditController, playerAgeEditController, playerid, ctx) {
-//   return TextButton(
-//       onPressed: () async {
-//         await FirebaseFirestore.instance
-//             .collection('tournament_details')
-//             .doc(document1)
-//             .collection('team_details')
-//             .doc(document2)
-//             .collection('player_details')
-//             .doc(document3ID)
-//             .update({
-//           'PlayerPhoto': playerphoto,
-//           'PlayerName': playerNameEditController.text,
-//           'DateOfBirth': playerAgeEditController.text,
-//           'PlayerId': playerid
-//         });
-//         playerNameEditController.clear();
-//         playerAgeEditController.clear();
-//         // ignore: use_build_context_synchronously
-//         ScaffoldMessenger.of(ctx).showSnackBar(updateSucessSnackbar());
-
-//         // ignore: use_build_context_synchronously
-//         navigatorPOP(ctx);
-//       },
-//       child: const Text('Save'));
-// }
-class Dbfunctions {
-  //not used
-
-  static savebutton(
-      {required  document1,
-      required  document2,
-      required  document3ID,
-      required String playerphoto,
-      required playerNameEditController,
-      required playerAgeEditController,
-      required String playerid,
-      required ctx}) {
-    return TextButton(
-        onPressed: () async {
-          await FirebaseFirestore.instance
-              .collection('tournament_details')
-              .doc(document1)
-              .collection('team_details')
-              .doc(document2)
-              .collection('player_details')
-              .doc(document3ID)
-              .update({
-            'PlayerPhoto': playerphoto,
-            'PlayerName': playerNameEditController.text,
-            'DateOfBirth': playerAgeEditController.text,
-            'PlayerId': playerid
-          });
-          playerNameEditController.clear();
-          playerAgeEditController.clear();
-          // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(ctx).showSnackBar(updateSucessSnackbar());
-
-          // ignore: use_build_context_synchronously
-          navigatorPOP(ctx);
-        },
-        child: const Text('Save'));
-  }
+addTeamPhoneController({required numbercontroller,required String? hintText}) {
+  return TextFormField(
+    controller: numbercontroller,
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+    ),
+    keyboardType: TextInputType.number,
+    validator: (value) => value == null || value.isEmpty ? hintText : null,
+  );
 }
-
