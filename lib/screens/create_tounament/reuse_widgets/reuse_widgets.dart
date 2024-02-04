@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 appbardecorations({required String name}) {
   return AppBar(
     backgroundColor: Colors.yellow[100],
     title: Text(
       name,
-      style: const TextStyle(
-          color: Colors.teal, fontSize: 30, fontWeight: FontWeight.bold),
+      style:GoogleFonts.oswald(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.teal)
+      //  const TextStyle(
+      //     color: Colors.teal, fontSize: 30, fontWeight: FontWeight.bold),
     ),
   );
 }
@@ -21,10 +23,11 @@ searchbarContainer({required String searchIteam}) {
         ),
         Text(
           searchIteam,
-          style: TextStyle(
-              color: Colors.blueGrey,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
+          style:GoogleFonts.oswald(fontSize: 18)
+          //  TextStyle(
+          //     color: Colors.blueGrey,
+          //     fontWeight: FontWeight.bold,
+          //     fontSize: 18),
         )
       ],
     ),
@@ -61,8 +64,9 @@ containerButtonCR({required String txt}) {
     child: Center(
         child: Text(
       txt,
-      style: const TextStyle(
-          color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+      style:GoogleFonts.oswald(color: Colors.white,fontSize: 28,fontWeight: FontWeight.bold) 
+      // const TextStyle(
+      //     color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
     )),
   );
 }
@@ -70,7 +74,8 @@ containerButtonCR({required String txt}) {
 hintText({required String hintTxt}) {
   return Text(
     hintTxt,
-    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+    style: GoogleFonts.oswald(fontSize: 20,fontWeight: FontWeight.w400)
+    //const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
   );
 }
 

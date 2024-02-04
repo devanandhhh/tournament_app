@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 bgblacktext({required String text1}) {
   return Text(
     text1,
-    style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
+    style:GoogleFonts.oswald(fontSize: 39)
+    // TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
   );
 }
 
@@ -12,10 +14,11 @@ containerButtons({required String name}) {
       child: Center(
           child: Text(
         name,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 21,
-        ),
+        style:GoogleFonts.oswald(fontSize: 21, fontWeight: FontWeight.bold,letterSpacing: 1)
+        //  TextStyle(
+        //   fontWeight: FontWeight.bold,
+        //   fontSize: 21,
+        // ),
       )),
       width: 300,
       height: 58,
@@ -27,8 +30,9 @@ containerButtons({required String name}) {
 headingtext({required String text}) {
   return Text(
     text,
-    style:const TextStyle(
-        color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 27),
+     style:GoogleFonts.oswald(fontSize: 27,color: Colors.teal,fontWeight: FontWeight.bold)
+    //const TextStyle(
+    //     color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 27),
   );
 }
 

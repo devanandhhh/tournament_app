@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 
 tabtext(text) {
@@ -9,13 +10,15 @@ tabtext(text) {
 }
 
 tealcolor() {
-  return const TextStyle(
-      color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 30);
+  return GoogleFonts.oswald(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.teal);
+  // const TextStyle(
+  //     color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 30);
 }
 
 font17() {
-  return const TextStyle(
-      color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500);
+  return GoogleFonts.oswald(fontSize: 20,letterSpacing: 1,fontWeight: FontWeight.w500,color: Colors.black);
+  // const TextStyle(
+  //     color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500);
 }
 
 underlineDecoration() {
@@ -87,4 +90,7 @@ addTeamPhoneController({required numbercontroller,required String? hintText}) {
     keyboardType: TextInputType.number,
     validator: (value) => value == null || value.isEmpty ? hintText : null,
   );
+}
+googleFont(){
+  return GoogleFonts.ubuntu(color: Colors.teal,fontSize: 20,fontWeight: FontWeight.bold);
 }

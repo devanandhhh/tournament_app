@@ -69,6 +69,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   sizedbox10(),
                   TextFormField(
                     controller: tournamentNameController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -82,6 +83,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   sizedbox10(),
                   TextFormField(
                     controller: placeController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -95,6 +97,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   sizedbox10(),
                   TextFormField(
                     controller: dateController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     onTap: () async {
                       DateTime? picked = await showDatePicker(
                           context: context,
@@ -103,7 +106,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                           lastDate: DateTime(2100));
                       if (picked != null) {
                         final formatDate =
-                            DateFormat('dd-MM-yyyy').format(picked);
+                            //DateFormat('dd-MM-yyyy').format(picked);
+                            DateFormat.yMMMMd('en_US').format(picked);
 
                         setState(() {
                           dateController.text = formatDate.toString();
@@ -112,7 +116,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                     },
                     readOnly: true,
                     decoration: InputDecoration(
-                      hintText: 'DD-MM-YYYY',
+                      hintText: 'MM-DD-YYYY',
                       filled: true,
                       fillColor: const Color.fromARGB(255, 216, 214, 198),
                       border: OutlineInputBorder(
@@ -222,7 +226,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                                           'Successfully Created ',
                                           style: TextStyle(color: Colors.white),
                                         )));
-                      
+
                                 await DatabaseFunctions.addTournament(
                                     selectImage: selectImage,
                                     tournamentNameController:

@@ -110,8 +110,10 @@ class _AddplayersState extends State<Addplayers> {
                                     firstDate: DateTime(1999),
                                     lastDate: DateTime(2100));
                                 if (pickedDate != null) {
-                                  final formatDate = DateFormat('dd-MM-yyyy')
-                                      .format(pickedDate);
+                                  final formatDate =
+                                   DateFormat.yMMMMd('en_US').format(pickedDate);
+                                  //  DateFormat('dd-MM-yyyy')
+                                  //     .format(pickedDate);
                                   setState(() {
                                     playerAgeController.text =
                                         formatDate.toString();
@@ -309,15 +311,16 @@ class _AddplayersState extends State<Addplayers> {
                                                                     'Player Name'),
                                                       ),
                                                       sizedbox10(),
-                                                      TextFormField(
-                                                        controller:
-                                                            playerAgeEditController,
-                                                        decoration: const InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            labelText:
-                                                                'Date of birth'),
-                                                      ),
+                                                      DatePickerForAge(controller: playerAgeEditController, labeltxt: 'Date Of Birth'),
+                                                      // TextFormField(
+                                                      //   controller:
+                                                      //       playerAgeEditController,
+                                                      //   decoration: const InputDecoration(
+                                                      //       border:
+                                                      //           OutlineInputBorder(),
+                                                      //       labelText:
+                                                      //           'Date of birth'),
+                                                      // ),
                                                       sizedbox10(),
                                                       Column(
                                                         crossAxisAlignment:

@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/select_tournament/first_page.dart';
+import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 import 'package:tournament_creator/screens/view_details/view_details.dart';
 
 class TournmentList extends StatefulWidget {
@@ -111,7 +113,10 @@ class _TournmentListState extends State<TournmentList> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         scrollable: true,
-                                        title: const Text('Edit Data'),
+                                        title: Text(
+                                          'Edit Data',
+                                          style: stylefont(),
+                                        ),
                                         content: StatefulBuilder(
                                           builder: (context, setState) =>
                                               SingleChildScrollView(
@@ -139,10 +144,15 @@ class _TournmentListState extends State<TournmentList> {
                                                           'Tournament Name',
                                                       controller:
                                                           tournamentNameController),
-                                                  editingtextform(
-                                                      labeltxt: 'Date',
+                                                  DatePicker(
                                                       controller:
-                                                          dateController),
+                                                          dateController,
+                                                      labeltxt: 'Date'),
+                                                  // editingtextformOntap(
+                                                  //     labeltxt: 'Date',
+                                                  //     controller:
+                                                  //         dateController,context: context),
+
                                                   editingtextform(
                                                       labeltxt: "Place",
                                                       controller:

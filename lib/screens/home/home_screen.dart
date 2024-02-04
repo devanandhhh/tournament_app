@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_creator/fav_screen/fav_screen.dart';
 import 'package:tournament_creator/screens/addNotes/add_notes.dart';
 import 'package:tournament_creator/screens/create_tounament/create_tournament.dart';
@@ -53,15 +54,16 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: searchbarContainer(searchIteam: "Search"),
               )),
-          const Padding(
-              padding: EdgeInsets.all(34.0),
+           Padding(
+              padding:const EdgeInsets.all(34.0),
               child: Text(
                 ' Hello!',
-                style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                ),
+                style:GoogleFonts.oswald(fontSize: 50,color: Colors.teal)
+                //  TextStyle(
+                //   color: Colors.teal,
+                //   fontSize: 50,
+                //   fontWeight: FontWeight.bold,
+                // ),
               )),
           Expanded(
               child: Container(

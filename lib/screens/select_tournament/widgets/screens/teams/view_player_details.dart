@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 
 // ignore: camel_case_types, must_be_immutable
 class View_player_details extends StatelessWidget {
@@ -33,7 +34,8 @@ class View_player_details extends StatelessWidget {
           sizedbox10(),
           Text(
             teamName,
-            style: TextStyle(fontSize: 23, fontWeight: FontWeight.w300),
+            style:googleFont()
+            // TextStyle(fontSize: 23, fontWeight: FontWeight.w300),
           ),
           sizedbox10(),
           Text(
@@ -49,9 +51,11 @@ class View_player_details extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.file(
-                File(playerphoto),
-                fit: BoxFit.cover,
+              child: InstaImageViewer(
+                child: Image.file(
+                  File(playerphoto),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -63,7 +67,7 @@ class View_player_details extends StatelessWidget {
           sizedbox10(),
           Text(
             playerName,
-            style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 20),
+            style:googleFont()
           ),
           sizedbox10(),
           Text(
@@ -71,7 +75,7 @@ class View_player_details extends StatelessWidget {
             style: font17(),
           ),
           sizedbox10(),
-          Text(playerDoB),
+          Text(playerDoB,style: googleFont(),),
           sizedbox10(),
           Text(
             'Player ID Proof',
@@ -87,9 +91,11 @@ class View_player_details extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.file(
-                File(playerProff),
-                fit: BoxFit.cover,
+              child: InstaImageViewer(
+                child: Image.file(
+                  File(playerProff),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           )

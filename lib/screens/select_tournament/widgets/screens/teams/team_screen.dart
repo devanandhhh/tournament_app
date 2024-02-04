@@ -10,6 +10,7 @@ import 'package:tournament_creator/screens/select_tournament/widgets/reusable.da
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_players.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_team.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_details.dart';
+import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 
 // ignore: must_be_immutable
 class Teamscreen extends StatefulWidget {
@@ -119,7 +120,7 @@ String? seletedImage;
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: const Text('Edit Team Data'),
+                                    title:   Text('Edit Team Data',style: stylefont(),),
                                     content: StatefulBuilder(
                                       builder: (context, setState) =>
                                           SingleChildScrollView(
