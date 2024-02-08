@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
+import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 
 editingtextform({
   required String labeltxt,
@@ -91,42 +97,7 @@ editingtextformDecorated({required controller}) {
   );
 }
 
-// ignore: must_be_immutable
-class DatePicker extends StatefulWidget {
-  DatePicker({super.key, required this.controller, required this.labeltxt});
 
-  // ignore: prefer_typing_uninitialized_variables
-  TextEditingController controller;
-  String labeltxt;
-
-  @override
-  State<DatePicker> createState() => _DatePickerState();
-}
-
-class _DatePickerState extends State<DatePicker> {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        controller: widget.controller,
-        readOnly: true,
-        decoration: InputDecoration(labelText: widget.labeltxt),
-        onTap: () async {
-          DateTime? picked = await showDatePicker(
-              context: context,
-              //  initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate: DateTime(2100));
-          if (picked != null) {
-            final formatDate =
-                //DateFormat('dd-MM-yyyy').format(picked);
-                DateFormat.yMMMMd('en_US').format(picked);
-            setState(() {
-              widget.controller.text = formatDate.toString();
-            });
-          }
-        });
-  }
-}
 
 // ignore: must_be_immutable
 class DatePickerForAge extends StatefulWidget {
@@ -165,4 +136,123 @@ class _DatePickerForAgeState extends State<DatePickerForAge> {
           }
         });
   }
+}
+
+// for sample not using
+showDialog1(
+    {required context,
+    required image,
+    required tournamentNameController,
+    required dateController,
+    required placeController,required categoryy,
+    required categories,
+    required limits,
+    required limitOfTeams,
+    required docs,
+    required selectedImage
+
+    }) {
+     
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Text(
+            'Edit Data',
+            style: stylefont(),
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) => SingleChildScrollView(
+              child: Column(children: [
+                CircleAvatar(
+                  backgroundImage: FileImage(File(image)),
+                  maxRadius: 70,
+                  child: GestureDetector(
+                    onTap: () async {
+                      String? pickimage = await pickImageFromGallery();
+                      setState(() {
+                        image = pickimage!;
+                      });
+                    },
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    editingtextform(
+                        labeltxt: 'Tournament Name',
+                        controller: tournamentNameController),
+                    DatePicker(controller: dateController, labeltxt: 'Date'),
+                    // editingtextformOntap(
+                    //     labeltxt: 'Date',
+                    //     controller:
+                    //         dateController,context: context),
+
+                    editingtextform(
+                        labeltxt: "Place", controller: placeController),
+                    sizedbox10(),
+                    const Text('Category'),
+                    DropdownButtonFormField(
+                        hint: Text(categoryy),
+                        items: categories.map((e) {
+                          return DropdownMenuItem(value: e, child: Text(e));
+                        }).toList(),
+                        onChanged: (value) {
+                          if (categoryy != value) {
+                            categoryy = value.toString();
+                          }
+                        }),
+                    sizedbox10(),
+                    const Text('Limit of Team'),
+                    DropdownButtonFormField(
+                        hint: Text(limits),
+                        items: limitOfTeams.map((e) {
+                          return DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (limits != value) {
+                            limits = value.toString();
+                          }
+                        })
+                  ],
+                ),
+              ]),
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // setState(() {
+                  //   selectedImage = image;
+                  // });
+                },
+                child: const Text('Cancel')),
+            TextButton(
+                onPressed: () async {
+                  await DatabaseFunctions.editTournament(
+                      documentId: docs.id,
+                      tournamentImage: image,
+                      tournamentNameController: tournamentNameController,
+                      dateController: dateController,
+                      placeController: placeController,
+                      category: categoryy,
+                      limits: limits);
+                  tournamentNameController.clear();
+                  dateController.clear();
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                  dataSucessSnackbar();
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(updateSucessSnackbar());
+                },
+                child: const Text('Save'))
+          ],
+        );
+      });
 }

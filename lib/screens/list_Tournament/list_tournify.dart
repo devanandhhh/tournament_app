@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
@@ -21,7 +21,7 @@ class _TournmentListState extends State<TournmentList> {
   final GlobalKey<ScaffoldMessengerState> scaffoldkey = GlobalKey();
   String? selectedImage;
   List categories = ['7s', '9s', '11s'];
-  List limitOfTeams = ['8 teams', '16 teams', '32 teams'];
+  List <String> limitOfTeams = ['8 teams', '16 teams', '32 teams'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +42,6 @@ class _TournmentListState extends State<TournmentList> {
                 itemBuilder: (context, index) {
                   var docs = snapshot.data!.docs[index];
                   List<String> viewDetails = [];
-                  //List<String> detailsView = [];
                   String tournamentName = docs['TournamentName'];
                   String date = docs['Date'];
                   String image = docs['TournamentImage'];
@@ -53,6 +52,7 @@ class _TournmentListState extends State<TournmentList> {
                   selectedImage = image;
                   viewDetails.addAll(
                       [image, tournamentName, place, date, categoryy, limits]);
+                     
                   TextEditingController tournamentNameController =
                       TextEditingController(text: docs['TournamentName']);
                   TextEditingController dateController =
@@ -70,7 +70,16 @@ class _TournmentListState extends State<TournmentList> {
                                 builder: (context) => Firstscreen(
                                     title: tournamentName,
                                     doc1: docs.id,
-                                    details: viewDetails)));
+                                    details: viewDetails,
+                                    categories:categories,
+                                    limitOfTeams: limitOfTeams,
+                                    
+
+                                   // detailsView: detailsView,
+                                   // dateController: dateController,
+                                    
+                                    
+                                   )));
                       },
                       leading: CircleAvatar(
                         radius: 30,
@@ -260,18 +269,5 @@ class _TournmentListState extends State<TournmentList> {
           },
         ));
   }
-  // @override
-  // void dispose() {
-  //  print('delete sucessfully');
-  //   super.dispose();
-  // }
-//   Future<void> deletedocument(String docs)async{
-// try{await  FirebaseFirestore.instance
-//                 .collection('tournament_details')
-//                 .doc(docs)
-//                 .delete();
-//                 scaffoldkey.currentState?.showSnackBar(SnackBar(content: Text('delete')));
-//   }
-//   catch (e){print(e);}
-// }
+
 }

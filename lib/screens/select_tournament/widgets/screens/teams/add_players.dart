@@ -235,6 +235,16 @@ class _AddplayersState extends State<Addplayers> {
                               TextEditingController(text: dateOfBirth);
 
                           return ListTile(
+                            onTap: () {
+                               navigatorPush(
+                                          ctx: context,
+                                          screen: View_player_details(
+                                              teamName: widget.title,
+                                              playerphoto: playerphoto,
+                                              playerName: playerName,
+                                              playerDoB: dateOfBirth,
+                                              playerProff: playerid));
+                            },
                             tileColor: Colors.amber[100],
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
