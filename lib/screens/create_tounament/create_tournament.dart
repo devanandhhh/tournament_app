@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 class CreateTournament extends StatefulWidget {
@@ -25,6 +26,8 @@ class _CreateTournamentState extends State<CreateTournament> {
   var limitController = TextEditingController();
   final placeController = TextEditingController();
   String? selectImage;
+  //add user
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -219,6 +222,18 @@ class _CreateTournamentState extends State<CreateTournament> {
                               if (limitsCN != null &&
                                   categoryCN != null &&
                                   selectImage != null) {
+                                await FirebaseFirestore.instance
+                                    .collection('tournament')
+                                  .add({
+                                    'TournamentImage': selectImage,
+                                    "TournamentName":
+                                        tournamentNameController.text,
+                                    'Place': placeController.text,
+                                    'Date': dateController.text,
+                                    'Category': categoryCN,
+                                    'LimitOfTeam': limitsCN,
+                                    'userID': user.uid
+                                  });
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(
                                         backgroundColor: Colors.green,
@@ -227,14 +242,14 @@ class _CreateTournamentState extends State<CreateTournament> {
                                           style: TextStyle(color: Colors.white),
                                         )));
 
-                                await DatabaseFunctions.addTournament(
-                                    selectImage: selectImage,
-                                    tournamentNameController:
-                                        tournamentNameController,
-                                    placeController: placeController,
-                                    dateController: dateController,
-                                    category: categoryCN,
-                                    limits: limitsCN);
+                                // await DatabaseFunctions.addTournament(
+                                //     selectImage: selectImage,
+                                //     tournamentNameController:
+                                //         tournamentNameController,
+                                //     placeController: placeController,
+                                //     dateController: dateController,
+                                //     category: categoryCN,
+                                //     limits: limitsCN);
 
                                 tournamentNameController.clear();
                                 dateController.clear();

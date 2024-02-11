@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(theme: ThemeData(primaryColor: Colors.teal,primarySwatch: Colors.amber),
       title: 'tournament app',
-      home:const SplashScreen(),
+      home:
+      const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -131,4 +131,7 @@ class DatabaseFunctions {
       'place': placeController.text
     });
   }
+  // static addUser({
+  //   required
+  // })
 }

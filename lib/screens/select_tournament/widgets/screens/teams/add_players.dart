@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -19,7 +18,7 @@ class Addplayers extends StatefulWidget {
   var doc1;
 // ignore: prefer_typing_uninitialized_variables
   var doc2;
-  
+
   @override
   State<Addplayers> createState() => _AddplayersState();
 }
@@ -30,8 +29,7 @@ class _AddplayersState extends State<Addplayers> {
   TextEditingController playerAgeController = TextEditingController();
   String? playerImage;
   String? playerID;
-    String? seletedImage;
-
+  String? seletedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +108,8 @@ class _AddplayersState extends State<Addplayers> {
                                     firstDate: DateTime(1999),
                                     lastDate: DateTime(2100));
                                 if (pickedDate != null) {
-                                  final formatDate =
-                                   DateFormat.yMMMMd('en_US').format(pickedDate);
+                                  final formatDate = DateFormat.yMMMMd('en_US')
+                                      .format(pickedDate);
                                   //  DateFormat('dd-MM-yyyy')
                                   //     .format(pickedDate);
                                   setState(() {
@@ -162,12 +160,25 @@ class _AddplayersState extends State<Addplayers> {
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
                       if (playerImage != null || playerID != null) {
+                        // await FirebaseFirestore.instance
+                        //     .collection('tournament_details')
+                        //     .doc(widget.doc1)
+                        //     .collection('team_details')
+                        //     .doc(widget.doc2)
+                        //     .collection('player_details')
+                        //     .add({
+                        //   'PlayerPhoto': playerImage,
+                        //   'PlayerName': playerNameController.text,
+                        //   'DateOfBirth': playerAgeController.text,
+                        //   'PlayerId': playerID
+                        // });
+                       
                         await FirebaseFirestore.instance
-                            .collection('tournament_details')
+                            .collection('tournament')
                             .doc(widget.doc1)
-                            .collection('team_details')
+                            .collection('team')
                             .doc(widget.doc2)
-                            .collection('player_details')
+                            .collection('player')
                             .add({
                           'PlayerPhoto': playerImage,
                           'PlayerName': playerNameController.text,
@@ -208,12 +219,19 @@ class _AddplayersState extends State<Addplayers> {
                 sizedbox10(),
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('tournament_details')
+                      .collection('tournament')
                       .doc(widget.doc1)
-                      .collection('team_details')
+                      .collection('team')
                       .doc(widget.doc2)
-                      .collection('player_details')
+                      .collection('player')
                       .snapshots(),
+                  // stream: FirebaseFirestore.instance
+                  //     .collection('tournament_details')
+                  //     .doc(widget.doc1)
+                  //     .collection('team_details')
+                  //     .doc(widget.doc2)
+                  //     .collection('player_details')
+                  //     .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                       return const Center(
@@ -236,14 +254,14 @@ class _AddplayersState extends State<Addplayers> {
 
                           return ListTile(
                             onTap: () {
-                               navigatorPush(
-                                          ctx: context,
-                                          screen: View_player_details(
-                                              teamName: widget.title,
-                                              playerphoto: playerphoto,
-                                              playerName: playerName,
-                                              playerDoB: dateOfBirth,
-                                              playerProff: playerid));
+                              navigatorPush(
+                                  ctx: context,
+                                  screen: View_player_details(
+                                      teamName: widget.title,
+                                      playerphoto: playerphoto,
+                                      playerName: playerName,
+                                      playerDoB: dateOfBirth,
+                                      playerProff: playerid));
                             },
                             tileColor: Colors.amber[100],
                             shape: RoundedRectangleBorder(
@@ -321,7 +339,11 @@ class _AddplayersState extends State<Addplayers> {
                                                                     'Player Name'),
                                                       ),
                                                       sizedbox10(),
-                                                      DatePickerForAge(controller: playerAgeEditController, labeltxt: 'Date Of Birth'),
+                                                      DatePickerForAge(
+                                                          controller:
+                                                              playerAgeEditController,
+                                                          labeltxt:
+                                                              'Date Of Birth'),
                                                       // TextFormField(
                                                       //   controller:
                                                       //       playerAgeEditController,
@@ -378,28 +400,60 @@ class _AddplayersState extends State<Addplayers> {
                                                     onPressed: () {
                                                       navigatorPOP(context);
                                                       setState(() {
-                                                      seletedImage=playerphoto;
+                                                        seletedImage =
+                                                            playerphoto;
                                                       });
-
                                                     },
                                                     child:
-                                                        const Text('Cancel')),                                       
+                                                        const Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
-                                                      await DatabaseFunctions.editPlayer(
-                                                          document1:
-                                                              widget.doc1,
-                                                          document2:
-                                                              widget.doc2,
-                                                          document3ID: doc3.id,
-                                                          playerphoto:
-                                                              playerphoto,
-                                                          playerNameEditController:
-                                                              playerNameEditController,
-                                                          playerAgeEditController:
-                                                              playerAgeEditController,
-                                                          playerid: playerid,
-                                                          ctx: context);
+                                                      // await DatabaseFunctions.editPlayer(
+                                                      //     document1:
+                                                      //         widget.doc1,
+                                                      //     document2:
+                                                      //         widget.doc2,
+                                                      //     document3ID: doc3.id,
+                                                      //     playerphoto:
+                                                      //         playerphoto,
+                                                      //     playerNameEditController:
+                                                      //         playerNameEditController,
+                                                      //     playerAgeEditController:
+                                                      //         playerAgeEditController,
+                                                      //     playerid: playerid,
+                                                      //     ctx: context);
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'tournament')
+                                                          .doc(widget.doc1)
+                                                          .collection('team')
+                                                          .doc(widget.doc2)
+                                                          .collection('player')
+                                                          .doc(doc3.id)
+                                                          .update({
+                                                        'PlayerPhoto':
+                                                            playerphoto,
+                                                        'PlayerName':
+                                                            playerNameEditController
+                                                                .text,
+                                                        'DateOfBirth':
+                                                            playerAgeEditController
+                                                                .text,
+                                                        'PlayerId': playerid
+                                                      });
+                                                      playerNameEditController
+                                                          .clear();
+                                                      playerAgeEditController
+                                                          .clear();
+                                                      // ignore: use_build_context_synchronously
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              updateSucessSnackbar());
+
+                                                      // ignore: use_build_context_synchronously
+                                                      navigatorPOP(context);
                                                     },
                                                     child: const Text('Save'))
                                               ],
@@ -426,16 +480,27 @@ class _AddplayersState extends State<Addplayers> {
                                                     child: Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
-                                                      await DatabaseFunctions
-                                                          .deletePlayer(
-                                                              document1:
-                                                                  widget.doc1,
-                                                              document2:
-                                                                  widget.doc2,
-                                                              documentID:
-                                                                  doc3.id,
-                                                              ctx: context);
-                                                    
+                                                      // await DatabaseFunctions
+                                                      //     .deletePlayer(
+                                                      //         document1:
+                                                      //             widget.doc1,
+                                                      //         document2:
+                                                      //             widget.doc2,
+                                                      //         documentID:
+                                                      //             doc3.id,
+                                                      //         ctx: context);
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'tournament')
+                                                          .doc(widget.doc1)
+                                                          .collection('team')
+                                                          .doc(widget.doc2)
+                                                          .collection('player')
+                                                          .doc(doc3.id)
+                                                          .delete();
+                                                          navigatorPOP(context);
+                                                          scaffoldmessenger(context);
                                                     },
                                                     child: const Text('Ok'))
                                               ],

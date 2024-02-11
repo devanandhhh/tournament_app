@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/list_Tournament/widgets/showEditTournament.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/match_screen.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/team_screen.dart';
@@ -14,8 +13,9 @@ class Firstscreen extends StatefulWidget {
     required this.title,
     required this.doc1,
     required this.details,
-    required this.categories,
+    required this.limits,
     required this.limitOfTeams,
+   
    
 //required this.dateController,
   });
@@ -23,9 +23,10 @@ class Firstscreen extends StatefulWidget {
   final title;
 // ignore: prefer_typing_uninitialized_variables
   var doc1;
-  List categories;
+  late String limits;
   List? limitOfTeams;
   List<String> details;
+ 
 
   @override
   State<Firstscreen> createState() => _FirstscreenState();
@@ -34,7 +35,6 @@ class Firstscreen extends StatefulWidget {
 class _FirstscreenState extends State<Firstscreen> {
   // ignore: prefer_typing_uninitialized_variables
   var docs;
-
   String? selectedImage;
 
   @override
@@ -71,49 +71,49 @@ class _FirstscreenState extends State<Firstscreen> {
                                       category: widget.details[4],
                                       limit: widget.details[5])));
                         }),
-                    PopupMenuItem(
-                      child: const Text('Edit '),
-                      onTap: () {
+                    // PopupMenuItem(
+                    //   child: const Text('Edit '),
+                    //   onTap: () {
                        
-                        TextEditingController tournamentNameController =
-                            TextEditingController(
-                                text: docs?['TournamentName'] ?? '');
-                        TextEditingController dateController =
-                            TextEditingController(text: docs?['Date'] ?? '');
-                        TextEditingController placeController =
-                            TextEditingController(text: docs?['Place'] ?? '');
-                        TextEditingController categoryy = TextEditingController(
-                            text: docs?['Category'] ?? '');
-                        TextEditingController limits = TextEditingController(
-                            text: docs?['LimitOfTeam'] ?? '');
-                        TextEditingController image = TextEditingController(
-                            text: docs?['TournamentImage'] ?? '');
-                        //selectedImage = details[0];
+                    //     TextEditingController tournamentNameController =
+                    //         TextEditingController(
+                    //             text: docs?['TournamentName'] ?? '');
+                    //     TextEditingController dateController =
+                    //         TextEditingController(text: docs?['Date'] ?? '');
+                    //     TextEditingController placeController =
+                    //         TextEditingController(text: docs?['Place'] ?? '');
+                    //     TextEditingController categoryy = TextEditingController(
+                    //         text: docs?['Category'] ?? '');
+                    //     TextEditingController limits = TextEditingController(
+                    //         text: docs?['LimitOfTeam'] ?? '');
+                    //     TextEditingController image = TextEditingController(
+                    //         text: docs?['TournamentImage'] ?? '');
+                    //     //selectedImage = details[0];
 
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return ShowEditTournament(
-                            context: context,
-                            image: image,
-                            tournamentNameController: tournamentNameController,
-                            dateController: dateController,
-                            placeController: placeController,
-                            categoryy: categoryy,
-                            categories: widget.categories,
-                            limits: limits,
-                            limitOfTeams: widget.limitOfTeams,
-                            docs: docs,
-                            // selectedImage: selectedImage
-                          );}
-                        );
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //            ));
-                      },
-                    )
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return ShowEditTournament(
+                    //         context: context,
+                    //         image: image,
+                    //         tournamentNameController: tournamentNameController,
+                    //         dateController: dateController,
+                    //         placeController: placeController,
+                    //         categoryy: categoryy,
+                    //        // categories: widget.categories,
+                    //         limits: limits,
+                    //         limitOfTeams: widget.limitOfTeams,
+                    //         docs: docs,
+                    //         // selectedImage: selectedImage
+                    //       );}
+                    //     );
+                    //     // Navigator.push(
+                    //     //     context,
+                    //     //     MaterialPageRoute(
+                    //     //         builder: (context) =>
+                    //     //            ));
+                    //   },
+                    // )
                   ];
                 },
               ),
@@ -131,7 +131,7 @@ class _FirstscreenState extends State<Firstscreen> {
           ),
           body: TabBarView(children: [
             Teamscreen(
-              doc1: widget.doc1,
+              doc1: widget.doc1,limit: widget.limits,
             ),
             const Matchscreen(),
             const Center(

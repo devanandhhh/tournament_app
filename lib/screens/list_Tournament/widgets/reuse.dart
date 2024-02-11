@@ -55,14 +55,24 @@ alertDialog1({required ctx, required docss}) {
           child: const Text('Cancel')),
       TextButton(
           onPressed: () async {
-            await FirebaseFirestore.instance
-                .collection('tournament_details')
-                .doc(docss)
-                .delete();
-            Navigator.of(ctx).pop();
+            try {
+              await FirebaseFirestore.instance
+                  .collection('tournament')
+                  .doc(docss)
+                  .delete();
+              Navigator.of(ctx).pop();
 
-            ScaffoldMessenger.of(ctx).showSnackBar(
-                const SnackBar(content: Text('Delete Successfully')));
+              ScaffoldMessenger.of(ctx).showSnackBar(
+                  const SnackBar(content: Text('Delete Successfully')));
+            } catch (e) {
+              print(e);
+            }
+
+            // await FirebaseFirestore.instance
+            //     .collection('tournament_details')
+            //     .doc(docss)
+            //     .delete();
+
             //  Navigator.of(ctx).pop();
           },
           child: const Text('Ok'))
@@ -96,8 +106,6 @@ editingtextformDecorated({required controller}) {
         filled: true),
   );
 }
-
-
 
 // ignore: must_be_immutable
 class DatePickerForAge extends StatefulWidget {
@@ -144,15 +152,13 @@ showDialog1(
     required image,
     required tournamentNameController,
     required dateController,
-    required placeController,required categoryy,
+    required placeController,
+    required categoryy,
     required categories,
     required limits,
     required limitOfTeams,
     required docs,
-    required selectedImage
-
-    }) {
-     
+    required selectedImage}) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {

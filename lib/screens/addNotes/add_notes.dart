@@ -45,9 +45,7 @@ class _AddNotesState extends State<AddNotes> {
                 style: fontW17(),
               ),
             )
-          : ListView.separated(
-              itemCount: databox.length,
-              itemBuilder: ((context, index) {
+            :GridView.builder(itemCount: databox.length, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:2), itemBuilder:  ((context, index) {
                 String key = databox.keyAt(index).toString();
                 Notes? notes = databox.get(key);
                 return Padding(
@@ -113,9 +111,78 @@ class _AddNotesState extends State<AddNotes> {
                         borderRadius: BorderRadius.circular(10)),
                   ),
                 );
-              }),
-              separatorBuilder: (context, index) => const SizedBox(),
-            ),
+              }),)
+          // : ListView.separated(
+          //     itemCount: databox.length,
+          //     itemBuilder: ((context, index) {
+          //       String key = databox.keyAt(index).toString();
+          //       Notes? notes = databox.get(key);
+          //       return Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: ListTile(
+          //           title: Text(
+          //             notes!.title!,
+          //             style: fontW17(),
+          //           ),
+          //           trailing: PopupMenuButton(
+          //             icon: const Icon(Icons.more_vert),
+          //             itemBuilder: (context) {
+          //               return [
+          //                 PopupMenuItem(
+          //                   child: const Text('View'),
+          //                   onTap: () {
+          //                     Navigator.push(
+          //                         context,
+          //                         MaterialPageRoute(
+          //                             builder: (context) => ViewScreen(
+          //                                   notes: notes,
+          //                                 )));
+          //                   },
+          //                 ),
+          //                 PopupMenuItem(
+          //                   child: const Text('Edit'),
+          //                   onTap: () {
+          //                     editbuttonClick(key, notes);
+          //                   },
+          //                 ),
+          //                 PopupMenuItem(
+          //                   child: const Text('Delete'),
+          //                   onTap: () {
+          //                     showDialog(
+          //                         context: context,
+          //                         builder: ((context) => AlertDialog(
+          //                               title: const Text('Delete Note'),
+          //                               content: const Text(
+          //                                   'Are you sure you want to delete?'),
+          //                               actions: [
+          //                                 TextButton(
+          //                                     onPressed: () {
+          //                                       navigatorPOP(context);
+          //                                     },
+          //                                     child: const Text('Cancel')),
+          //                                 TextButton(
+          //                                     onPressed: () {
+          //                                       Navigator.of(context).pop();
+          //                                       databox.deleteAt(index);
+          //                                       setState(() {});
+          //                                       scaffoldmessenger(context);
+          //                                     },
+          //                                     child: const Text('Ok '))
+          //                               ],
+          //                             )));
+          //                   },
+          //                 ),
+          //               ];
+          //             },
+          //           ),
+          //           tileColor: Colors.amber[100],
+          //           shape: RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.circular(10)),
+          //         ),
+          //       );
+          //     }),
+          //     separatorBuilder: (context, index) => const SizedBox(),
+          //   ),
     );
   }
 

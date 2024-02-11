@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/select_tournament/first_page.dart';
+import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 import 'package:tournament_creator/screens/view_details/view_details.dart';
 
@@ -21,7 +22,9 @@ class _TournmentListState extends State<TournmentList> {
   final GlobalKey<ScaffoldMessengerState> scaffoldkey = GlobalKey();
   String? selectedImage;
   List categories = ['7s', '9s', '11s'];
-  List <String> limitOfTeams = ['8 teams', '16 teams', '32 teams'];
+  List<String> limitOfTeams = ['8 teams', '16 teams', '32 teams'];
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +33,13 @@ class _TournmentListState extends State<TournmentList> {
         backgroundColor: Colors.yellow[100],
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('tournament_details')
+              .collection('tournament')
+              .where('userID', isEqualTo: user.uid)
               .snapshots(),
+          // stream:
+          // FirebaseFirestore.instance
+          //     .collection('tournament_details')
+          //     .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(
@@ -48,11 +56,11 @@ class _TournmentListState extends State<TournmentList> {
                   String place = docs['Place'];
                   String categoryy = docs['Category'];
                   String limits = docs['LimitOfTeam'];
-
+String limits1=docs['LimitOfTeam'];
                   selectedImage = image;
                   viewDetails.addAll(
                       [image, tournamentName, place, date, categoryy, limits]);
-                     
+
                   TextEditingController tournamentNameController =
                       TextEditingController(text: docs['TournamentName']);
                   TextEditingController dateController =
@@ -68,18 +76,16 @@ class _TournmentListState extends State<TournmentList> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Firstscreen(
-                                    title: tournamentName,
-                                    doc1: docs.id,
-                                    details: viewDetails,
-                                    categories:categories,
-                                    limitOfTeams: limitOfTeams,
-                                    
+                                      title: tournamentName,
+                                      doc1: docs.id,
+                                      details: viewDetails,
+                                      limits: limits1,
+                                      limitOfTeams: limitOfTeams,
+                                     
 
-                                   // detailsView: detailsView,
-                                   // dateController: dateController,
-                                    
-                                    
-                                   )));
+                                      // detailsView: detailsView,
+                                      // dateController: dateController,
+                                    )));
                       },
                       leading: CircleAvatar(
                         radius: 30,
@@ -168,38 +174,42 @@ class _TournmentListState extends State<TournmentList> {
                                                           placeController),
                                                   sizedbox10(),
                                                   const Text('Category'),
-                                                  DropdownButtonFormField(
-                                                      hint: Text(categoryy),
-                                                      items:
-                                                          categories.map((e) {
-                                                        return DropdownMenuItem(
-                                                            value: e,
-                                                            child: Text(e));
-                                                      }).toList(),
-                                                      onChanged: (value) {
-                                                        if (categoryy !=
-                                                            value) {
-                                                          categoryy =
-                                                              value.toString();
-                                                        }
-                                                      }),
+                                                  sizedbox10(),
+                                                  Text(categoryy,style: font17(),),
+                                                  // DropdownButtonFormField(
+                                                  //     hint: Text(categoryy),
+                                                  //     items:
+                                                  //         categories.map((e) {
+                                                  //       return DropdownMenuItem(
+                                                  //           value: e,
+                                                  //           child: Text(e));
+                                                  //     }).toList(),
+                                                  //     onChanged: (value) {
+                                                  //       if (categoryy !=
+                                                  //           value) {
+                                                  //         categoryy =
+                                                  //             value.toString();
+                                                  //       }
+                                                  //     }),
                                                   sizedbox10(),
                                                   const Text('Limit of Team'),
-                                                  DropdownButtonFormField(
-                                                      hint: Text(limits),
-                                                      items:
-                                                          limitOfTeams.map((e) {
-                                                        return DropdownMenuItem(
-                                                          value: e,
-                                                          child: Text(e),
-                                                        );
-                                                      }).toList(),
-                                                      onChanged: (value) {
-                                                        if (limits != value) {
-                                                          limits =
-                                                              value.toString();
-                                                        }
-                                                      })
+                                                  // DropdownButtonFormField(
+                                                  //     hint: Text(limits),
+                                                  //     items:
+                                                  //         limitOfTeams.map((e) {
+                                                  //       return DropdownMenuItem(
+                                                  //         value: e,
+                                                  //         child: Text(e),
+                                                  //       );
+                                                  //     }).toList(),
+                                                  //     onChanged: (value) {
+                                                  //       if (limits != value) {
+                                                  //         limits =
+                                                  //             value.toString();
+                                                  //       }
+                                                  //     })
+                                                  sizedbox10(),
+                                                  Text(limits,style: font17(),)
                                                 ],
                                               ),
                                             ]),
@@ -216,22 +226,48 @@ class _TournmentListState extends State<TournmentList> {
                                               child: const Text('Cancel')),
                                           TextButton(
                                               onPressed: () async {
-                                                await DatabaseFunctions
-                                                    .editTournament(
-                                                        documentId: docs.id,
-                                                        tournamentImage: image,
-                                                        tournamentNameController:
-                                                            tournamentNameController,
-                                                        dateController:
-                                                            dateController,
-                                                        placeController:
-                                                            placeController,
-                                                        category: categoryy,
-                                                        limits: limits);
+                                                //   await DatabaseFunctions
+                                                //       .editTournament(
+                                                //           documentId: docs.id,
+                                                //           tournamentImage: image,
+                                                //           tournamentNameController:
+                                                //               tournamentNameController,
+                                                //           dateController:
+                                                //               dateController,
+                                                //           placeController:
+                                                //               placeController,
+                                                //           category: categoryy,
+                                                //           limits: limits);
+                                                //   tournamentNameController
+                                                //       .clear();
+                                                //   dateController.clear();
+                                                //   // ignore: use_build_context_synchronously
+                                                //   Navigator.of(context).pop();
+                                                //   dataSucessSnackbar();
+                                                //   // ignore: use_build_context_synchronously
+                                                //   ScaffoldMessenger.of(context)
+                                                //       .showSnackBar(
+                                                //           updateSucessSnackbar());
+                                                //-----------------------------------
+                                                await FirebaseFirestore.instance
+                                                    .collection('tournament')
+                                                    .doc(docs.id)
+                                                    .update({
+                                                  'TournamentImage':
+                                                      selectedImage,
+                                                  'TournamentName':
+                                                      tournamentNameController
+                                                          .text,
+                                                  'Date': dateController.text,
+                                                  "Place": placeController.text,
+                                                  'Category': categoryy,
+                                                  'LimitOfTeam': limits,
+                                                 
+                                                });
                                                 tournamentNameController
                                                     .clear();
+
                                                 dateController.clear();
-                                                // ignore: use_build_context_synchronously
                                                 Navigator.of(context).pop();
                                                 dataSucessSnackbar();
                                                 // ignore: use_build_context_synchronously
@@ -269,5 +305,4 @@ class _TournmentListState extends State<TournmentList> {
           },
         ));
   }
-
 }

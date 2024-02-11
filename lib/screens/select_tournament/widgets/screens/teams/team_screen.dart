@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
@@ -14,49 +13,43 @@ import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 
 // ignore: must_be_immutable
 class Teamscreen extends StatefulWidget {
-  Teamscreen({super.key, this.doc1});
+  Teamscreen({super.key, this.doc1, this.limit});
 // ignore: prefer_typing_uninitialized_variables
   var doc1;
+  String? limit;
 
   @override
   State<Teamscreen> createState() => _TeamscreenState();
 }
 
 class _TeamscreenState extends State<Teamscreen> {
-String? seletedImage;
-
+  String? seletedImage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddTeam(
-                        docss: widget.doc1,
-                      )));
-        },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.add),
-      ),
       backgroundColor: Colors.yellow[100],
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('tournament_details')
+            .collection('tournament')
             .doc(widget.doc1)
-            .collection('team_details')
+            .collection('team')
+            //.orderBy('createdAt',descending: false)   
             .snapshots(),
+        // stream: FirebaseFirestore.instance
+        //     .collection('tournament_details')
+        //     .doc(widget.doc1)
+        //     .collection('team_details')
+        //     .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
               child: Text('No data available'),
-            );
+            ); 
           }
           return ListView.separated(
               itemBuilder: (context, index) {
                 var doc2 = snapshot.data!.docs[index];
-                String teamImage = doc2['teamImage'] ;
+                String teamImage = doc2['teamImage'];
                 String teamName = doc2['teamName'];
                 String managerName = doc2['managerName'];
                 String phoneNumber = doc2['phoneNumber'];
@@ -120,7 +113,10 @@ String? seletedImage;
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title:   Text('Edit Team Data',style: stylefont(),),
+                                    title: Text(
+                                      'Edit Team Data',
+                                      style: stylefont(),
+                                    ),
                                     content: StatefulBuilder(
                                       builder: (context, setState) =>
                                           SingleChildScrollView(
@@ -141,10 +137,7 @@ String? seletedImage;
                                                       },
                                                     );
                                                   },
-                                                )
-
-                                                
-                                                ),
+                                                )),
                                             sizedbox30(),
                                             TextFormField(
                                               controller: teamNameController,
@@ -178,26 +171,39 @@ String? seletedImage;
                                           onPressed: () {
                                             navigatorPOP(context);
                                             setState(() {
-                                              
-                                              seletedImage=teamImage;
+                                              seletedImage = teamImage;
                                             });
                                           },
                                           child: const Text('Cancel')),
                                       TextButton(
                                           onPressed: () async {
-                                            await DatabaseFunctions.editTeam(
-                                                document1: widget.doc1,
-                                                document2ID: doc2.id,
-                                                teamImage: teamImage,
-                                                teamNameController:
-                                                    teamNameController,
-                                                managerNameController:
-                                                    managerNameController,
-                                                phoneNumberController:
-                                                    phoneNumberController,
-                                                placeController:
-                                                    placeController);
-                                          
+                                            // await DatabaseFunctions.editTeam(
+                                            //     document1: widget.doc1,
+                                            //     document2ID: doc2.id,
+                                            //     teamImage: teamImage,
+                                            //     teamNameController:
+                                            //         teamNameController,
+                                            //     managerNameController:
+                                            //         managerNameController,
+                                            //     phoneNumberController:
+                                            //         phoneNumberController,
+                                            //     placeController:
+                                            //         placeController);
+                                            await FirebaseFirestore.instance
+                                                .collection('tournament')
+                                                .doc(widget.doc1)
+                                                .collection('team')
+                                                .doc(doc2.id)
+                                                .update({
+                                              'teamImage': teamImage,
+                                              "teamName":
+                                                  teamNameController.text,
+                                              'managerName':
+                                                  managerNameController.text,
+                                              'phoneNumber':
+                                                  phoneNumberController.text,
+                                              'place': placeController.text
+                                            });
 
                                             teamNameController.clear();
                                             managerNameController.clear();
@@ -220,7 +226,8 @@ String? seletedImage;
                         PopupMenuItem(
                           child: const Text('Delete'),
                           onTap: () async {
-                            alertdialog2(context, widget.doc1, doc2);
+                            alertdialog2(
+                                ctx: context, doc1: widget.doc1, doc2: doc2.id);
                           },
                         )
                       ];
@@ -229,9 +236,44 @@ String? seletedImage;
                 );
               },
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: snapshot.data!.docs.length);
+              itemCount:
+                  // iteamCount(a: widget.limit)
+                  snapshot.data!.docs.length
+                  //);
+                   <= iteamCount(a: widget.limit)
+                      ? snapshot.data!.docs.length
+                      : iteamCount(a: widget.limit));
+        }, 
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddTeam(
+                        docss: widget.doc1,
+                        limit: widget.limit,
+                      )));
         },
+        backgroundColor: Colors.teal,
+        child: const Icon(Icons.add),
       ),
     );
   }
+}
+
+int iteamCount({required String? a}) {
+  if (a == '8 teams') {
+    print('8');
+    return 8;
+    
+  } else if (a == '16 teams') {
+     print('16');
+    return 16;
+    
+  } else if (a == '32 teams') {
+     print('32');
+    return 32;
+  }
+  return 0;
 }

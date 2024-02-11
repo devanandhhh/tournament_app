@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/home/home_screen.dart';
+import 'package:tournament_creator/login&signUp/auth_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -43,6 +43,6 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+        MaterialPageRoute(builder: (ctx) =>  AuthPage()));
   }
 }

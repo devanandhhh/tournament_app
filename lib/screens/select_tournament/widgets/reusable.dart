@@ -10,13 +10,18 @@ tabtext(text) {
 }
 
 tealcolor() {
-  return GoogleFonts.oswald(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.teal);
+  return GoogleFonts.oswald(
+      fontSize: 30, fontWeight: FontWeight.bold, color: Colors.teal);
   // const TextStyle(
   //     color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 30);
 }
 
 font17() {
-  return GoogleFonts.oswald(fontSize: 20,letterSpacing: 1,fontWeight: FontWeight.w500,color: Colors.black);
+  return GoogleFonts.oswald(
+      fontSize: 20,
+      letterSpacing: 1,
+      fontWeight: FontWeight.w500,
+      color: Colors.black);
   // const TextStyle(
   //     color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500);
 }
@@ -44,7 +49,7 @@ decorationshowdiag(String text) {
   return InputDecoration(border: const OutlineInputBorder(), labelText: text);
 }
 
-alertdialog2(ctx, doc1, doc2) {
+alertdialog2({required ctx,required doc1, required  doc2}) {
   return showDialog(
       context: ctx,
       builder: (context) {
@@ -61,11 +66,17 @@ alertdialog2(ctx, doc1, doc2) {
                   onPressed: () async {
                     navigatorPOP(ctx);
                     await FirebaseFirestore.instance
-                        .collection('tournament_details')
+                        .collection('tournament')
                         .doc(doc1)
-                        .collection('team_details')
-                        .doc(doc2.id)
-                        .delete();
+                        .collection('team')
+                        .doc(doc2)
+                        .delete();   
+                    // await FirebaseFirestore.instance
+                    //     .collection('tournament_details')
+                    //     .doc(doc1)
+                    //     .collection('team_details')
+                    //     .doc(doc2.id)
+                    //     .delete();
                     scaffoldmessenger(ctx);
                   },
                   child: const Text('Ok'))
@@ -81,7 +92,7 @@ addTeamtxtController(TextEditingController teamController, String hinttext) {
   );
 }
 
-addTeamPhoneController({required numbercontroller,required String? hintText}) {
+addTeamPhoneController({required numbercontroller, required String? hintText}) {
   return TextFormField(
     controller: numbercontroller,
     decoration: const InputDecoration(
@@ -91,6 +102,8 @@ addTeamPhoneController({required numbercontroller,required String? hintText}) {
     validator: (value) => value == null || value.isEmpty ? hintText : null,
   );
 }
-googleFont(){
-  return GoogleFonts.ubuntu(color: Colors.teal,fontSize: 20,fontWeight: FontWeight.bold);
+
+googleFont() {
+  return GoogleFonts.ubuntu(
+      color: Colors.teal, fontSize: 20, fontWeight: FontWeight.bold);
 }
