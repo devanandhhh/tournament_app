@@ -8,6 +8,7 @@ import 'package:tournament_creator/screens/addNotes/create_notes.dart';
 import 'package:tournament_creator/screens/addNotes/view_notes.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 
 // ignore: must_be_immutable
 class AddNotes extends StatefulWidget {
@@ -51,6 +52,11 @@ class _AddNotesState extends State<AddNotes> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
+                    onTap: () {
+                      navigatorPush(ctx: context, screen: ViewScreen(
+                                            notes: notes,
+                                          )); 
+                    },
                     title: Text(
                       notes!.title!,
                       style: fontW17(),

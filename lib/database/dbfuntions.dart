@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
@@ -134,4 +135,122 @@ class DatabaseFunctions {
   // static addUser({
   //   required
   // })
+
+  static addTournament1(
+      {required selectImage,
+      required tournamentNameController,
+      required placeController,
+      required dateController,
+      required categoryCN,
+      required limitsCN,
+      required user}) async {
+    await FirebaseFirestore.instance.collection('tournament').add({
+      'TournamentImage': selectImage,
+      "TournamentName": tournamentNameController.text,
+      'Place': placeController.text,
+      'Date': dateController.text,
+      'Category': categoryCN,
+      'LimitOfTeam': limitsCN,
+      'userID': user
+    });
+  }
+
+  static edittournament1(
+      {required document1,
+      required image,
+      required tournamentNameController,
+      required dateController,
+      required placeController,
+      required categoryy,
+      required limits}) async {
+    await FirebaseFirestore.instance
+        .collection('tournament')
+        .doc(document1)
+        .update({
+      'TournamentImage': image,
+      'TournamentName': tournamentNameController.text,
+      'Date': dateController.text,
+      "Place": placeController.text,
+      'Category': categoryy,
+      'LimitOfTeam': limits,
+    });
+  }
+
+  static addteam1(
+      {required document,
+      required teamNameController,
+      required managerNameController,
+      required phoneNumberController,
+      required placeController,
+      required seletedImage}) async {
+    await FirebaseFirestore.instance
+        .collection('tournament')
+        .doc(document)
+        .collection('team')
+        .add({
+      'teamName': teamNameController.text,
+      'managerName': managerNameController.text,
+      'phoneNumber': phoneNumberController.text,
+      'place': placeController.text,
+      'teamImage': seletedImage
+    });
+  }
+
+  static editteam1({
+    required document1,
+    required document2,
+    required teamImage,
+    required teamNameController,
+    required managerNameController,
+    required phoneNumberController,
+    required placeController,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection('tournament')
+        .doc(document1)
+        .collection('team')
+        .doc(document2)
+        .update({
+      'teamImage': teamImage,
+      "teamName": teamNameController.text,
+      'managerName': managerNameController.text,
+      'phoneNumber': phoneNumberController.text,
+      'place': placeController.text
+    });
+  }
+
+  static addplayer1(
+      {required playerImage,
+      required playerNameController,
+      required playerAgeController,
+      required playerID,
+      required document1,
+      required document2}) async {
+    await FirebaseFirestore.instance.collection('players').add({
+      'PlayerPhoto': playerImage,
+      'PlayerName': playerNameController.text,
+      'DateOfBirth': playerAgeController.text,
+      'PlayerId': playerID,
+      'tournamentID': document1,
+      'teamID': document2,
+    });
+  }
+
+  static editplayer1(
+      {required document3,
+      required playerphoto,
+      required playerNameEditController,
+      required playerAgeEditController,
+      required playerid}) async {
+    await FirebaseFirestore.instance
+        .collection('players')
+        .doc(document3)
+        .update({
+      'PlayerPhoto': playerphoto,
+      'PlayerName': playerNameEditController.text,
+      'DateOfBirth': playerAgeEditController.text,
+      'PlayerId': playerid,
+    });
+  }
 }
+ 

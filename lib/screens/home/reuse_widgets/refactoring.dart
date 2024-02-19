@@ -23,7 +23,9 @@ containerButtons({required String name}) {
       width: 300,
       height: 58,
       decoration: BoxDecoration(
-          color:const Color.fromARGB(255, 216, 214, 198),
+          color:
+          //Colors.grey[400],
+          const Color.fromARGB(255, 216, 214, 198),
           borderRadius: BorderRadius.circular(5)));
 }
 

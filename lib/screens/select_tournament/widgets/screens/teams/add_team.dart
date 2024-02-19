@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -19,7 +20,6 @@ class AddTeam extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   var docss;
   String? limit;
-
   @override
   State<AddTeam> createState() => _AddTeamState();
 }
@@ -116,57 +116,65 @@ class _AddTeamState extends State<AddTeam> {
                     if (seletedImage != null) {
                       //    int documentlength=   await FirebaseFirestore.instance.collection('tournament').doc(widget.docss).collection('team').snapshots().length;
                       //  int iteamCount1= iteamCount(a: widget.limit);
-                       if(documentlength<=iteamCount1-1){
-                      await FirebaseFirestore.instance
-                          .collection('tournament')
-                          .doc(widget.docss)
-                          .collection('team')
-                          .add({
-                        'teamName': teamNameController.text,
-                        'managerName': managerNameController.text,
-                        'phoneNumber': phoneNumberController.text,
-                        'place': placeController.text,
-                        'teamImage': seletedImage
-                      });
+                      if (documentlength <= iteamCount1 - 1) {
+                        // await FirebaseFirestore.instance
+                        //     .collection('tournament')
+                        //     .doc(widget.docss)
+                        //     .collection('team')
+                        //     .add({
+                        //   'teamName': teamNameController.text,
+                        //   'managerName': managerNameController.text,
+                        //   'phoneNumber': phoneNumberController.text,
+                        //   'place': placeController.text,
+                        //   'teamImage': seletedImage
+                        // });
+                        DatabaseFunctions.addteam1(
+                            document: widget.docss,
+                            teamNameController: teamNameController,
+                            managerNameController: managerNameController,
+                            phoneNumberController: phoneNumberController,
+                            placeController: placeController,
+                            seletedImage: seletedImage);
 
-                      teamNameController.clear();
-                      managerNameController.clear();
-                      phoneNumberController.clear();
-                      placeController.clear();
-                      seletedImage = null;
+                        teamNameController.clear();
+                        managerNameController.clear();
+                        phoneNumberController.clear();
+                        placeController.clear();
+                        seletedImage = null;
 
-                      // ignore: use_build_context_synchronously
-                      scaffoldmessAdded(context);
-                      setState(() {});
-                      navigatorPOP(context);
-                      //  }
-                      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('full')));
-                      // int a= iteamCount(a: widget.limit);
+                        // ignore: use_build_context_synchronously
+                        scaffoldmessAdded(context);
+                        setState(() {});
+                        navigatorPOP(context);
+                        //  }
+                        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('full')));
+                        // int a= iteamCount(a: widget.limit);
 
-                      //  await DatabaseFunctions.addTeam(
-                      //   document1: widget.docss,
-                      //   teamNameController: teamNameController,
-                      //   managerNameController: managerNameController,
-                      //   phoneNumberController: phoneNumberController,
-                      //   placeController: placeController,
-                      //   imageSeleted: seletedImage);
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Team Already full'),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    navigatorPOP(context);
-                                  },
-                                  child: Text('Ok'))
-                            ],
-                          );
-                        },
-                      );
-                    }}
+                        //  await DatabaseFunctions.addTeam(
+                        //   document1: widget.docss,
+                        //   teamNameController: teamNameController,
+                        //   managerNameController: managerNameController,
+                        //   phoneNumberController: phoneNumberController,
+                        //   placeController: placeController,
+                        //   imageSeleted: seletedImage);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Team Already full'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      navigatorPOP(context);
+                                    },
+                                    child: Text('Ok'))
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
                   });
 
                   //  await FirebaseFirestore.instance

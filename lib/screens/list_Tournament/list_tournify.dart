@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
@@ -11,9 +13,10 @@ import 'package:tournament_creator/screens/select_tournament/widgets/reusable.da
 import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 import 'package:tournament_creator/screens/view_details/view_details.dart';
 
+// ignore: must_be_immutable
 class TournmentList extends StatefulWidget {
-  const TournmentList({super.key});
-
+  TournmentList({super.key, this.uniqueId});
+  String? uniqueId;
   @override
   State<TournmentList> createState() => _TournmentListState();
 }
@@ -56,7 +59,7 @@ class _TournmentListState extends State<TournmentList> {
                   String place = docs['Place'];
                   String categoryy = docs['Category'];
                   String limits = docs['LimitOfTeam'];
-String limits1=docs['LimitOfTeam'];
+                  String limits1 = docs['LimitOfTeam'];
                   selectedImage = image;
                   viewDetails.addAll(
                       [image, tournamentName, place, date, categoryy, limits]);
@@ -81,7 +84,6 @@ String limits1=docs['LimitOfTeam'];
                                       details: viewDetails,
                                       limits: limits1,
                                       limitOfTeams: limitOfTeams,
-                                     
 
                                       // detailsView: detailsView,
                                       // dateController: dateController,
@@ -175,22 +177,22 @@ String limits1=docs['LimitOfTeam'];
                                                   sizedbox10(),
                                                   const Text('Category'),
                                                   sizedbox10(),
-                                                  Text(categoryy,style: font17(),),
-                                                  // DropdownButtonFormField(
-                                                  //     hint: Text(categoryy),
-                                                  //     items:
-                                                  //         categories.map((e) {
-                                                  //       return DropdownMenuItem(
-                                                  //           value: e,
-                                                  //           child: Text(e));
-                                                  //     }).toList(),
-                                                  //     onChanged: (value) {
-                                                  //       if (categoryy !=
-                                                  //           value) {
-                                                  //         categoryy =
-                                                  //             value.toString();
-                                                  //       }
-                                                  //     }),
+                                                  // Text(categoryy,style: font17(),),
+                                                  DropdownButtonFormField(
+                                                      hint: Text(categoryy),
+                                                      items:
+                                                          categories.map((e) {
+                                                        return DropdownMenuItem(
+                                                            value: e,
+                                                            child: Text(e));
+                                                      }).toList(),
+                                                      onChanged: (value) {
+                                                        if (categoryy !=
+                                                            value) {
+                                                          categoryy =
+                                                              value.toString();
+                                                        }
+                                                      }),
                                                   sizedbox10(),
                                                   const Text('Limit of Team'),
                                                   // DropdownButtonFormField(
@@ -209,7 +211,10 @@ String limits1=docs['LimitOfTeam'];
                                                   //       }
                                                   //     })
                                                   sizedbox10(),
-                                                  Text(limits,style: font17(),)
+                                                  Text(
+                                                    limits,
+                                                    style: font17(),
+                                                  )
                                                 ],
                                               ),
                                             ]),
@@ -249,26 +254,36 @@ String limits1=docs['LimitOfTeam'];
                                                 //       .showSnackBar(
                                                 //           updateSucessSnackbar());
                                                 //-----------------------------------
-                                                await FirebaseFirestore.instance
-                                                    .collection('tournament')
-                                                    .doc(docs.id)
-                                                    .update({
-                                                  'TournamentImage':
-                                                      selectedImage,
-                                                  'TournamentName':
-                                                      tournamentNameController
-                                                          .text,
-                                                  'Date': dateController.text,
-                                                  "Place": placeController.text,
-                                                  'Category': categoryy,
-                                                  'LimitOfTeam': limits,
-                                                 
-                                                });
+                                                // await FirebaseFirestore.instance
+                                                //     .collection('tournament')
+                                                //     .doc(docs.id)
+                                                //     .update({
+                                                //   'TournamentImage': image,
+                                                //   'TournamentName':
+                                                //       tournamentNameController
+                                                //           .text,
+                                                //   'Date': dateController.text,
+                                                //   "Place": placeController.text,
+                                                //   'Category': categoryy,
+                                                //   'LimitOfTeam': limits,
+                                                // });
+                                                //--------
+                                                DatabaseFunctions.edittournament1(
+                                                    document1: docs.id,
+                                                    image: image,
+                                                    tournamentNameController:
+                                                        tournamentNameController,
+                                                    dateController:
+                                                        dateController,
+                                                    placeController:
+                                                        placeController,
+                                                    categoryy: categoryy,
+                                                    limits: limits);
                                                 tournamentNameController
                                                     .clear();
 
                                                 dateController.clear();
-                                                Navigator.of(context).pop();
+                                                navigatorPOP(context);
                                                 dataSucessSnackbar();
                                                 // ignore: use_build_context_synchronously
                                                 ScaffoldMessenger.of(context)

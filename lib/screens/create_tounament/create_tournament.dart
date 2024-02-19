@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 class CreateTournament extends StatefulWidget {
@@ -222,42 +223,41 @@ class _CreateTournamentState extends State<CreateTournament> {
                               if (limitsCN != null &&
                                   categoryCN != null &&
                                   selectImage != null) {
-                                await FirebaseFirestore.instance
-                                    .collection('tournament')
-                                  .add({
-                                    'TournamentImage': selectImage,
-                                    "TournamentName":
-                                        tournamentNameController.text,
-                                    'Place': placeController.text,
-                                    'Date': dateController.text,
-                                    'Category': categoryCN,
-                                    'LimitOfTeam': limitsCN,
-                                    'userID': user.uid
-                                  });
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                        backgroundColor: Colors.green,
-                                        content: Text(
-                                          'Successfully Created ',
-                                          style: TextStyle(color: Colors.white),
-                                        )));
+                                // await FirebaseFirestore.instance
+                                //     .collection('tournament')
+                                //   .add({
+                                //     'TournamentImage': selectImage,
+                                //     "TournamentName":
+                                //         tournamentNameController.text,
+                                //     'Place': placeController.text,
+                                //     'Date': dateController.text,
+                                //     'Category': categoryCN,
+                                //     'LimitOfTeam': limitsCN,
+                                //     'userID': user.uid
+                                //   });
+                                DatabaseFunctions.addTournament1(
+                                    selectImage: selectImage,
+                                    tournamentNameController:
+                                        tournamentNameController,
+                                    placeController: placeController,
+                                    dateController: dateController,
+                                    categoryCN: categoryCN,
+                                    limitsCN: limitsCN,
+                                    user: user.uid);
+                               
+                                messengerScaffold1(ctx:context , text: 'Sucessfully Added');
+                                
 
-                                // await DatabaseFunctions.addTournament(
-                                //     selectImage: selectImage,
-                                //     tournamentNameController:
-                                //         tournamentNameController,
-                                //     placeController: placeController,
-                                //     dateController: dateController,
-                                //     category: categoryCN,
-                                //     limits: limitsCN);
+                               
 
                                 tournamentNameController.clear();
                                 dateController.clear();
                                 placeController.clear();
                                 categoryController.clear();
                                 limitController.clear();
+                                Navigator.pop(context);
                                 // ignore: use_build_context_synchronously
-                                Navigator.of(context).pop();
+                                // Navigator.pushReplacement(context,MaterialPageRoute(builder: (ctx)=>HomeScreen(uniqueId: uniqueId,)) );
                               }
                             }
                           },

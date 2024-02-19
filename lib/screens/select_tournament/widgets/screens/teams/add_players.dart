@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -12,13 +13,14 @@ import 'package:tournament_creator/screens/select_tournament/widgets/screens/tea
 
 // ignore: must_be_immutable
 class Addplayers extends StatefulWidget {
-  Addplayers({super.key, required this.title, this.doc1, this.doc2});
+  Addplayers(
+      {super.key, required this.title, this.doc1, this.doc2, this.uniqueId});
   String title;
 // ignore: prefer_typing_uninitialized_variables
   var doc1;
 // ignore: prefer_typing_uninitialized_variables
   var doc2;
-
+  String? uniqueId;
   @override
   State<Addplayers> createState() => _AddplayersState();
 }
@@ -30,6 +32,7 @@ class _AddplayersState extends State<Addplayers> {
   String? playerImage;
   String? playerID;
   String? seletedImage;
+  String? selectedId;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +162,7 @@ class _AddplayersState extends State<Addplayers> {
                 InkWell(
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      if (playerImage != null || playerID != null) {
+                      if (playerImage != null && playerID != null) {
                         // await FirebaseFirestore.instance
                         //     .collection('tournament_details')
                         //     .doc(widget.doc1)
@@ -172,19 +175,36 @@ class _AddplayersState extends State<Addplayers> {
                         //   'DateOfBirth': playerAgeController.text,
                         //   'PlayerId': playerID
                         // });
-                       
-                        await FirebaseFirestore.instance
-                            .collection('tournament')
-                            .doc(widget.doc1)
-                            .collection('team')
-                            .doc(widget.doc2)
-                            .collection('player')
-                            .add({
-                          'PlayerPhoto': playerImage,
-                          'PlayerName': playerNameController.text,
-                          'DateOfBirth': playerAgeController.text,
-                          'PlayerId': playerID
-                        });
+
+                        // await FirebaseFirestore.instance
+                        //     .collection('tournament')
+                        //     .doc(widget.doc1)
+                        //     .collection('team')
+                        //     .doc(widget.doc2)
+                        //     .collection('player')
+                        //     .add({
+                        //   'PlayerPhoto': playerImage,
+                        //   'PlayerName': playerNameController.text,
+                        //   'DateOfBirth': playerAgeController.text,
+                        //   'PlayerId': playerID
+                        // });
+                        // await FirebaseFirestore.instance
+                        //     .collection('players')
+                        //     .add({
+                        //   'PlayerPhoto': playerImage,
+                        //   'PlayerName': playerNameController.text,
+                        //   'DateOfBirth': playerAgeController.text,
+                        //   'PlayerId': playerID,
+                        //   'tournamentID': widget.doc1,
+                        //   'teamID': widget.doc2,
+                        // });
+                        DatabaseFunctions.addplayer1(
+                            playerImage: playerImage,
+                            playerNameController: playerNameController,
+                            playerAgeController: playerAgeController,
+                            playerID: playerID,
+                            document1: widget.doc1,
+                            document2: widget.doc2);
                         playerAgeController.clear();
                         playerNameController.clear();
                         setState(() {
@@ -194,10 +214,9 @@ class _AddplayersState extends State<Addplayers> {
                         // ignore: use_build_context_synchronously
                         scaffoldmessAdded(context);
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Photos is reqired'),
-                          backgroundColor: Colors.red,
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text('Player photo &proof is reqired'),
+                          backgroundColor: Colors.red[400],
                         ));
                       }
                     }
@@ -219,12 +238,15 @@ class _AddplayersState extends State<Addplayers> {
                 sizedbox10(),
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('tournament')
-                      .doc(widget.doc1)
-                      .collection('team')
-                      .doc(widget.doc2)
-                      .collection('player')
+                      .collection('players')
+                      .where('teamID', isEqualTo: widget.doc2)
                       .snapshots(),
+                  // .collection('tournament')
+                  // .doc(widget.doc1)
+                  // .collection('team')
+                  // .doc(widget.doc2)
+                  // .collection('player')
+                  // .snapshots(),
                   // stream: FirebaseFirestore.instance
                   //     .collection('tournament_details')
                   //     .doc(widget.doc1)
@@ -245,7 +267,7 @@ class _AddplayersState extends State<Addplayers> {
                           String playerphoto = doc3['PlayerPhoto'] ?? '';
                           String playerName = doc3['PlayerName'];
                           String dateOfBirth = doc3['DateOfBirth'];
-                          String playerid = doc3['PlayerId'];
+                          String playerid = doc3['PlayerId'] ?? '';
 
                           TextEditingController playerNameEditController =
                               TextEditingController(text: playerName);
@@ -402,6 +424,7 @@ class _AddplayersState extends State<Addplayers> {
                                                       setState(() {
                                                         seletedImage =
                                                             playerphoto;
+                                                        selectedId = playerid;
                                                       });
                                                     },
                                                     child:
@@ -421,27 +444,52 @@ class _AddplayersState extends State<Addplayers> {
                                                       //     playerAgeEditController:
                                                       //         playerAgeEditController,
                                                       //     playerid: playerid,
-                                                      //     ctx: context);
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'tournament')
-                                                          .doc(widget.doc1)
-                                                          .collection('team')
-                                                          .doc(widget.doc2)
-                                                          .collection('player')
-                                                          .doc(doc3.id)
-                                                          .update({
-                                                        'PlayerPhoto':
-                                                            playerphoto,
-                                                        'PlayerName':
-                                                            playerNameEditController
-                                                                .text,
-                                                        'DateOfBirth':
-                                                            playerAgeEditController
-                                                                .text,
-                                                        'PlayerId': playerid
-                                                      });
+                                                      // //     ctx: context);
+                                                      // await FirebaseFirestore
+                                                      //     .instance
+                                                      //     .collection(
+                                                      //         'tournament')
+                                                      //     .doc(widget.doc1)
+                                                      //     .collection('team')
+                                                      //     .doc(widget.doc2)
+                                                      //     .collection('player')
+                                                      //     .doc(doc3.id)
+                                                      //     .update({
+                                                      //   'PlayerPhoto':
+                                                      //       playerphoto,
+                                                      //   'PlayerName':
+                                                      //       playerNameEditController
+                                                      //           .text,
+                                                      //   'DateOfBirth':
+                                                      //       playerAgeEditController
+                                                      //           .text,
+                                                      //   'PlayerId': playerid
+                                                      // });
+                                                      // await FirebaseFirestore
+                                                      //     .instance
+                                                      //     .collection('players')
+                                                      //     .doc(doc3.id)
+                                                      //     .update({
+                                                      //   'PlayerPhoto':
+                                                      //       //   playerImage,
+                                                      //       playerphoto,
+                                                      //   'PlayerName':
+                                                      //       playerNameEditController
+                                                      //           .text,
+                                                      //   'DateOfBirth':
+                                                      //       playerAgeEditController
+                                                      //           .text,
+                                                      //   'PlayerId': playerid,
+                                                      // });
+                                                      DatabaseFunctions.editplayer1(
+                                                          document3: doc3.id,
+                                                          playerphoto:
+                                                              playerphoto,
+                                                          playerNameEditController:
+                                                              playerNameEditController,
+                                                          playerAgeEditController:
+                                                              playerAgeEditController,
+                                                          playerid: playerid);
                                                       playerNameEditController
                                                           .clear();
                                                       playerAgeEditController
@@ -491,16 +539,21 @@ class _AddplayersState extends State<Addplayers> {
                                                       //         ctx: context);
                                                       await FirebaseFirestore
                                                           .instance
-                                                          .collection(
-                                                              'tournament')
-                                                          .doc(widget.doc1)
-                                                          .collection('team')
-                                                          .doc(widget.doc2)
-                                                          .collection('player')
+                                                          //  .collection('players').where('teamID',isEqualTo: widget.doc2).
+                                                          // .collection(
+                                                          //     'tournament')
+                                                          // .doc(widget.doc1)
+                                                          // .collection('team')
+                                                          // .doc(widget.doc2)
+                                                          // .collection('player')
+                                                          // .doc(doc3.id)
+                                                          // .delete();
+                                                          .collection('players')
                                                           .doc(doc3.id)
                                                           .delete();
-                                                          navigatorPOP(context);
-                                                          scaffoldmessenger(context);
+                                                      navigatorPOP(context);
+                                                      scaffoldmessenger(
+                                                          context);
                                                     },
                                                     child: const Text('Ok'))
                                               ],

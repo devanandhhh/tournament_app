@@ -37,7 +37,13 @@ updateToDataBase(String key, String titleText, String contentText) {
 
 scaffoldmessAdded(ctx) {
   return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
-    content: Text('Added sucessfully'),
-    backgroundColor: Colors.green,
+    content:const Text('Added sucessfully'),
+    backgroundColor: Colors.green[400],
   ));
 }
+messengerScaffold1({required ctx ,required String text}){
+   return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+    content: Text(text),
+    backgroundColor: Colors.green[400],
+  ));
+} 

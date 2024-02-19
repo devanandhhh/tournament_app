@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/match_screen.dart';
+import 'package:tournament_creator/screens/select_tournament/widgets/screens/players/players_screen.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/team_screen.dart';
 import 'package:tournament_creator/screens/view_details/view_details.dart';
 
 //import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-
+//  bool isEnabled=false;
 // ignore: must_be_immutable
 class Firstscreen extends StatefulWidget {
   Firstscreen({
@@ -15,6 +16,7 @@ class Firstscreen extends StatefulWidget {
     required this.details,
     required this.limits,
     required this.limitOfTeams,
+    this.uniqueId
    
    
 //required this.dateController,
@@ -26,7 +28,7 @@ class Firstscreen extends StatefulWidget {
   late String limits;
   List? limitOfTeams;
   List<String> details;
- 
+ String? uniqueId;
 
   @override
   State<Firstscreen> createState() => _FirstscreenState();
@@ -71,49 +73,7 @@ class _FirstscreenState extends State<Firstscreen> {
                                       category: widget.details[4],
                                       limit: widget.details[5])));
                         }),
-                    // PopupMenuItem(
-                    //   child: const Text('Edit '),
-                    //   onTap: () {
-                       
-                    //     TextEditingController tournamentNameController =
-                    //         TextEditingController(
-                    //             text: docs?['TournamentName'] ?? '');
-                    //     TextEditingController dateController =
-                    //         TextEditingController(text: docs?['Date'] ?? '');
-                    //     TextEditingController placeController =
-                    //         TextEditingController(text: docs?['Place'] ?? '');
-                    //     TextEditingController categoryy = TextEditingController(
-                    //         text: docs?['Category'] ?? '');
-                    //     TextEditingController limits = TextEditingController(
-                    //         text: docs?['LimitOfTeam'] ?? '');
-                    //     TextEditingController image = TextEditingController(
-                    //         text: docs?['TournamentImage'] ?? '');
-                    //     //selectedImage = details[0];
-
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) {
-                    //         return ShowEditTournament(
-                    //         context: context,
-                    //         image: image,
-                    //         tournamentNameController: tournamentNameController,
-                    //         dateController: dateController,
-                    //         placeController: placeController,
-                    //         categoryy: categoryy,
-                    //        // categories: widget.categories,
-                    //         limits: limits,
-                    //         limitOfTeams: widget.limitOfTeams,
-                    //         docs: docs,
-                    //         // selectedImage: selectedImage
-                    //       );}
-                    //     );
-                    //     // Navigator.push(
-                    //     //     context,
-                    //     //     MaterialPageRoute(
-                    //     //         builder: (context) =>
-                    //     //            ));
-                    //   },
-                    // )
+                
                   ];
                 },
               ),
@@ -131,12 +91,10 @@ class _FirstscreenState extends State<Firstscreen> {
           ),
           body: TabBarView(children: [
             Teamscreen(
-              doc1: widget.doc1,limit: widget.limits,
+              doc1: widget.doc1,limit: widget.limits,uniqueId: widget.uniqueId,
             ),
-            const Matchscreen(),
-            const Center(
-              child: Text('players are here'),
-            )
+             Matchscreen(docss:widget.doc1,limit:widget.limits),
+            PlayerScreen(doc1: widget.doc1,uniqueId: widget.uniqueId,) 
           ]),
         ));
   }

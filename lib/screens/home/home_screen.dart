@@ -7,13 +7,15 @@ import 'package:tournament_creator/screens/create_tounament/create_tournament.da
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/list_tournify.dart';
-import 'package:tournament_creator/screens/search_Screen/search_screen.dart';
+import 'package:tournament_creator/screens/search_Screen/sample_screen.dart';
+// import 'package:tournament_creator/screens/search_Screen/search_screen.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  HomeScreen({super.key,this.uniqueId});
 
   final user = FirebaseAuth.instance.currentUser!;
-
+String ?uniqueId;
    signUserOut() {
     FirebaseAuth.instance.signOut();
   }
@@ -73,9 +75,10 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(30.0),
               child: InkWell(
                 onTap: () {
-                  navigatorPush(ctx: context, screen: const SearchScreen());
+                 // navigatorPush(ctx: context, screen: const SearchScreen());
+                 navigatorPush(ctx: context, screen: SampleScreen());
                 },
-                child: searchbarContainer(searchIteam: "Search"),
+                child: searchbarContainer(searchIteam: "Search "),
               )),
           Padding(
               padding: const EdgeInsets.all(34.0),
@@ -103,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                     sizedbox70(),
                     InkWell(
                       onTap: () {
-                          navigatorPush(ctx: context, screen: CreateTournament());
+                          navigatorPush(ctx: context, screen:const CreateTournament());
                       },
                       child: containerButtons(name: "Create Tournament"),
                     ),
@@ -111,9 +114,9 @@ class HomeScreen extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         navigatorPush(
-                            ctx: context, screen: const TournmentList());
+                            ctx: context, screen:  TournmentList(uniqueId: uniqueId,));
                       },
-                      child: containerButtons(name: 'Tournament List'),
+                      child: containerButtons(name: 'My Tournaments '),
                     )
                   ]),
             ),

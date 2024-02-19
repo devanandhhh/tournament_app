@@ -15,13 +15,18 @@ appbardecorations({required String name}) {
 
 searchbarContainer({required String searchIteam}) {
   return Container(
-    child: Row(
+    height: 60,
+    width: 350,
+    decoration: BoxDecoration(
+        color:const  Color.fromARGB(255, 216, 214, 198),
+        borderRadius: BorderRadius.circular(48)),
+    child:Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(18.0),
+       const Padding(
+          padding:  EdgeInsets.all(18.0),
           child: Icon(Icons.search),
         ),
-        Text(
+         Text(
           searchIteam,
           style:GoogleFonts.oswald(fontSize: 18)
           //  TextStyle(
@@ -31,11 +36,6 @@ searchbarContainer({required String searchIteam}) {
         )
       ],
     ),
-    height: 60,
-    width: 350,
-    decoration: BoxDecoration(
-        color: Color.fromARGB(255, 216, 214, 198),
-        borderRadius: BorderRadius.circular(48)),
   );
 }
 
@@ -45,7 +45,7 @@ messengerScaffold({required String text, required BuildContext ctx}) {
       text,
       style: const TextStyle(color: Colors.white),
     ),
-    backgroundColor: Colors.red,
+    backgroundColor: Colors.red[400],
   ));
 }
 

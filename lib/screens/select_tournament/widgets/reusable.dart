@@ -58,13 +58,13 @@ alertdialog2({required ctx,required doc1, required  doc2}) {
             content: const Text('Are you sure you want to delete Team '),
             actions: [
               TextButton(
-                  onPressed: () {
-                    navigatorPOP(ctx);
+                  onPressed: () { 
+                    navigatorPOP(context);
                   },
                   child: const Text('Cancel')),
               TextButton(
                   onPressed: () async {
-                    navigatorPOP(ctx);
+                    navigatorPOP(context);
                     await FirebaseFirestore.instance
                         .collection('tournament')
                         .doc(doc1)
@@ -77,7 +77,8 @@ alertdialog2({required ctx,required doc1, required  doc2}) {
                     //     .collection('team_details')
                     //     .doc(doc2.id)
                     //     .delete();
-                    scaffoldmessenger(ctx);
+                    // ignore: use_build_context_synchronously
+                    scaffoldmessenger(context);
                   },
                   child: const Text('Ok'))
             ]);

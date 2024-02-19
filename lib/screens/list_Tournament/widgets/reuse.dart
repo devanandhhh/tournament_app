@@ -82,9 +82,9 @@ alertDialog1({required ctx, required docss}) {
 
 dataSucessSnackbar() => print('Data edited sucessfully ');
 updateSucessSnackbar() {
-  return const SnackBar(
-    content: Text('Updated data Sucessfully '),
-    backgroundColor: Colors.green,
+  return  SnackBar(
+    content:const Text('Updated data Sucessfully '),
+    backgroundColor: Colors.green[400],
   );
 }
 

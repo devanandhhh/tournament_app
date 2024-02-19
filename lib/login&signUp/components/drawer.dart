@@ -1,16 +1,40 @@
+// import 'dart:html';
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/login&signUp/components/my_list_tile.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
+import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
+// import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 
 // ignore: must_be_immutable
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   MyDrawer({super.key, this.ontap});
   Function? ontap;
+
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  final user = FirebaseAuth.instance.currentUser;
+  final firestore1 = FirebaseFirestore.instance;
+  TextEditingController userNameController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+
+  String? image;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.teal,
       child: ListView(children: [
         //Drawer head
         const DrawerHeader(
@@ -29,7 +53,100 @@ class MyDrawer extends StatelessWidget {
         MyListTile(
           icon: Icons.person,
           text: 'P R O F I L E',
-          onTap: () {},
+          onTap: () async {
+            if (user != null) {
+              String email = user!.email ?? '';
+              QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                  await firestore1
+                      .collection('users')
+                      .where('email', isEqualTo: email)
+                      .get();
+
+              if (querySnapshot.docs.isNotEmpty) {
+                DocumentSnapshot<Map<String, dynamic>> snapshot =
+                    querySnapshot.docs.first;
+                String name = snapshot.get('userName');
+                userNameController.text = name;
+                emailController.text = email;
+                String documentId = snapshot.id;
+                // ignore: use_build_context_synchronously
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('User Profile'),
+                    scrollable: true,
+                    content: StatefulBuilder(
+                      builder: (context, setState) => SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 70,
+                              backgroundColor: Colors.teal,
+                              backgroundImage:
+                                  const AssetImage('assets/addimage2.png'),
+                              child: InkWell(
+                                  onTap: () async {
+                                    String? pickimage =
+                                        await pickImageFromGallery();
+                                   
+                                    setState(() {
+                                      image = pickimage;
+                                    });
+                                  },
+                                  child: image != null
+                                      ? ClipOval(
+                                          child: Image.file(
+                                            File(image!),
+                                            fit: BoxFit.cover,
+                                            height: 120,
+                                            width: 120,
+                                          ),
+                                        )
+                                      : null),
+                            ),
+                            sizedbox30(),
+                            TextFormField(
+                              controller: userNameController,
+                              decoration:
+                                  InputDecoration(labelText: 'User name'),
+                            ),
+                            sizedbox10(),
+                            TextFormField(
+                              controller: emailController,
+                              readOnly: true,
+                              decoration:
+                                  const InputDecoration(labelText: 'Email '),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            navigatorPOP(context);
+                          },
+                          child: const Text('Cancel')),
+                      TextButton(
+                          onPressed: () async {
+                            firestore1
+                                .collection('users')
+                                .doc(documentId)
+                                .update({'userName': userNameController.text});
+// scaffoldmessAdded(context);
+                            messengerScaffold1(
+                                text: 'Edited Successfully', ctx: context);
+                            navigatorPOP(context);
+                          },
+                          child: const Text('Save'))
+                    ],
+                  ),
+                );
+              }
+            }
+
+            // navigatorPush(ctx: context, screen: ProfilePage());
+          },
         ),
         MyListTile(
           icon: Icons.logout,
@@ -39,6 +156,28 @@ class MyDrawer extends StatelessWidget {
             signUserOut(context);
           },
         ),
+        const SizedBox(
+          height: 310,
+        ),
+        const Padding(
+          padding: EdgeInsets.all(18.0),
+          child: Divider(),
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            Text(
+              'Login With : ${user!.email!}',
+              style: const TextStyle(color: Colors.white),
+            )
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.all(18.0),
+          child: Divider(),
+        )
       ]),
     );
   }
@@ -48,20 +187,24 @@ class MyDrawer extends StatelessWidget {
       context: ctx,
       builder: (context) {
         return AlertDialog(
-          title: Text('Do You Want to LogOut'),
+          title: const Text('Do You Want to LogOut'),
           actions: [
             TextButton(
                 onPressed: () {
                   navigatorPOP(context);
                 },
-                child: Text('No')),
+                child: const Text('No')),
             TextButton(
                 onPressed: () {
                   signout();
                   navigatorPOP(context);
-                  scaffoldmessenger(context);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text('LogOut SucessFully'),
+                    backgroundColor: Colors.green[400],
+                  ));
+                  //scaffoldmessenger(context);
                 },
-                child: Text('Yes'))
+                child: const Text('Yes'))
           ],
         );
       },
@@ -69,6 +212,7 @@ class MyDrawer extends StatelessWidget {
     //
   }
 
+  // userget()async{
   signout() {
     return FirebaseAuth.instance.signOut();
   }

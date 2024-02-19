@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
+// import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_players.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_team.dart';
@@ -13,10 +15,11 @@ import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 
 // ignore: must_be_immutable
 class Teamscreen extends StatefulWidget {
-  Teamscreen({super.key, this.doc1, this.limit});
-// ignore: prefer_typing_uninitialized_variables
+  Teamscreen({super.key, this.doc1, this.limit, this.uniqueId});
+  // ignore: prefer_typing_uninitialized_variables
   var doc1;
   String? limit;
+  String? uniqueId;
 
   @override
   State<Teamscreen> createState() => _TeamscreenState();
@@ -24,6 +27,8 @@ class Teamscreen extends StatefulWidget {
 
 class _TeamscreenState extends State<Teamscreen> {
   String? seletedImage;
+  List<String> teamNames = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +38,6 @@ class _TeamscreenState extends State<Teamscreen> {
             .collection('tournament')
             .doc(widget.doc1)
             .collection('team')
-            //.orderBy('createdAt',descending: false)   
             .snapshots(),
         // stream: FirebaseFirestore.instance
         //     .collection('tournament_details')
@@ -41,14 +45,21 @@ class _TeamscreenState extends State<Teamscreen> {
         //     .collection('team_details')
         //     .snapshots(),
         builder: (context, snapshot) {
+          //print(widget.doc1);
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
               child: Text('No data available'),
-            ); 
+            );
           }
           return ListView.separated(
               itemBuilder: (context, index) {
                 var doc2 = snapshot.data!.docs[index];
+
+                // for(var doc in snapshot.data!.docs){
+                //   teamNames.add(doc['teamName']);
+                // }
+                //   print(teamNames);
+
                 String teamImage = doc2['teamImage'];
                 String teamName = doc2['teamName'];
                 String managerName = doc2['managerName'];
@@ -72,6 +83,7 @@ class _TeamscreenState extends State<Teamscreen> {
                           title: teamName,
                           doc1: widget.doc1,
                           doc2: doc2.id,
+                          uniqueId: widget.uniqueId,
                         ));
                   },
                   leading: CircleAvatar(
@@ -107,6 +119,7 @@ class _TeamscreenState extends State<Teamscreen> {
                           },
                         ),
                         PopupMenuItem(
+                          //  enabled: isEnabled,
                           child: const Text('Edit'),
                           onTap: () {
                             showDialog(
@@ -189,21 +202,33 @@ class _TeamscreenState extends State<Teamscreen> {
                                             //         phoneNumberController,
                                             //     placeController:
                                             //         placeController);
-                                            await FirebaseFirestore.instance
-                                                .collection('tournament')
-                                                .doc(widget.doc1)
-                                                .collection('team')
-                                                .doc(doc2.id)
-                                                .update({
-                                              'teamImage': teamImage,
-                                              "teamName":
-                                                  teamNameController.text,
-                                              'managerName':
-                                                  managerNameController.text,
-                                              'phoneNumber':
-                                                  phoneNumberController.text,
-                                              'place': placeController.text
-                                            });
+                                            // await FirebaseFirestore.instance
+                                            //     .collection('tournament')
+                                            //     .doc(widget.doc1)
+                                            //     .collection('team')
+                                            //     .doc(doc2.id)
+                                            //     .update({
+                                            //   'teamImage': teamImage,
+                                            //   "teamName":
+                                            //       teamNameController.text,
+                                            //   'managerName':
+                                            //       managerNameController.text,
+                                            //   'phoneNumber':
+                                            //       phoneNumberController.text,
+                                            //   'place': placeController.text
+                                            // });
+                                            DatabaseFunctions.editteam1(
+                                                document1: widget.doc1,
+                                                document2: doc2.id,
+                                                teamImage: teamImage,
+                                                teamNameController:
+                                                    teamNameController,
+                                                managerNameController:
+                                                    managerNameController,
+                                                phoneNumberController:
+                                                    phoneNumberController,
+                                                placeController:
+                                                    placeController);
 
                                             teamNameController.clear();
                                             managerNameController.clear();
@@ -224,6 +249,7 @@ class _TeamscreenState extends State<Teamscreen> {
                           },
                         ),
                         PopupMenuItem(
+                          //  enabled: isEnabled,
                           child: const Text('Delete'),
                           onTap: () async {
                             alertdialog2(
@@ -239,11 +265,12 @@ class _TeamscreenState extends State<Teamscreen> {
               itemCount:
                   // iteamCount(a: widget.limit)
                   snapshot.data!.docs.length
-                  //);
-                   <= iteamCount(a: widget.limit)
+                          //);
+                          <=
+                          iteamCount(a: widget.limit)
                       ? snapshot.data!.docs.length
                       : iteamCount(a: widget.limit));
-        }, 
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -266,13 +293,11 @@ int iteamCount({required String? a}) {
   if (a == '8 teams') {
     print('8');
     return 8;
-    
   } else if (a == '16 teams') {
-     print('16');
+    print('16');
     return 16;
-    
   } else if (a == '32 teams') {
-     print('32');
+    print('32');
     return 32;
   }
   return 0;
