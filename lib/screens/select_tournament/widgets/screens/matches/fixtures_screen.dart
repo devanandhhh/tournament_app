@@ -73,8 +73,10 @@ class FixtureScreen extends StatelessWidget {
                       'image2': teamB['teamImage'],
                       'tournamentID': docs,
                       'scoreA': null,
-                      'scoreB': null
+                      'scoreB': null,
+                      'scoreAdded':false
                     });
+                    print('score added false');
                   }
                 }
                 //return listview

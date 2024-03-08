@@ -65,8 +65,10 @@ class AddScore extends StatelessWidget {
                                 .doc(doc1)
                                 .update({
                               'scoreA': team1ScoreController.text,
-                              'scoreB': team2ScoreController.text
+                              'scoreB': team2ScoreController.text,
+                              'scoreAdded':true
                             });
+                            print('score added true');
                           },
                           child: const Text('Yes ')),
                     ],
