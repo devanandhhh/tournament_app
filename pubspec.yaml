@@ -44,6 +44,7 @@ dependencies:
   google_fonts: ^6.1.0
   insta_image_viewer: ^1.0.2
   firebase_auth: ^4.17.4
+  firebase_storage: ^11.6.7
 
 dev_dependencies:
   flutter_test:
@@ -73,8 +74,11 @@ flutter:
   assets:
     - assets/addimage.png
     - assets/addimage2.png
-    
-    
+    - assets/vini.webp 
+    - assets/login.jpg 
+    - assets/demo.jpg
+    - assets/person1.jpg
+    - assets/documentmodel.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

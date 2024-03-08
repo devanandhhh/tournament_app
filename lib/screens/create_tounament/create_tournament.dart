@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
@@ -27,6 +30,10 @@ class _CreateTournamentState extends State<CreateTournament> {
   var limitController = TextEditingController();
   final placeController = TextEditingController();
   String? selectImage;
+  String? uniquefileName;
+  XFile? image;
+  String? imageUrl = '';
+
   //add user
   final user = FirebaseAuth.instance.currentUser!;
   @override
@@ -40,28 +47,50 @@ class _CreateTournamentState extends State<CreateTournament> {
           child: Padding(
             padding: const EdgeInsets.all(13.0),
             child: Column(children: [
-              CircleAvatar(
-                backgroundColor: Colors.teal,
-                maxRadius: 51,
-                backgroundImage: const AssetImage('assets/addimage2.png'),
-                child: GestureDetector(
-                  onTap: () async {
-                    String? pickImage = await pickImageFromGallery();
-                    setState(() {
-                      selectImage = pickImage;
-                    });
-                  },
-                  child: selectImage != null
-                      ? ClipOval(
-                          child: Image.file(
-                            File(selectImage!),
-                            fit: BoxFit.cover,
-                            width: 150,
-                            height: 150,
-                          ),
-                        )
-                      : null,
-                ),
+              GestureDetector(
+                onTap: () async {
+                  await obj.imagePicking();
+                  setState(() {});
+                },
+                child: CircleAvatar(
+                    backgroundColor: Colors.teal,
+                    maxRadius: 51,
+                    backgroundImage: obj.imageLink.isEmpty
+                        ? Image.asset('assets/addimage2.png').image
+                        : Image.file(File(obj.imageLink)).image
+                    // FileImage(File()) : Image.asset('assets/addimage2.png').image,
+                    // child: GestureDetector(
+                    //   onTap: () async {
+                    //     // String? pickImage = await pickImageFromGallery();
+                    //     // setState(() {
+                    //     //   selectImage = pickImage;
+                    //     // });
+                    //     XFile? file = await imageFromGallery();
+                    //     print('IMAGE FILE :${file?.path}');
+                    //     if (file == null) return;
+
+                    //     setState(() {
+                    //       image = file;
+                    //     });
+                    //     print('image uploaded:${image?.path}');
+                    //     //updating
+                    //     uniquefileName =
+                    //         DateTime.now().microsecondsSinceEpoch.toString();
+                    //     print('the num : $uniquefileName');
+                    //   },
+                    //   // child: selectImage != null
+                    //   //     ? ClipOval(
+                    //   //         child: Image.file(
+                    //   //           File(selectImage!),
+                    //   //           fit: BoxFit.cover,
+                    //   //           width: 150,
+                    //   //           height: 150,
+                    //   //         ),
+                    //   //       )
+                    //   //     : null,
+                    //   // not using
+                    // ),
+                    ),
               ),
               const SizedBox(
                 height: 20,
@@ -76,7 +105,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.trim().isEmpty) {
                         return 'Tournament Name Required';
                       }
                       return null;
@@ -90,7 +119,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.trim().isEmpty) {
                         return 'Place is Required';
                       }
                       return null;
@@ -195,12 +224,13 @@ class _CreateTournamentState extends State<CreateTournament> {
                             placeController.clear();
                             categoryController.clear();
                             limitController.clear();
+                            obj.imageLink = '';
                           },
                           child: containerButtonCR(txt: 'Clear')),
                       InkWell(
                           onTap: () async {
                             if (formkey.currentState!.validate()) {
-                              if (selectImage == null) {
+                              if (obj.imageLink.isEmpty) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(
                                   content: Text(
@@ -222,21 +252,32 @@ class _CreateTournamentState extends State<CreateTournament> {
                               }
                               if (limitsCN != null &&
                                   categoryCN != null &&
-                                  selectImage != null) {
-                                // await FirebaseFirestore.instance
-                                //     .collection('tournament')
-                                //   .add({
-                                //     'TournamentImage': selectImage,
-                                //     "TournamentName":
-                                //         tournamentNameController.text,
-                                //     'Place': placeController.text,
-                                //     'Date': dateController.text,
-                                //     'Category': categoryCN,
-                                //     'LimitOfTeam': limitsCN,
-                                //     'userID': user.uid
-                                //   });
+                                  //image != null
+                                  obj.imageLink.isNotEmpty) {
+                                print('halo');
+
+                                dialogShowing(ctx: context);
+
+                                uniquefileName = DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString();
+                                print('the num : $uniquefileName');
+
+                                await FirebaseStorage.instance
+                                    .ref()
+                                    .child('TournamentImages')
+                                    .child(uniquefileName!)
+                                    .putFile(File(obj.imageLink));
+
+                                imageUrl = await FirebaseStorage.instance
+                                    .ref()
+                                    .child('TournamentImages')
+                                    .child(uniquefileName!)
+                                    .getDownloadURL();
+
                                 DatabaseFunctions.addTournament1(
-                                    selectImage: selectImage,
+                                    selectImage: imageUrl,
+                                    uniquefileName: uniquefileName,
                                     tournamentNameController:
                                         tournamentNameController,
                                     placeController: placeController,
@@ -244,18 +285,21 @@ class _CreateTournamentState extends State<CreateTournament> {
                                     categoryCN: categoryCN,
                                     limitsCN: limitsCN,
                                     user: user.uid);
-                               
-                                messengerScaffold1(ctx:context , text: 'Sucessfully Added');
-                                
 
-                               
+                                messengerScaffold1(
+                                    ctx: context, text: 'Sucessfully Added');
 
                                 tournamentNameController.clear();
                                 dateController.clear();
                                 placeController.clear();
                                 categoryController.clear();
                                 limitController.clear();
+                                // setState(() {
+                                // image=null;
+                                obj.imageLink = '';
+                                //  });
                                 Navigator.pop(context);
+                                navigatorPOP(context);
                                 // ignore: use_build_context_synchronously
                                 // Navigator.pushReplacement(context,MaterialPageRoute(builder: (ctx)=>HomeScreen(uniqueId: uniqueId,)) );
                               }

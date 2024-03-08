@@ -18,7 +18,7 @@ class Matchscreen extends StatefulWidget {
   });
   var docss;
   String? limit;
-
+  bool? value1;
   @override
   State<Matchscreen> createState() => _MatchscreenState();
 }
@@ -26,6 +26,22 @@ class Matchscreen extends StatefulWidget {
 class _MatchscreenState extends State<Matchscreen> {
   bool isLoading = false;
   List<String?> teamNames = [];
+  bool? value1;
+  flagFunction1() async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await FirebaseFirestore.instance
+            .collection('tournament')
+            .doc(widget.docss)
+            .get();
+    value1 = documentSnapshot.get('flag');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    flagFunction1();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,28 +66,54 @@ class _MatchscreenState extends State<Matchscreen> {
                     print(' Document Length  is :$documentlength');
                     print(' Iteam Count is :$iteamCount1');
                     if (documentlength == iteamCount1) {
-                      // setState(() {
-                      //   isEnabled = false;
-                      //   print(isEnabled);
-                      // });
-                      // if (isEnabled == false) {
-                      //   fetchTeamName();
-                      //   List<List<String?>>grouped=[];
-                      //   teamNames.shuffle();
-                      //   for(int i=0;i<teamNames.length;i+=2){
-                      //     List<String?>group=teamNames.sublist(i,i+2).toList();
-                      //     grouped.add(group);
-                      //   }
-                      //   navigatorPush(ctx: context, screen: FixtureScreen(groupedTeams: grouped,));
-                      // }
-
-                       navigatorPush(ctx: context, screen: FixtureScreen(docs: widget.docss,documentlength: documentlength,));
+                      if (value1 == true) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title:const Text(
+                                    'After creating Fixtures you cant edit the Team details'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      navigatorPOP(context);
+                                    },
+                                    child: Text('Go Back'),
+                                  ),
+                                  TextButton(
+                                      onPressed: () async {
+                                        navigatorPOP(context);
+                                        navigatorPush(
+                                            ctx: context,
+                                            screen: FixtureScreen(
+                                              docs: widget.docss,
+                                              documentlength: documentlength,
+                                              trueorFalse: value1!,
+                                            ));
+                                        await FirebaseFirestore.instance
+                                            .collection('tournament')
+                                            .doc(widget.docss)
+                                            .update({'flag': false});
+                                        setState(() {});
+                                      },
+                                      child:const Text('Go to Fixtures'))
+                                ],
+                              );
+                            });
+                      } else {
+                        navigatorPush(
+                            ctx: context,
+                            screen: FixtureScreen(
+                              docs: widget.docss,
+                              documentlength: documentlength,trueorFalse: value1!,
+                            ));
+                      }
                     } else {
                       showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Teams are not full '),
+                              title: Text('Need $iteamCount1 teams '),
                               actions: [
                                 TextButton(
                                     onPressed: () {

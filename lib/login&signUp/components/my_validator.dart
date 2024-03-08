@@ -61,7 +61,7 @@ class Validator {
 
     return value.isNotEmpty && regex.hasMatch(value)
         ? null
-        : 'Password must contain both letters and numbers';
+        : 'Enter a Password with letters and number Only';
   }
 
   static String? validateName(String? value) {

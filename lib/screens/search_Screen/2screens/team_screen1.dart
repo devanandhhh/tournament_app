@@ -2,12 +2,11 @@
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
-import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_details.dart';
+// import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+// import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_details.dart';
 // import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 class TeamScreenView extends StatelessWidget {
@@ -20,7 +19,7 @@ class TeamScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: Colors.yellow[100],
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('tournament')
@@ -48,32 +47,34 @@ class TeamScreenView extends StatelessWidget {
                     String teamImage = doc2['teamImage'];
                     String teamName = doc2['teamName'];
                     String managerName = doc2['managerName'];
-                    String phoneNumber = doc2['phoneNumber'];
-                    String place = doc2['place'];
+                    // String phoneNumber = doc2['phoneNumber'];
+                    // String place = doc2['place'];
 
                     return ListTile(
-                      onTap: () => navigatorPush(
-                          ctx: context,
-                          screen: ViewTeamDetails(
-                              imageview: teamImage,
-                              teamName: teamName,
-                              managerName: managerName,
-                              phoneNumber: phoneNumber,
-                              placeName: place)),
+                      // onTap: () => navigatorPush(
+                      //     ctx: context,
+                      //     screen: ViewTeamDetails(
+                      //         imageview: teamImage,
+                      //         teamName: teamName,
+                      //         managerName: managerName,
+                      //         phoneNumber: phoneNumber,
+                      //         placeName: place)),
                       title: Text(teamName),
                       subtitle: Text(managerName),
-                      leading: CircleAvatar(
+                      leading: CircleAvatar(radius: 30,backgroundColor: Colors.teal,
                         child: ClipOval(
-                            child: Image.file(
-                          File(teamImage),
-                          fit: BoxFit.cover,
-                          width: 50,
-                          height: 50,
-                        )),
+                            child:Image.network(teamImage,fit: BoxFit.cover,width: 50,height: 50,)
+                        //      Image.file(
+                        //   File(teamImage),
+                        //   fit: BoxFit.cover,
+                        //   width: 50,
+                        //   height: 50,
+                        // )
+                        ),
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => Divider(),
+                  separatorBuilder: (context, index) =>const Divider(),
                   itemCount: snapshot.data!.docs.length);
             }));
   }

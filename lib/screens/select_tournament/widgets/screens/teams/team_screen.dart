@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 // import 'package:tournament_creator/screens/select_tournament/first_page.dart';
@@ -26,8 +30,29 @@ class Teamscreen extends StatefulWidget {
 }
 
 class _TeamscreenState extends State<Teamscreen> {
+  final user = FirebaseAuth.instance.currentUser!;
   String? seletedImage;
   List<String> teamNames = [];
+  bool? value;
+  String? uniquenumber;
+  String? imageurl;
+
+  Future<bool?> flagFunction() async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await FirebaseFirestore.instance
+            .collection('tournament')
+            .doc(widget.doc1)
+            .get();
+    value = documentSnapshot.get('flag');
+    return value;
+    //print( 'true or false $value');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    flagFunction();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +64,6 @@ class _TeamscreenState extends State<Teamscreen> {
             .doc(widget.doc1)
             .collection('team')
             .snapshots(),
-        // stream: FirebaseFirestore.instance
-        //     .collection('tournament_details')
-        //     .doc(widget.doc1)
-        //     .collection('team_details')
-        //     .snapshots(),
         builder: (context, snapshot) {
           //print(widget.doc1);
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -55,17 +75,13 @@ class _TeamscreenState extends State<Teamscreen> {
               itemBuilder: (context, index) {
                 var doc2 = snapshot.data!.docs[index];
 
-                // for(var doc in snapshot.data!.docs){
-                //   teamNames.add(doc['teamName']);
-                // }
-                //   print(teamNames);
-
-                String teamImage = doc2['teamImage'];
+                String teamImage = doc2['teamImage'] ?? '';
                 String teamName = doc2['teamName'];
                 String managerName = doc2['managerName'];
                 String phoneNumber = doc2['phoneNumber'];
                 String place = doc2['place'];
-
+                String fileName = doc2['uniqueFileName']??'';
+                seletedImage = teamImage;
                 TextEditingController teamNameController =
                     TextEditingController(text: teamName);
                 TextEditingController managerNameController =
@@ -92,8 +108,8 @@ class _TeamscreenState extends State<Teamscreen> {
                     child: ClipOval(
                         child: teamImage.isEmpty
                             ? null
-                            : Image.file(
-                                File(teamImage),
+                            : Image.network(
+                                teamImage,
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -119,7 +135,7 @@ class _TeamscreenState extends State<Teamscreen> {
                           },
                         ),
                         PopupMenuItem(
-                          //  enabled: isEnabled,
+                          enabled: value!,
                           child: const Text('Edit'),
                           onTap: () {
                             showDialog(
@@ -135,22 +151,72 @@ class _TeamscreenState extends State<Teamscreen> {
                                           SingleChildScrollView(
                                         child: Column(
                                           children: [
-                                            CircleAvatar(
+                                            GestureDetector(
+                                              onTap: () async {
+                                                await obj.imagePicking();
+                                                setState(
+                                                  () {},
+                                                );
+                                              },
+                                              child: CircleAvatar(
                                                 backgroundColor: Colors.teal,
                                                 radius: 55,
-                                                backgroundImage:
-                                                    FileImage(File(teamImage)),
-                                                child: InkWell(
-                                                  onTap: () async {
-                                                    String? pickImage =
-                                                        await pickImageFromGallery();
-                                                    setState(
-                                                      () {
-                                                        teamImage = pickImage!;
-                                                      },
-                                                    );
-                                                  },
-                                                )),
+                                                backgroundImage: obj
+                                                        .imageLink.isEmpty
+                                                    ? NetworkImage(teamImage)
+                                                    : Image.file(
+                                                            File(obj.imageLink))
+                                                        .image,
+                                                // FileImage(File(teamImage)),
+                                                // child: InkWell(
+                                                //   onTap: () async {
+
+                                                // String? pickImage =
+                                                //     await pickImageFromGallery();
+                                                // setState(
+                                                //   () {
+                                                //     teamImage = pickImage!;
+                                                //   },
+                                                // );
+                                                // try {
+                                                //   XFile? file =
+                                                //       await imageFromGallery();
+                                                //   print('image picked');
+                                                //   dialogShowing(
+                                                //       ctx: context);
+                                                //   uniquenumber = DateTime
+                                                //           .now()
+                                                //       .millisecondsSinceEpoch
+                                                //       .toString();
+                                                //   await FirebaseStorage
+                                                //       .instance
+                                                //       .ref()
+                                                //       .child('TeamImages')
+                                                //       .child(uniquenumber!)
+                                                //       .putFile(
+                                                //           File(file!.path));
+                                                //   imageurl =
+                                                //       await FirebaseStorage
+                                                //           .instance
+                                                //           .ref()
+                                                //           .child(
+                                                //               'TeamImages')
+                                                //           .child(
+                                                //               uniquenumber!)
+                                                //           .getDownloadURL();
+                                                //   setState(
+                                                //     () {
+                                                //       teamImage = imageurl!;
+                                                //     },
+                                                //   );
+                                                //   navigatorPOP(context);
+                                                // } catch (e) {
+                                                //   print('error in $e');
+                                                // }
+                                                //},
+                                                // )
+                                              ),
+                                            ),
                                             sizedbox30(),
                                             TextFormField(
                                               controller: teamNameController,
@@ -183,44 +249,59 @@ class _TeamscreenState extends State<Teamscreen> {
                                       TextButton(
                                           onPressed: () {
                                             navigatorPOP(context);
-                                            setState(() {
-                                              seletedImage = teamImage;
-                                            });
+                                            //delete image form storage
+                                            DatabaseFunctions.deleteFileteam(
+                                              fileName: fileName,
+                                            );
+                                            // setState(() {
+                                            // seletedImage = teamImage;
+                                            //  teamImage = seletedImage!;
+                                            obj.imageLink = '';
+                                            // });
                                           },
                                           child: const Text('Cancel')),
                                       TextButton(
                                           onPressed: () async {
-                                            // await DatabaseFunctions.editTeam(
-                                            //     document1: widget.doc1,
-                                            //     document2ID: doc2.id,
-                                            //     teamImage: teamImage,
-                                            //     teamNameController:
-                                            //         teamNameController,
-                                            //     managerNameController:
-                                            //         managerNameController,
-                                            //     phoneNumberController:
-                                            //         phoneNumberController,
-                                            //     placeController:
-                                            //         placeController);
-                                            // await FirebaseFirestore.instance
-                                            //     .collection('tournament')
-                                            //     .doc(widget.doc1)
-                                            //     .collection('team')
-                                            //     .doc(doc2.id)
-                                            //     .update({
-                                            //   'teamImage': teamImage,
-                                            //   "teamName":
-                                            //       teamNameController.text,
-                                            //   'managerName':
-                                            //       managerNameController.text,
-                                            //   'phoneNumber':
-                                            //       phoneNumberController.text,
-                                            //   'place': placeController.text
-                                            // });
+                                            obj.imageLink.isEmpty
+                                                ? DatabaseFunctions.editteam1(
+                                                    document1: widget.doc1,
+                                                    document2: doc2,
+                                                    teamImage: teamImage,
+                                                    teamNameController:
+                                                        teamNameController,
+                                                    managerNameController:
+                                                        managerNameController,
+                                                    phoneNumberController:
+                                                        phoneNumberController,
+                                                    placeController:
+                                                        placeController,
+                                                    uniquenumber: fileName)
+                                                : dialogShowing(ctx: context);
+                                            uniquenumber = DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString();
+                                            await FirebaseStorage.instance
+                                                .ref()
+                                                .child('TeamImages')
+                                                .child(uniquenumber!)
+                                                .putFile(File(obj.imageLink));
+                                            imageurl = await FirebaseStorage
+                                                .instance
+                                                .ref()
+                                                .child('TeamImages')
+                                                .child(uniquenumber!)
+                                                .getDownloadURL();
+
+                                            // DatabaseFunctions.deleteFile(
+                                            //     fileName: fileName,
+                                            //     foldername: 'TeamImages');
+                                            try{
+                                            DatabaseFunctions.deleteFileteam(
+                                                fileName: fileName);
                                             DatabaseFunctions.editteam1(
                                                 document1: widget.doc1,
                                                 document2: doc2.id,
-                                                teamImage: teamImage,
+                                                teamImage: imageurl,
                                                 teamNameController:
                                                     teamNameController,
                                                 managerNameController:
@@ -228,7 +309,8 @@ class _TeamscreenState extends State<Teamscreen> {
                                                 phoneNumberController:
                                                     phoneNumberController,
                                                 placeController:
-                                                    placeController);
+                                                    placeController,
+                                                uniquenumber: uniquenumber);
 
                                             teamNameController.clear();
                                             managerNameController.clear();
@@ -236,11 +318,17 @@ class _TeamscreenState extends State<Teamscreen> {
                                             placeController.clear();
                                             // ignore: use_build_context_synchronously
                                             navigatorPOP(context);
+                                            obj.imageLink = '';
+
                                             dataSucessSnackbar();
                                             // ignore: use_build_context_synchronously
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                                     updateSucessSnackbar());
+                                                    } catch (e) {
+                                                  print('gott error $e');
+                                                }
+                                                navigatorPOP(context);
                                           },
                                           child: const Text('Save'))
                                     ],
@@ -249,11 +337,17 @@ class _TeamscreenState extends State<Teamscreen> {
                           },
                         ),
                         PopupMenuItem(
-                          //  enabled: isEnabled,
+                          enabled: value!,
                           child: const Text('Delete'),
                           onTap: () async {
+                            //delete from storage
+
                             alertdialog2(
-                                ctx: context, doc1: widget.doc1, doc2: doc2.id);
+                                ctx: context,
+                                doc1: widget.doc1,
+                                doc2: doc2.id,
+                                fileName: fileName,
+                                foldername: 'TeamImages');
                           },
                         )
                       ];
@@ -273,14 +367,42 @@ class _TeamscreenState extends State<Teamscreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddTeam(
-                        docss: widget.doc1,
-                        limit: widget.limit,
-                      )));
+        onPressed: () async {
+          await FirebaseFirestore.instance
+              .collection('tournament')
+              .doc(widget.doc1)
+              .collection('team')
+              .get()
+              .then((QuerySnapshot querySnapshot) async {
+            int documentlength = querySnapshot.size;
+            int iteamCount1 = iteamCount(a: widget.limit);
+            print(' Document Length :$documentlength');
+            if (documentlength <= iteamCount1 - 1) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddTeam(
+                            docss: widget.doc1,
+                            limit: widget.limit,
+                          )));
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Teams Limit is Full'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            navigatorPOP(context);
+                          },
+                          child: const Text('Ok'))
+                    ],
+                  );
+                },
+              );
+            }
+          });
         },
         backgroundColor: Colors.teal,
         child: const Icon(Icons.add),

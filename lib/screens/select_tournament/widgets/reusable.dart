@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 
 tabtext(text) {
@@ -49,7 +50,12 @@ decorationshowdiag(String text) {
   return InputDecoration(border: const OutlineInputBorder(), labelText: text);
 }
 
-alertdialog2({required ctx,required doc1, required  doc2}) {
+alertdialog2(
+    {required ctx,
+    required doc1,
+    required doc2,
+    required fileName,
+    required foldername}) {
   return showDialog(
       context: ctx,
       builder: (context) {
@@ -58,53 +64,100 @@ alertdialog2({required ctx,required doc1, required  doc2}) {
             content: const Text('Are you sure you want to delete Team '),
             actions: [
               TextButton(
-                  onPressed: () { 
-                    navigatorPOP(context);
-                  },
-                  child: const Text('Cancel')),
+                onPressed: () async {
+                  try {
+                    DatabaseFunctions.deleteFileteam(
+                      fileName: fileName,
+                    );
+                  } catch (e) {
+                    print('error in delete player :$e');
+                  }
+
+                  //navigatorPOP(context);
+                  await FirebaseFirestore.instance
+                      .collection('tournament')
+                      .doc(doc1)
+                      .collection('team')
+                      .doc(doc2)
+                      .delete();
+                  // await FirebaseFirestore.instance
+                  //     .collection('tournament_details')
+                  //     .doc(doc1)
+                  //     .collection('team_details')
+                  //     .doc(doc2.id)
+                  //     .delete();
+                  try {
+                    QuerySnapshot playerSnapshot = await FirebaseFirestore
+                        .instance
+                        .collection('players')
+                        .where('teamID', isEqualTo: doc2)
+                        .get();
+                    for (DocumentSnapshot doc in playerSnapshot.docs) {
+                      await doc.reference.delete();
+                    }
+                  } catch (e) {
+                    print('Error is $e');
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  scaffoldmessenger(context);
+                  // navigatorPOP(context);
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+              ),
               TextButton(
-                  onPressed: () async {
-                    navigatorPOP(context);
-                    await FirebaseFirestore.instance
-                        .collection('tournament')
-                        .doc(doc1)
-                        .collection('team')
-                        .doc(doc2)
-                        .delete();   
-                    // await FirebaseFirestore.instance
-                    //     .collection('tournament_details')
-                    //     .doc(doc1)
-                    //     .collection('team_details')
-                    //     .doc(doc2.id)
-                    //     .delete();
-                    // ignore: use_build_context_synchronously
-                    scaffoldmessenger(context);
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // navigatorPOP(context);
+                    print('doc2 is ${doc2}');
                   },
-                  child: const Text('Ok'))
+                  child: const Text('No'))
             ]);
       });
 }
 
 addTeamtxtController(TextEditingController teamController, String hinttext) {
   return TextFormField(
+    autovalidateMode: AutovalidateMode.onUserInteraction,
     controller: teamController,
     decoration: const InputDecoration(border: OutlineInputBorder()),
-    validator: (value) => value == null || value.isEmpty ? hinttext : null,
+    validator: (value) =>
+        value == null || value.trim().isEmpty ? hinttext : null,
   );
 }
 
 addTeamPhoneController({required numbercontroller, required String? hintText}) {
   return TextFormField(
-    controller: numbercontroller,
-    decoration: const InputDecoration(
-      border: OutlineInputBorder(),
-    ),
-    keyboardType: TextInputType.number,
-    validator: (value) => value == null || value.isEmpty ? hintText : null,
-  );
+      maxLength: 10,
+      controller: numbercontroller,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+      ),
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return hintText;
+        }
+        if (value.length != 10) {
+          return 'Phone number must be 10 digits.';
+        }
+        return null;
+        // ? hintText : null,
+      });
 }
 
 googleFont() {
   return GoogleFonts.ubuntu(
       color: Colors.teal, fontSize: 20, fontWeight: FontWeight.bold);
+}
+
+Future<int> getPlayerCount(String teamid) async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('players')
+      .where('teamID', isEqualTo: teamid)
+      .get();
+  return snapshot.docs.length;
 }

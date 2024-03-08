@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -26,15 +29,15 @@ class AddTeam extends StatefulWidget {
 
 class _AddTeamState extends State<AddTeam> {
   final teamNameController = TextEditingController();
-
   final managerNameController = TextEditingController();
-
   final phoneNumberController = TextEditingController();
-
   final placeController = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
   String? seletedImage;
+
+  // XFile? image;
+  String? imageUrl;
+  String? uniquefileName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,26 +47,48 @@ class _AddTeamState extends State<AddTeam> {
         padding: const EdgeInsets.all(18.0),
         child: SingleChildScrollView(
           child: Column(children: [
-            CircleAvatar(
-                backgroundImage: const AssetImage('assets/addimage.png'),
+            GestureDetector(
+              onTap: () async{
+               await obj.imagePicking();
+                setState(() {}); 
+              },
+              child: CircleAvatar(backgroundColor: Colors.teal,
+                backgroundImage: obj.imageLink.isEmpty
+                    ? Image.asset('assets/addimage.png').image
+                    : Image.file(File(obj.imageLink)).image, 
+                //  image != null ? FileImage(File(image!.path)) : Image.asset('assets/addimage.png').image,
+                // const AssetImage('assets/addimage.png'),
                 radius: 70,
-                child: GestureDetector(
-                    onTap: () async {
-                      String? pickImage = await pickImageFromGallery();
-                      setState(() {
-                        seletedImage = pickImage;
-                      });
-                    },
-                    child: seletedImage != null
-                        ? ClipOval(
-                            child: Image.file(
-                              File(seletedImage!),
-                              fit: BoxFit.cover,
-                              width: 130,
-                              height: 130,
-                            ),
-                          )
-                        : null)),
+                // child: GestureDetector(
+                //   onTap: () async {
+                //     XFile? file = await imageFromGallery();
+                //     setState(() {
+                //       image = file;
+                //     });
+
+                //     uniquefileName =
+                //         DateTime.now().microsecondsSinceEpoch.toString();
+                //         print('image selected and unique number created');
+                //   },
+                // ),
+              ),
+            ),
+            //  onTap: () async {
+            //   String? pickImage = await pickImageFromGallery();
+            //   setState(() {
+            //     seletedImage = pickImage;
+            //   });
+            // },
+            // child: seletedImage != null
+            //     ? ClipOval(
+            //         child: Image.file(
+            //           File(seletedImage!),
+            //           fit: BoxFit.cover,
+            //           width: 130,
+            //           height: 130,
+            //         ),
+            //       )
+            //     : null)),
             Form(
               key: formKey,
               child: Column(
@@ -97,8 +122,8 @@ class _AddTeamState extends State<AddTeam> {
               child: containerButtonCR(txt: 'Add Team'),
               onTap: () async {
                 if (formKey.currentState!.validate()) {
-                  if (seletedImage == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  if ( obj.imageLink.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                       'You Must Select an Image',
                       style: TextStyle(color: Colors.red),
@@ -112,63 +137,61 @@ class _AddTeamState extends State<AddTeam> {
                       .then((QuerySnapshot querySnapshot) async {
                     int documentlength = querySnapshot.size;
                     int iteamCount1 = iteamCount(a: widget.limit);
-                    print(' Document Length :$documentlength');
-                    if (seletedImage != null) {
-                      //    int documentlength=   await FirebaseFirestore.instance.collection('tournament').doc(widget.docss).collection('team').snapshots().length;
-                      //  int iteamCount1= iteamCount(a: widget.limit);
+                    print(' Document Length : $documentlength');
+                    if (obj.imageLink .isNotEmpty) {
                       if (documentlength <= iteamCount1 - 1) {
-                        // await FirebaseFirestore.instance
-                        //     .collection('tournament')
-                        //     .doc(widget.docss)
-                        //     .collection('team')
-                        //     .add({
-                        //   'teamName': teamNameController.text,
-                        //   'managerName': managerNameController.text,
-                        //   'phoneNumber': phoneNumberController.text,
-                        //   'place': placeController.text,
-                        //   'teamImage': seletedImage
-                        // });
+                        //adding image
+                        dialogShowing(ctx: context);
+                             uniquefileName =
+                        DateTime.now().microsecondsSinceEpoch.toString();
+                        
+                        await FirebaseStorage.instance
+                            .ref()
+                            .child('TeamImages')
+                            .child(uniquefileName!)
+                            .putFile(File(obj.imageLink));
+
+                        imageUrl = await FirebaseStorage.instance
+                            .ref()
+                            .child('TeamImages')
+                            .child(uniquefileName!)
+                            .getDownloadURL();
+
                         DatabaseFunctions.addteam1(
                             document: widget.docss,
                             teamNameController: teamNameController,
                             managerNameController: managerNameController,
                             phoneNumberController: phoneNumberController,
                             placeController: placeController,
-                            seletedImage: seletedImage);
+                            seletedImage: imageUrl,
+                            uniquenumber: uniquefileName);
 
                         teamNameController.clear();
                         managerNameController.clear();
                         phoneNumberController.clear();
                         placeController.clear();
-                        seletedImage = null;
+                        // seletedImage = null;
 
                         // ignore: use_build_context_synchronously
                         scaffoldmessAdded(context);
-                        setState(() {});
+                        // setState(() {
+                        //   image = null;
+                        // });
+                        obj.imageLink=''; 
                         navigatorPOP(context);
-                        //  }
-                        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('full')));
-                        // int a= iteamCount(a: widget.limit);
-
-                        //  await DatabaseFunctions.addTeam(
-                        //   document1: widget.docss,
-                        //   teamNameController: teamNameController,
-                        //   managerNameController: managerNameController,
-                        //   phoneNumberController: phoneNumberController,
-                        //   placeController: placeController,
-                        //   imageSeleted: seletedImage);
+                        navigatorPOP(context);
                       } else {
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Team Already full'),
+                              title: const Text('Team Already full'),
                               actions: [
                                 TextButton(
                                     onPressed: () {
                                       navigatorPOP(context);
                                     },
-                                    child: Text('Ok'))
+                                    child: const Text('Ok'))
                               ],
                             );
                           },
@@ -176,62 +199,6 @@ class _AddTeamState extends State<AddTeam> {
                       }
                     }
                   });
-
-                  //  await FirebaseFirestore.instance
-                  //     .collection('tournament')
-                  //     .doc(widget.docss)
-                  //     .collection('team')
-                  //     .snapshots()
-                  //     .length;
-                  //  print('This ${documentlength}');
-
-                  // if (seletedImage != null && documentlength <= iteamCount1) {
-                  //   //    int documentlength=   await FirebaseFirestore.instance.collection('tournament').doc(widget.docss).collection('team').snapshots().length;
-                  //   //  int iteamCount1= iteamCount(a: widget.limit);
-                  //   // if(documentlength<=iteamCount1){
-                  //   await FirebaseFirestore.instance
-                  //       .collection('tournament')
-                  //       .doc(widget.docss)
-                  //       .collection('team')
-                  //       .add({
-                  //     'teamName': teamNameController.text,
-                  //     'managerName': managerNameController.text,
-                  //     'phoneNumber': phoneNumberController.text,
-                  //     'place': placeController.text,
-                  //     'teamImage': seletedImage
-                  //   });
-
-                  //   teamNameController.clear();
-                  //   managerNameController.clear();
-                  //   phoneNumberController.clear();
-                  //   placeController.clear();
-                  //   seletedImage = null;
-
-                  //   // ignore: use_build_context_synchronously
-                  //   scaffoldmessAdded(context);
-                  //   setState(() {});
-                  //   navigatorPOP(context);
-                  //   //  }
-                  //   //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('full')));
-                  //   // int a= iteamCount(a: widget.limit);
-
-                  //   //  await DatabaseFunctions.addTeam(
-                  //   //   document1: widget.docss,
-                  //   //   teamNameController: teamNameController,
-                  //   //   managerNameController: managerNameController,
-                  //   //   phoneNumberController: phoneNumberController,
-                  //   //   placeController: placeController,
-                  //   //   imageSeleted: seletedImage);
-                  // } else {
-                  //   showDialog(context: context, builder: (context) {
-                  //     return AlertDialog(
-                  //     title:  Text('Team Already full'),
-                  //     actions: [TextButton(onPressed: (){
-                  //       navigatorPOP(context);
-                  //     }, child: Text('Ok'))],
-                  //     );
-                  //   },);
-                  // }
                 }
               },
             )

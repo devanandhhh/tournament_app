@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:tournament_creator/login&signUp/components/my_button.dart';
 import 'package:tournament_creator/login&signUp/components/my_validator.dart';
 
@@ -73,151 +75,169 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[100],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 110,
-                ),
-                const Icon(
-                  Icons.lock,
-                  size: 100,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'Welcome back,You\'ve been Missed!',
-                  style: TextStyle(color: Colors.grey[700], fontSize: 16),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                //user textfield
-                // MyTextfield(
-                //   controller: emailController,
-                //   validateOntap:Validator.validateEmail,
-                //   hinttext: 'Email',
-                //   obscureText: false,
-                // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextFormField(
-                    //   validator: Validator.validateEmail,
-                    validator: Validator.validateEmail1,
-                    controller: emailController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        fillColor: Colors.yellow[100],
-                        filled: true,
-                        hintText: 'Email'),
-                  ),
-                ),
-                //password textfield
-                const SizedBox(
-                  height: 25,
-                ),
-                // MyTextfield(
-                //   controller: passwordController,
-                //   validateOntap:Validator.validatePassword,
-                //   hinttext: 'Password',
-                //   obscureText: true,
-                // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextFormField(
-                    //   validator: Validator.validateEmail,
-                    validator: Validator.validatePassword1,
-                    controller: passwordController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    //keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        fillColor: Colors.yellow[100],
-                        filled: true,
-                        hintText: 'Password'),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                MyButton(
-                  onTap: signInUserIn,
-                  text: 'LogIn ',
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      )),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: Text(
-                            'Or continue',
-                            style: TextStyle(color: Colors.grey[700]),
-                          )),
-                      Expanded(
-                          child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ))
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.yellow[100],
+        body:
+        //  Stack(fit: StackFit.expand, children: [
+        //   SizedBox(
+        //       height: 200,
+        //       width: 300,
+        //       child: Image.asset(
+        //         'assets/demo.jpg' , 
+        //         fit: BoxFit.cover,
+        //       )),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
                   children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
+                    // Container(
+                    //   height: 330 ,
+                    //   width:  double.infinity,
+                    //   child: Image.asset('assets/messi.jpg'),
+                    //   decoration: BoxDecoration(),
+                    // ),
+                    const SizedBox(
+                      height: 110,
+                    ),
+                    const Icon(
+                      Icons.lock,
+                      size: 100,
                     ),
                     const SizedBox(
-                      width: 4,
+                      height: 50,
                     ),
-                    GestureDetector(
-                      onTap: signInUserIn,
-                      child: GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text(
-                          'Register Now',
-                          style: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
-                        ),
+                    Text(
+                      'Welcome back,You\'ve been Missed!',
+                      style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    //user textfield
+                    // MyTextfield(
+                    //   controller: emailController,
+                    //   validateOntap:Validator.validateEmail,
+                    //   hinttext: 'Email',
+                    //   obscureText: false,
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: TextFormField(
+                        //   validator: Validator.validateEmail,
+                        validator: Validator.validateEmail1,
+                        controller: emailController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                            enabledBorder:  OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder:  OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            fillColor: Colors.yellow[100],
+                            filled: true,
+                            hintText: 'Email'),
                       ),
+                    ),
+                    //password textfield
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    // MyTextfield(
+                    //   controller: passwordController,
+                    //   validateOntap:Validator.validatePassword,
+                    //   hinttext: 'Password',
+                    //   obscureText: true,
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: TextFormField(
+                        //   validator: Validator.validateEmail,
+                        validator: Validator.validatePassword1,
+                        controller: passwordController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        //keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            fillColor: Colors.yellow[100],
+                            filled: true,
+                            hintText: 'Password'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    MyButton(
+                      onTap: signInUserIn,
+                      text: 'LogIn ',
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Divider(
+                            thickness: 0.5,
+                            color: Colors.grey[400],
+                          )),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: Text(
+                                'Or continue',
+                                style: TextStyle(color: Colors.grey[700]),
+                              )),
+                          Expanded(
+                              child: Divider(
+                            thickness: 0.5,
+                            color: Colors.grey[400],
+                          ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Not a member?',
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        GestureDetector(
+                          onTap: signInUserIn,
+                          child: GestureDetector(
+                            onTap: widget.onTap,
+                            child: const Text(
+                              'Register Now',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      ],
                     )
+                    //sign in button
                   ],
-                )
-                //sign in button
-              ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        //])
+        );
   }
 }

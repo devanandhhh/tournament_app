@@ -2,12 +2,17 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tournament_creator/database/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
+import 'package:tournament_creator/sample.dart';
 import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
@@ -27,7 +32,14 @@ class _TournmentListState extends State<TournmentList> {
   List categories = ['7s', '9s', '11s'];
   List<String> limitOfTeams = ['8 teams', '16 teams', '32 teams'];
   final user = FirebaseAuth.instance.currentUser!;
+  //----
+  XFile? imageSelected;
+  String? uniquenumber;
+  String? urlImage;
+  String? alreadySelectedImage;
+  // String newImage = '';
 
+  //---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +72,8 @@ class _TournmentListState extends State<TournmentList> {
                   String categoryy = docs['Category'];
                   String limits = docs['LimitOfTeam'];
                   String limits1 = docs['LimitOfTeam'];
+                  String filename = docs['UniqueFileName'];
+                  alreadySelectedImage = image;
                   selectedImage = image;
                   viewDetails.addAll(
                       [image, tournamentName, place, date, categoryy, limits]);
@@ -93,12 +107,19 @@ class _TournmentListState extends State<TournmentList> {
                         radius: 30,
                         backgroundColor: Colors.teal,
                         child: ClipOval(
-                            child: Image.file(
-                          File(image),
+                            child: Image.network(
+                          image,
                           fit: BoxFit.cover,
                           width: 50,
                           height: 50,
                         )),
+                        // child: ClipOval(
+                        //     child: Image.file(
+                        //   File(image),
+                        //   fit: BoxFit.cover,
+                        //   width: 50,
+                        //   height: 50,
+                        // )),
                       ),
                       title: Text(tournamentName),
                       subtitle: Text(date),
@@ -127,6 +148,7 @@ class _TournmentListState extends State<TournmentList> {
                               onTap: () {
                                 showDialog(
                                     context: context,
+                                    // barrierDismissible: true,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         scrollable: true,
@@ -138,18 +160,70 @@ class _TournmentListState extends State<TournmentList> {
                                           builder: (context, setState) =>
                                               SingleChildScrollView(
                                             child: Column(children: [
-                                              CircleAvatar(
-                                                backgroundImage:
-                                                    FileImage(File(image)),
-                                                maxRadius: 70,
-                                                child: GestureDetector(
-                                                  onTap: () async {
-                                                    String? pickimage =
-                                                        await pickImageFromGallery();
-                                                    setState(() {
-                                                      image = pickimage!;
-                                                    });
-                                                  },
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  // await imagePicking();
+                                                  await obj.imagePicking();
+                                                  setState(
+                                                    () {},
+                                                  );
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundImage: obj
+                                                          .imageLink.isEmpty
+                                                      ? NetworkImage(image)
+                                                      : Image.file(File(
+                                                              obj.imageLink))
+                                                          .image,
+                                                  maxRadius: 70,
+                                                  // child: GestureDetector(
+                                                  //   onTap: () async {
+                                                  //     // imageFromGallery();
+
+                                                  //     // String? pickimage =
+                                                  //     //     await pickImageFromGallery();
+                                                  //     // setState(() {
+                                                  //     //   image = pickimage!;
+                                                  //     // });
+                                                  //     //imagetxt=await imageFromGallery();
+
+                                                  //     // try {
+                                                  //     //   String file1 =
+                                                  //     //       await imageFromGallery();
+                                                  //     //   print(
+                                                  //     //       'image edited $file1');
+                                                  //     //   dialogShowing(
+                                                  //     //       ctx: context);
+                                                  //     //   uniquenumber = DateTime
+                                                  //     //           .now()
+                                                  //     //       .millisecondsSinceEpoch
+                                                  //     //       .toString();
+
+                                                  //     //   await FirebaseStorage
+                                                  //     //       .instance
+                                                  //     //       .ref()
+                                                  //     //       .child(
+                                                  //     //           'TournamentImages')
+                                                  //     //       .child(uniquenumber!)
+                                                  //     //       .putFile(File(file1));
+                                                  //     //   urlImage =
+                                                  //     //       await FirebaseStorage
+                                                  //     //           .instance
+                                                  //     //           .ref()
+                                                  //     //           .child(
+                                                  //     //               'TournamentImages')
+                                                  //     //           .child(
+                                                  //     //               uniquenumber!)
+                                                  //     //           .getDownloadURL();
+                                                  //     //   setState(() {
+                                                  //     //     image = urlImage!;
+                                                  //     //   });
+                                                  //     //   navigatorPOP(context);
+                                                  //     // } catch (e) {
+                                                  //     //   print('Error is : $e');
+                                                  //     // }
+                                                  //   },
+                                                  // ),
                                                 ),
                                               ),
                                               Column(
@@ -195,21 +269,7 @@ class _TournmentListState extends State<TournmentList> {
                                                       }),
                                                   sizedbox10(),
                                                   const Text('Limit of Team'),
-                                                  // DropdownButtonFormField(
-                                                  //     hint: Text(limits),
-                                                  //     items:
-                                                  //         limitOfTeams.map((e) {
-                                                  //       return DropdownMenuItem(
-                                                  //         value: e,
-                                                  //         child: Text(e),
-                                                  //       );
-                                                  //     }).toList(),
-                                                  //     onChanged: (value) {
-                                                  //       if (limits != value) {
-                                                  //         limits =
-                                                  //             value.toString();
-                                                  //       }
-                                                  //     })
+
                                                   sizedbox10(),
                                                   Text(
                                                     limits,
@@ -224,9 +284,10 @@ class _TournmentListState extends State<TournmentList> {
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
-                                                setState(() {
-                                                  selectedImage = image;
-                                                });
+                                                // setState(() {
+                                                //   newImage = '';
+                                                // });
+                                                obj.imageLink = '';
                                               },
                                               child: const Text('Cancel')),
                                           TextButton(
@@ -268,29 +329,91 @@ class _TournmentListState extends State<TournmentList> {
                                                 //   'LimitOfTeam': limits,
                                                 // });
                                                 //--------
-                                                DatabaseFunctions.edittournament1(
-                                                    document1: docs.id,
-                                                    image: image,
-                                                    tournamentNameController:
-                                                        tournamentNameController,
-                                                    dateController:
-                                                        dateController,
-                                                    placeController:
-                                                        placeController,
-                                                    categoryy: categoryy,
-                                                    limits: limits);
-                                                tournamentNameController
-                                                    .clear();
+                                                // DatabaseFunctions.deleteFile(
+                                                //    fileName:  filename,foldername: 'TournamentImage');
+                                                obj.imageLink.isEmpty
+                                                    // ? await FirebaseFirestore
+                                                    //     .instance
+                                                    //     .collection(
+                                                    //         'tournament')
+                                                    //     .doc(docs.id)
+                                                    //     .update({
+                                                    //     'TournamentImage':
+                                                    //         image,
+                                                    //     'TournamentName':
+                                                    //         tournamentNameController
+                                                    //             .text,
+                                                    //     'Date':
+                                                    //         dateController.text,
+                                                    //     "Place": placeController
+                                                    //         .text,
+                                                    //     'Category': categoryy,
+                                                    //     'LimitOfTeam': limits,
+                                                    //   })
+                                                    ? DatabaseFunctions.edittournament1(
+                                                        document1: docs.id,
+                                                        image: image,
+                                                        tournamentNameController:
+                                                            tournamentNameController,
+                                                        dateController:
+                                                            dateController,
+                                                        placeController:
+                                                            placeController,
+                                                        categoryy: categoryy,
+                                                        uniquefileName:
+                                                            filename,
+                                                        limits: limits)
+                                                    : uniquenumber = DateTime
+                                                            .now()
+                                                        .millisecondsSinceEpoch
+                                                        .toString();
+                                                dialogShowing(ctx: context);
+                                                await FirebaseStorage.instance
+                                                    .ref()
+                                                    .child('TournamentImages')
+                                                    .child(uniquenumber!)
+                                                    .putFile(
+                                                        File(obj.imageLink));
+                                                urlImage = await FirebaseStorage
+                                                    .instance
+                                                    .ref()
+                                                    .child('TournamentImages')
+                                                    .child(uniquenumber!)
+                                                    .getDownloadURL();
+                                                try {
+                                                  DatabaseFunctions
+                                                      .deleteFiletournament(
+                                                          unique: filename);
+                                                  DatabaseFunctions.edittournament1(
+                                                      document1: docs.id,
+                                                      image: urlImage,
+                                                      tournamentNameController:
+                                                          tournamentNameController,
+                                                      dateController:
+                                                          dateController,
+                                                      placeController:
+                                                          placeController,
+                                                      categoryy: categoryy,
+                                                      uniquefileName:
+                                                          uniquenumber,
+                                                      limits: limits);
 
-                                                dateController.clear();
+                                                  tournamentNameController
+                                                      .clear();
+obj.imageLink='';
+                                                  dateController.clear();
+                                                  navigatorPOP(context);
+                                                  dataSucessSnackbar();
+                                                  // ignore: use_build_context_synchronously
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          updateSucessSnackbar());
+                                                } catch (e) {
+                                                  print('gott error');
+                                                }
                                                 navigatorPOP(context);
-                                                dataSucessSnackbar();
-                                                // ignore: use_build_context_synchronously
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        updateSucessSnackbar());
                                               },
-                                              child: const Text('Save'))
+                                              child: const Text('Save')),
                                         ],
                                       );
                                     });
@@ -303,7 +426,9 @@ class _TournmentListState extends State<TournmentList> {
                                     context: context,
                                     builder: ((BuildContext context) =>
                                         alertDialog1(
-                                            ctx: context, docss: docs.id)));
+                                            ctx: context,
+                                            docss: docs.id,
+                                            filename: filename)));
                               },
                             )
                           ];
@@ -320,4 +445,14 @@ class _TournmentListState extends State<TournmentList> {
           },
         ));
   }
+
+  // Future<void> imagePicking() async {
+  //   final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (image != null) {
+  //     setState(() {
+  //       newImage = image.path.toString();
+  //     });
+  //     print(newImage);
+  //   }
+  // }
 }

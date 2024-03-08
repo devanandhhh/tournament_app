@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
@@ -41,8 +40,8 @@ class ViewTournamentDetails extends StatelessWidget {
               backgroundColor: Colors.teal,
               maxRadius: 90,
               child: ClipOval(
-                child: Image.file(
-                  File(imageView),
+                child: Image.network(
+                  imageView,
                   fit: BoxFit.cover,
                   height: 170,
                   width: 170,

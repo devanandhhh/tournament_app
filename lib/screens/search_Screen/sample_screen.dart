@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/search_Screen/user_view.dart';
 
 class SampleScreen extends StatefulWidget {
-  SampleScreen({super.key});
+  const SampleScreen({super.key});
 
   @override
   State<SampleScreen> createState() => _SampleScreenState();
@@ -47,24 +46,26 @@ class _SampleScreenState extends State<SampleScreen> {
   @override
   void initState() {
     fetchData();
-    super.initState(); 
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow[100],
       appBar: AppBar(
+          backgroundColor: Colors.yellow[100],
           title: TextField(
-        controller: searchController,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            hintText: 'Search Tournament'),
-        onChanged: (value) {
-          filtedData(value);
-        },
-      )),
+            controller: searchController,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(borderSide: BorderSide.none),
+                hintText: 'Search Tournament'),
+            onChanged: (value) {
+              filtedData(value);
+            },
+          )),
       body: querySnapshot == null || filteredData.isEmpty
-          ? Center(child: CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator()
               //   Text('No tournament Available'),
               )
           : ListView.separated(
@@ -75,23 +76,29 @@ class _SampleScreenState extends State<SampleScreen> {
                 String date = iteam['Date'];
                 return ListTile(
                   onTap: () {
+                   // print('pa ${iteam.id}');
                     navigatorPush(
+
                         ctx: context,
                         screen: UserView(
                           tournamentname: tournamentName,
-                          doc1:iteam.id,
+                          doc1: iteam.id,
+                          
                         ));
                   },
                   leading: CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.teal,
                     child: ClipOval(
-                        child: Image.file(
-                      File(dprofile),
-                      fit: BoxFit.cover,
-                      width: 50,
-                      height: 50,
-                    )),
+                        child:
+                        Image.network(dprofile,fit: BoxFit.cover,width: 50,height: 50,)
+                    //      Image.file(
+                    //   File(dprofile),
+                    //   fit: BoxFit.cover,
+                    //   width: 50,
+                    //   height: 50,
+                    // )
+                    ),
                   ),
                   title: Text(tournamentName),
                   subtitle: Text(date),

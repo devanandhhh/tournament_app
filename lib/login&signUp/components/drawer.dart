@@ -29,7 +29,8 @@ class _MyDrawerState extends State<MyDrawer> {
 
   TextEditingController emailController = TextEditingController();
 
-  String? image;
+  // String? image
+  String? selectedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +39,10 @@ class _MyDrawerState extends State<MyDrawer> {
       child: ListView(children: [
         //Drawer head
         const DrawerHeader(
-            child: Icon(
-          Icons.person,
-          size: 70,
-          color: Colors.white,
-        )),
+            child: Icon(Icons.person, size: 70, color: Colors.white)
+            //  child:CircleAvatar(radius: 50,
+            //    backgroundColor:Colors.teal  ,)
+            ),
         //list tile
         MyListTile(
             icon: Icons.home,
@@ -66,9 +66,11 @@ class _MyDrawerState extends State<MyDrawer> {
                 DocumentSnapshot<Map<String, dynamic>> snapshot =
                     querySnapshot.docs.first;
                 String name = snapshot.get('userName');
+                String? image = snapshot.get('profile');
                 userNameController.text = name;
                 emailController.text = email;
                 String documentId = snapshot.id;
+                selectedImage = image;
                 // ignore: use_build_context_synchronously
                 showDialog(
                   context: context,
@@ -82,13 +84,17 @@ class _MyDrawerState extends State<MyDrawer> {
                             CircleAvatar(
                               radius: 70,
                               backgroundColor: Colors.teal,
-                              backgroundImage:
-                                  const AssetImage('assets/addimage2.png'),
+                              backgroundImage: image != null
+                                  ? FileImage(File(
+                                      image!,
+                                    ))
+                                  : null,
+                              // const AssetImage('assets/addimage2.png'),
                               child: InkWell(
                                   onTap: () async {
                                     String? pickimage =
                                         await pickImageFromGallery();
-                                   
+
                                     setState(() {
                                       image = pickimage;
                                     });
@@ -98,8 +104,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                           child: Image.file(
                                             File(image!),
                                             fit: BoxFit.cover,
-                                            height: 120,
-                                            width: 120,
+                                            height: 150,
+                                            width: 150,
                                           ),
                                         )
                                       : null),
@@ -125,6 +131,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       TextButton(
                           onPressed: () {
                             navigatorPOP(context);
+                            selectedImage = image;
                           },
                           child: const Text('Cancel')),
                       TextButton(
@@ -132,8 +139,11 @@ class _MyDrawerState extends State<MyDrawer> {
                             firestore1
                                 .collection('users')
                                 .doc(documentId)
-                                .update({'userName': userNameController.text});
-// scaffoldmessAdded(context);
+                                .update({
+                              'userName': userNameController.text,
+                              'profile': image
+                            });
+
                             messengerScaffold1(
                                 text: 'Edited Successfully', ctx: context);
                             navigatorPOP(context);
@@ -191,11 +201,6 @@ class _MyDrawerState extends State<MyDrawer> {
           actions: [
             TextButton(
                 onPressed: () {
-                  navigatorPOP(context);
-                },
-                child: const Text('No')),
-            TextButton(
-                onPressed: () {
                   signout();
                   navigatorPOP(context);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -204,7 +209,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   ));
                   //scaffoldmessenger(context);
                 },
-                child: const Text('Yes'))
+                child: const Text('Yes')),
+            TextButton(
+                onPressed: () {
+                  navigatorPOP(context);
+                },
+                child: const Text('No'))
           ],
         );
       },
