@@ -101,6 +101,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   hintText(hintTxt: 'Enter Tournament Name'),
                   sizedbox10(),
                   TextFormField(
+                    textCapitalization: TextCapitalization.words,
                     controller: tournamentNameController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),
@@ -115,6 +116,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   hintText(hintTxt: 'Enter Your Place '),
                   sizedbox10(),
                   TextFormField(
+                     textCapitalization: TextCapitalization.words,
                     controller: placeController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),

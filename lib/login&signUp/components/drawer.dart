@@ -31,6 +31,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   // String? image
   String? selectedImage;
+//first view method
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +40,7 @@ class _MyDrawerState extends State<MyDrawer> {
       child: ListView(children: [
         //Drawer head
         const DrawerHeader(
-            child: Icon(Icons.person, size: 70, color: Colors.white)
-            //  child:CircleAvatar(radius: 50,
-            //    backgroundColor:Colors.teal  ,)
-            ),
+            child: Icon(Icons.person, size: 70, color: Colors.white)),
         //list tile
         MyListTile(
             icon: Icons.home,
@@ -158,6 +156,19 @@ class _MyDrawerState extends State<MyDrawer> {
             // navigatorPush(ctx: context, screen: ProfilePage());
           },
         ),
+         MyListTile(
+            icon: Icons.security ,
+            text: 'A B O U T ',
+            onTap: () {
+              navigatorPOP(context);
+            }),
+        MyListTile(
+            icon: Icons.privacy_tip ,
+            text:  'P R I V A C Y   P O L I C Y',
+            onTap: () {
+              navigatorPOP(context);
+            }),
+       
         MyListTile(
           icon: Icons.logout,
           text: 'L O G O U T',
@@ -167,7 +178,7 @@ class _MyDrawerState extends State<MyDrawer> {
           },
         ),
         const SizedBox(
-          height: 310,
+          height: 210,
         ),
         const Padding(
           padding: EdgeInsets.all(18.0),

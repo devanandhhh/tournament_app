@@ -1,6 +1,5 @@
 // import 'dart:io';
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
@@ -55,19 +54,26 @@ class AddScore extends StatelessWidget {
                           onPressed: () {
                             navigatorPOP(context);
                           },
-                          child:const Text('No')),
+                          child: const Text('No')),
                       TextButton(
                           onPressed: () async {
+                            bool falseOrNot;
                             navigatorPOP(context);
                             navigatorPOP(context);
+                            team1ScoreController.text ==
+                                    team2ScoreController.text
+                                ? falseOrNot = false
+                                : falseOrNot = true;
+
                             await FirebaseFirestore.instance
                                 .collection('fixtures')
                                 .doc(doc1)
                                 .update({
                               'scoreA': team1ScoreController.text,
                               'scoreB': team2ScoreController.text,
-                              'scoreAdded':true
+                              'scoreAdded': falseOrNot
                             });
+
                             print('score added true');
                           },
                           child: const Text('Yes ')),
@@ -118,14 +124,16 @@ class AddScore extends StatelessWidget {
                             color: Colors.teal,
                             borderRadius: BorderRadius.circular(10)),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child:
-                          Image.network(image1!,fit: BoxFit.cover,)
-                          //  Image.file(
-                          //   File(image1!),
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              image1!,
+                              fit: BoxFit.cover,
+                            )
+                            //  Image.file(
+                            //   File(image1!),
+                            //   fit: BoxFit.cover,
+                            // ),
+                            ),
                       ),
                       Container(
                         height: 40,
@@ -133,14 +141,17 @@ class AddScore extends StatelessWidget {
                         //   decoration: BoxDecoration(
                         color: Colors.amber[100],
                         //     borderRadius: BorderRadius.circular(10)),
-                        child: TextFormField(maxLength: 1, 
+                        child: TextFormField(
+                          maxLength: 1,
                           validator: (value) {
                             if (value!.trim().isEmpty) {
                               return 'Null';
                             }
                             return null;
                           },
-                          decoration: InputDecoration(hintText: '  $scoreA',counter: SizedBox.shrink()),
+                          decoration: InputDecoration(
+                              hintText: '  $scoreA',
+                              counter: SizedBox.shrink()),
                           controller: team1ScoreController,
                           keyboardType: TextInputType.number,
                           style: font17(),
@@ -158,7 +169,10 @@ class AddScore extends StatelessWidget {
                         //   borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
                           maxLength: 1,
-                          decoration: InputDecoration(hintText: '  $scoreB',counter: SizedBox.shrink(),),
+                          decoration: InputDecoration(
+                            hintText: '  $scoreB',
+                            counter: SizedBox.shrink(),
+                          ),
                           validator: (value) {
                             if (value!.trim().isEmpty) {
                               return 'Null';
@@ -177,14 +191,16 @@ class AddScore extends StatelessWidget {
                             color: Colors.teal,
                             borderRadius: BorderRadius.circular(10)),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: 
-                          Image.network(image2!,fit: BoxFit.cover,)
-                          // Image.file(
-                          //   File(image2!),
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              image2!,
+                              fit: BoxFit.cover,
+                            )
+                            // Image.file(
+                            //   File(image2!),
+                            //   fit: BoxFit.cover,
+                            // ),
+                            ),
                       ),
                       const SizedBox(
                         width: 5,

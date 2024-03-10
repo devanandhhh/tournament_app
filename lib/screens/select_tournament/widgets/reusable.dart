@@ -120,6 +120,7 @@ alertdialog2(
 
 addTeamtxtController(TextEditingController teamController, String hinttext) {
   return TextFormField(
+    textCapitalization: TextCapitalization.words,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     controller: teamController,
     decoration: const InputDecoration(border: OutlineInputBorder()),
