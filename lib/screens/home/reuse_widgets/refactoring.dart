@@ -32,7 +32,7 @@ containerButtons({required String name}) {
 headingtext({required String text}) {
   return Text(
     text,
-     style:GoogleFonts.oswald(fontSize: 27,color: Colors.teal,fontWeight: FontWeight.bold)
+     style:GoogleFonts.oswald(fontSize: 30 ,color: Colors.teal,fontWeight: FontWeight.bold)
     //const TextStyle(
     //     color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 27),
   );

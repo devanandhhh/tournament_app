@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/fav_screen/like_button.dart';
 import 'package:tournament_creator/screens/search_Screen/2screens/match_screen.dart';
 import 'package:tournament_creator/screens/search_Screen/2screens/team_screen1.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
@@ -30,12 +29,12 @@ class _UserViewState extends State<UserView> {
               widget.tournamentname,
               style: tealcolor(),
             ),
-            actions:  [
-              Likebutton(doc1: widget.doc1,),
-             const SizedBox(
-                width: 20,
-              )
-            ],
+            // actions:  [
+            //   Likebutton(doc1: widget.doc1,),
+            //  const SizedBox(
+            //     width: 20,
+            //   )
+            // ],
             bottom: TabBar(
                 labelStyle: font17(),
                 indicator: underlineDecoration(),

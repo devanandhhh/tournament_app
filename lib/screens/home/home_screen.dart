@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tournament_creator/fav_screen/fav_screen.dart';
 import 'package:tournament_creator/login&signUp/components/drawer.dart';
 import 'package:tournament_creator/screens/addNotes/home_notes.dart';
 import 'package:tournament_creator/screens/create_tounament/create_tournament.dart';
@@ -26,18 +25,23 @@ String ?uniqueId;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar( backgroundColor: Colors.yellow[100],
-        title: headingtext(text: 'Tournament Creator'),
-        actions: [IconButton(onPressed: (){
-           navigatorPush(
-          ctx: context, screen: const FavouiteScreen()); 
-        }, icon:const Icon(Icons.favorite_border_outlined,size: 27,),),
+        title: headingtext(text: 'Tournament Creator '),  
+        actions: 
+         [
+        //   IconButton(onPressed: (){
+        //    navigatorPush(
+        //   ctx: context, screen: const FavouiteScreen()); 
+        // }, icon:const Icon(Icons.favorite_border_outlined,size: 27,),),
         //  iconSize30(icondata: Icons.favorite_border_outlined),
           const SizedBox(
             width: 10,
           ),
           IconButton(onPressed: (){
             navigatorPush(ctx: context, screen:const AddNotes());
-          }, icon:const Icon(Icons.edit))
+          }, icon:const Icon(Icons.edit_square,size: 30,)),
+            const SizedBox(
+            width: 15,
+          ),
         ],
       ),
       drawer: MyDrawer(),

@@ -2,7 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tournament_creator/screens/addNotes/home_notes.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
+import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 // import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
@@ -11,7 +13,7 @@ import 'package:tournament_creator/screens/select_tournament/widgets/reusable.da
 // import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/players_view/players_view.dart';
 
 // ignore: must_be_immutable
-class AddScore extends StatelessWidget {
+class AddScore extends StatefulWidget {
   AddScore(
       {super.key,
       required this.team1,
@@ -20,17 +22,50 @@ class AddScore extends StatelessWidget {
       required this.image2,
       required this.doc1,
       required this.scoreA,
-      required this.scoreB});
+      required this.scoreB,
+      required this.fixtureName});
   String? scoreA;
   String? scoreB;
-  TextEditingController team1ScoreController = TextEditingController();
-  TextEditingController team2ScoreController = TextEditingController();
   String? image1;
   String? image2;
   String? team1;
   String? team2;
+  String fixtureName;
   var doc1;
+
+  @override
+  State<AddScore> createState() => _AddScoreState();
+}
+
+class _AddScoreState extends State<AddScore> {
+  TextEditingController team1ScoreController = TextEditingController();
+
+  TextEditingController team2ScoreController = TextEditingController();
+
+//    bool flagsecond=true;
+// bool? flagsecondd;
+//   // @override
+//   // void initState() {
+//   //   super.initState();
+//   //   setState(() {
+
+//   //   });
+//   //   flagFunction2();
+//   // }
+//   flagFunction2() async {
+//     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+//         await FirebaseFirestore.instance
+//             .collection('tournament')
+//             .doc(widget.doc1)
+//             .get();
+//     flagsecondd = documentSnapshot.get('flagtwo');
+//     setState(() {
+
+//     });
+//   }
+
   final formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +78,18 @@ class AddScore extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              // bool flagsecondd;
+              // try{
+              // DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+              //     await FirebaseFirestore.instance
+              //         .collection('tournament')
+              //         .doc(widget.doc1)
+              //         .get();
+              // flagsecondd = documentSnapshot.get('flagtwo');
+              // setState(() {});
+
+              // if (flagsecondd) {
               if (formkey.currentState!.validate()) {
                 showDialog(
                   context: context,
@@ -57,24 +103,76 @@ class AddScore extends StatelessWidget {
                           child: const Text('No')),
                       TextButton(
                           onPressed: () async {
+                            // flagFunction2();
+                            // setState(() {
+
+                            // });
+                            // if (flagsecond==flagsecondd) {
+                            // bool flagsecondd;
+                            // DocumentSnapshot<Map<String, dynamic>>
+                            //     documentSnapshot = await FirebaseFirestore
+                            //         .instance
+                            //         .collection('tournament')
+                            //         .doc(widget.doc1)
+                            //         .get();
+                            // flagsecondd = documentSnapshot.get('flagtwo');
+                            // setState(() {});
+                            // if (flagsecondd) {
                             bool falseOrNot;
                             navigatorPOP(context);
                             navigatorPOP(context);
+                            //checking
                             team1ScoreController.text ==
                                     team2ScoreController.text
                                 ? falseOrNot = false
                                 : falseOrNot = true;
+                            String? winnerName;
+                            String? winnerImage;
+                            int team1Score =
+                                int.parse(team1ScoreController.text);
+                            int team2Score =
+                                int.parse(team2ScoreController.text);
+
+                            if (falseOrNot) {
+                              if (team1Score > team2Score) {
+                                winnerName = widget.team1;
+                                winnerImage = widget.image1;
+                              } else {
+                                winnerName = widget.team2;
+                                winnerImage = widget.image2;
+                              }
+                            }
 
                             await FirebaseFirestore.instance
-                                .collection('fixtures')
-                                .doc(doc1)
+                                .collection(widget.fixtureName)
+                                .doc(widget.doc1)
                                 .update({
                               'scoreA': team1ScoreController.text,
                               'scoreB': team2ScoreController.text,
-                              'scoreAdded': falseOrNot
+                              'scoreAdded': falseOrNot,
+                              'winnerName': winnerName,
+                              'winnerImg': winnerImage
                             });
 
                             print('score added true');
+                            // } else {
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (context) {
+                            //       return AlertDialog(
+                            //         title: Text(
+                            //             'Already created the 2nd fixtures'),
+                            //         actions: [
+                            //           TextButton(
+                            //               onPressed: () {
+                            //                 navigatorPOP(context);
+                            //               },
+                            //               child: Text('ok'))
+                            //         ],
+                            //       );
+                            //     },
+                            //   );
+                            // }
                           },
                           child: const Text('Yes ')),
                     ],
@@ -83,6 +181,28 @@ class AddScore extends StatelessWidget {
               } else {
                 print(' please enter score');
               }
+
+              // } else {
+              //   showDialog(
+              //     context: context,
+              //     builder: (context) {
+              //       return AlertDialog(
+              //         title: Text('Already created the 2nd fixtures'),
+              //         actions: [
+              //           TextButton(
+              //               onPressed: () {
+              //                 navigatorPOP(context);
+              //               },
+              //               child: Text('ok'))
+              //         ],
+              //       );
+              //     },
+              //   );
+              //   // }
+              // }
+              //  }catch(e){
+              //   print('error is $e');
+              // }
             },
             icon: const Icon(
               Icons.check_circle_outline_outlined,
@@ -94,152 +214,162 @@ class AddScore extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        // crossAxisAlignment : CrossAxisAlignment.start ,
-        children: [
-//
-
-          Padding(
-            padding: const EdgeInsets.only(left: 30, top: 10, right: 30),
-            child: Container(
-              height: 140,
-              width: 330,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.amber[100]),
-              child: Column(children: [
-                sizedbox30(),
-                Form(
-                  key: formkey,
-                  child: Row(
+      body: SingleChildScrollView(
+        child: Column(
+          // crossAxisAlignment : CrossAxisAlignment.start ,
+          children: [
+        //
+        
+            Padding(
+              padding: const EdgeInsets.only(left: 30, top: 10, right: 30),
+              child: Container(
+                height: 140,
+                width: 330,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.amber[100]),
+                child: Column(children: [
+                  sizedbox30(),
+                  Form(
+                    key: formkey,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.teal,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                widget.image1!,
+                                fit: BoxFit.cover,
+                              )
+                              //  Image.file(
+                              //   File(image1!),
+                              //   fit: BoxFit.cover,
+                              // ),
+                              ),
+                        ),
+                        Container(
+                          height: 40,
+                          width: 25,
+                          //   decoration: BoxDecoration(
+                          color: Colors.amber[100],
+                          //     borderRadius: BorderRadius.circular(10)),
+                          child: TextFormField(
+                            maxLength: 1,
+                            validator: (value) {
+                              if (value!.trim().isEmpty) {
+                                return 'Null';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                                hintText: '  ${widget.scoreA}',
+                                counter: SizedBox.shrink()),
+                            controller: team1ScoreController,
+                            keyboardType: TextInputType.number,
+                            style: font17(),
+                          ),
+                        ),
+                        Text(
+                          'VS',
+                          style: font17(),
+                        ),
+                        Container(
+                          height: 40,
+                          width: 25,
+                          //  decoration: BoxDecoration(
+                          color: Colors.amber[100],
+                          //   borderRadius: BorderRadius.circular(10)),
+                          child: TextFormField(
+                            maxLength: 1,
+                            decoration: InputDecoration(
+                              hintText: '  ${widget.scoreB}',
+                              counter: const SizedBox.shrink(),
+                            ),
+                            validator: (value) {
+                              if (value!.trim().isEmpty) {
+                                return 'Null';
+                              }
+                              return null;
+                            },
+                            controller: team2ScoreController,
+                            keyboardType: TextInputType.number,
+                            style: font17(),
+                          ),
+                        ),
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.teal,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                widget.image2!,
+                                fit: BoxFit.cover,
+                              )
+                              // Image.file(
+                              //   File(image2!),
+                              //   fit: BoxFit.cover,
+                              // ),
+                              ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const SizedBox(
-                        width: 5,
+                      Text(widget.team1 ?? 'team1'),
+                      SizedBox(
+                        width: 10,
                       ),
-                      Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.teal,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              image1!,
-                              fit: BoxFit.cover,
-                            )
-                            //  Image.file(
-                            //   File(image1!),
-                            //   fit: BoxFit.cover,
-                            // ),
-                            ),
-                      ),
-                      Container(
-                        height: 40,
-                        width: 25,
-                        //   decoration: BoxDecoration(
-                        color: Colors.amber[100],
-                        //     borderRadius: BorderRadius.circular(10)),
-                        child: TextFormField(
-                          maxLength: 1,
-                          validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return 'Null';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '  $scoreA',
-                              counter: SizedBox.shrink()),
-                          controller: team1ScoreController,
-                          keyboardType: TextInputType.number,
-                          style: font17(),
-                        ),
-                      ),
-                      Text(
-                        'VS',
-                        style: font17(),
-                      ),
-                      Container(
-                        height: 40,
-                        width: 25,
-                        //  decoration: BoxDecoration(
-                        color: Colors.amber[100],
-                        //   borderRadius: BorderRadius.circular(10)),
-                        child: TextFormField(
-                          maxLength: 1,
-                          decoration: InputDecoration(
-                            hintText: '  $scoreB',
-                            counter: SizedBox.shrink(),
-                          ),
-                          validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return 'Null';
-                            }
-                            return null;
-                          },
-                          controller: team2ScoreController,
-                          keyboardType: TextInputType.number,
-                          style: font17(),
-                        ),
-                      ),
-                      Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.teal,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              image2!,
-                              fit: BoxFit.cover,
-                            )
-                            // Image.file(
-                            //   File(image2!),
-                            //   fit: BoxFit.cover,
-                            // ),
-                            ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
+                      Text(widget.team2 ?? 'team2')
                     ],
+                  )
+                ]),
+              ),
+            ),
+            //  sizedbox70(),
+            Padding(
+              padding: const EdgeInsets.all(28.0),
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center ,
+                children: [
+                  Divider(),
+                  Text(
+                    'Add Notes Here',
+                    style: tealcolor(),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(team1 ?? 'team1'),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(team2 ?? 'team2')
-                  ],
-                )
-              ]),
-            ),
-          ),
-          //  sizedbox70(),
-          Padding(
-            padding: const EdgeInsets.all(28.0),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.center ,
-              children: [
-                Divider(),
-                Text(
-                  'Add Highlights',
-                  style: tealcolor(),
-                ),
-                Divider()
-              ],
-            ),
-          )
-        ],
+                  Divider(),
+                  Padding(
+                      padding: EdgeInsets.symmetric(vertical: 150),
+                      child: InkWell(
+                        child: containerButtonCR(txt: 'Click here'),
+                        onTap: () {
+                          navigatorPush(ctx: context, screen: AddNotes());
+                        },
+                      ))
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

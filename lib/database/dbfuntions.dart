@@ -136,7 +136,7 @@ class DatabaseFunctions {
 //   //   required
 //   // })
 
-  static addTournament1(
+  static addTournament1( 
       {required selectImage,
       required uniquefileName,
       required tournamentNameController,
@@ -154,7 +154,10 @@ class DatabaseFunctions {
       'Category': categoryCN,
       'LimitOfTeam': limitsCN,
       'userID': user,
-      'flag':true
+      'flag':true,
+      'flagtwo':true,
+      'flagthree':true
+      
     });
   }
 

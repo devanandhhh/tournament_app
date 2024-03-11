@@ -78,7 +78,7 @@ class _MatchscreenState extends State<Matchscreen> {
                                     onPressed: () {
                                       navigatorPOP(context);
                                     },
-                                    child: Text('Go Back'),
+                                    child:const Text('Go Back'),
                                   ),
                                   TextButton(
                                       onPressed: () async {

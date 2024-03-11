@@ -24,6 +24,11 @@ class _LikebuttonState extends State<Likebutton> {
     if (liked == true) {
       print('The doc1 is ${widget.doc1}');
       print('user id is ${user.uid} ');
+      //just try
+// await FirebaseFirestore.instance.collection('favourite').add({
+//   'user':user.uid,
+//   'tournamentDoc':widget.doc1
+// });
       // var docs=widget.doc1;
       //  String tournamentName = widget.doc1['TournamentName'];
       //             String date = widget.doc1['Date'];
@@ -43,7 +48,12 @@ class _LikebuttonState extends State<Likebutton> {
       // }
       //FirebaseFirestore.instance.collection('user').doc(user)
       // FirebaseFirestore.instance.collection('favourite').add({'userID':user.uid,'tournamentID':widget.doc1});
+
     }
+    // else{
+    //   print(widget.doc1);
+    //   await FirebaseFirestore.instance.collection('favourite').where('user',isEqualTo: user.uid)
+    // }
   }
 
   @override

@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:tournament_creator/screens/select_tournament/widgets/screens/mat
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/second_fixture.dart';
 
 // ignore: must_be_immutable
-class FixtureScreen extends StatelessWidget {
+class FixtureScreen extends StatefulWidget {
   FixtureScreen(
       {super.key,
       this.docs,
@@ -20,21 +21,37 @@ class FixtureScreen extends StatelessWidget {
   var docs;
   int documentlength;
   bool trueorFalse;
+  
+
+  @override
+  State<FixtureScreen> createState() => _FixtureScreenState();
+}
+
+class _FixtureScreenState extends State<FixtureScreen> {
   final user = FirebaseAuth.instance.currentUser!;
-  late List<int> fixture2nd;
+bool? isoke ;
+@override
+  void initState() {
+    flagFunction1();
+   
+    print(isoke);
+    super.initState();
+  
+  }
+ String? fixtureName='fixtures';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbardecorations(name: 'Matches'),
       backgroundColor: Colors.yellow[100],
-      body: trueorFalse
+      body: widget.trueorFalse
           ? StreamBuilder(
               stream: FirebaseFirestore.instance
                   // .collection('fixtures')
                   // .where('tournamentID', isEqualTo: docs)
                   // .snapshots(),
                   .collection('tournament')
-                  .doc(docs)
+                  .doc(widget.docs)
                   .collection('team')
                   .snapshots(),
               builder: (context, snapshot) {
@@ -57,6 +74,7 @@ class FixtureScreen extends StatelessWidget {
                 List<Widget> fixtureWidget = [];
 
                 for (int i = 0; i < teams.length - 1; i += 2) {
+              
                   var teamA = teams[i];
                   var teamB = teams[i + 1];
                   fixtureWidget.add(fixtures(
@@ -66,17 +84,21 @@ class FixtureScreen extends StatelessWidget {
                       image2: teamB['teamImage'],
                       doc1: null,
                       scoreA: '',
-                      scoreB: ''));
-                  if (trueorFalse) {
+                      scoreB: '',
+                      fixtureName: fixtureName
+                    ));
+                  if (widget.trueorFalse) {
                     FirebaseFirestore.instance.collection('fixtures').add({
                       'teamA': teamA['teamName'],
                       'teamB': teamB['teamName'],
                       'image1': teamA['teamImage'],
                       'image2': teamB['teamImage'],
-                      'tournamentID': docs,
+                      'tournamentID': widget.docs,
                       'scoreA': null,
                       'scoreB': null,
-                      'scoreAdded': false
+                      'scoreAdded': false,
+                      'winnerName': null,
+                      'winnerImg': null
                     });
                     print('score added false');
                   }
@@ -93,7 +115,7 @@ class FixtureScreen extends StatelessWidget {
           : StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('fixtures')
-                  .where('tournamentID', isEqualTo: docs)
+                  .where('tournamentID', isEqualTo: widget.docs)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -118,16 +140,20 @@ class FixtureScreen extends StatelessWidget {
                           ctx: context,
                           doc1: docc.id,
                           scoreA: scoreA,
-                          scoreB: scoreB);
+                          scoreB: scoreB,
+                          fixtureName: fixtureName
+                          );
                     },
                     separatorBuilder: (context, index) => sizedbox30(),
                     itemCount: snapshot.data!.docs.length);
               }),
       bottomNavigationBar: InkWell(
         onTap: () async {
+              print('isoke is $isoke');
+            
           QuerySnapshot snapshot = await FirebaseFirestore.instance
               .collection('fixtures')
-              .where('tournamentID', isEqualTo: docs)
+              .where('tournamentID', isEqualTo: widget.docs)
               .get();
 
           if (snapshot.docs.isEmpty) {
@@ -143,20 +169,109 @@ class FixtureScreen extends StatelessWidget {
             trueorFalseList.add(isyesorNo);
             print(trueorFalseList);
           }
+          List<Map<String, dynamic>> winners = [];
           bool finalcheckTrueOrFalse = !trueorFalseList.contains(false);
+
           if (finalcheckTrueOrFalse) {
-            //  QuerySnapshot fixturesnapshot =await FirebaseFirestore.instance.collection('fixtures').where('tournamentID',isEqualTo: docs).get();
+            for (var doc in snapshot.docs) {
+              String winnerName = doc['winnerName'];
+              String winnerImg = doc['winnerImg'];
+              winners.add({'winnerName': winnerName, 'winnerImg': winnerImg});
+            }
+            print('winners :$winners');
 
-            // for( var doc1 in snapshot.docs){
-            //   int scoreA =doc1['scoreA'];
-            //   int scoreB =doc1['scoreB'];
-            //   if(scoreA<scoreB){
-            //     fixture2nd.add()
+          
+            if (isoke == true) {
+              print('is oke is :$isoke');
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text(
+                        'After creating  2nd fixtures you cant edit the 1st fixtures'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                           
+                            navigatorPOP(context);
+                          },
+                          child: const Text('Go Back')),
+                      TextButton(
+                          onPressed: () async {
+                           await FirebaseFirestore.instance
+                                            .collection('tournament')
+                                            .doc(widget.docs)
+                                            .update({'flagtwo': false});
+                                        setState(() {}); 
 
-            //   }
-            // }
+                           
+                          
+                            List<Widget> secondroundWidget = [];
 
-            navigatorPush(ctx: context, screen: const SecondFixture());
+                            for (int i = 0; i < winners.length - 1; i += 2) {
+                              var teamA = winners[i];
+                              var teamB = winners[i + 1];
+                              secondroundWidget.add(fixtures(
+                                  team1: teamA['winnerName'],
+                                  team2: teamB['winnerName'],
+                                  image1: teamA['winnerImg'],
+                                  image2: teamB['winnerImg'],
+                                  doc1: null,
+                                  scoreA: '',
+                                  scoreB: '',
+                                  fixtureName: fixtureName
+                                 ));
+
+                              FirebaseFirestore.instance
+                                  .collection('secondRound')
+                                  .add({
+                                'teamA': teamA['winnerName'],
+                                'teamB': teamB['winnerName'],
+                                'image1': teamA['winnerImg'],
+                                'image2': teamB['winnerImg'],
+                                'tournamentID': widget.docs,
+                                'scoreA': null,
+                                'scoreB': null,
+                                'scoreAdded': false,
+                                'winnerName': null,
+                                'winnerImg': null
+                              });
+                              print('score added false');
+                            }
+                            //for disable the edit option in score screen
+                            // await FirebaseFirestore.instance
+                            //     .collection('tournament')
+                            //     .doc(widget.docs)
+                            //     .update({'flag2': false});
+                            // setState(() {});
+
+                            navigatorPush(
+                                ctx: context,
+                                screen: SecondFixture(
+                                  secondRound: secondroundWidget,
+                                  docs: widget.docs,
+                                  winners: winners,
+                                ));
+                          },
+                          child: const Text('Create 2nd Round'))
+                    ],
+                  );
+                },
+              );
+            } else {
+            
+              navigatorPush(
+                  ctx: context,
+                  screen: SecondFixture(
+                    docs: widget.docs,
+                    winners: winners,
+                  ));
+            }
+            // navigatorPush(
+            //     ctx: context,
+            //     screen: SecondFixture(
+            //       docs: docs,
+            //     ));
           } else {
             trueorFalseList.clear();
             showDialog(
@@ -212,5 +327,13 @@ class FixtureScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+   flagFunction1() async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await FirebaseFirestore.instance
+            .collection('tournament')
+            .doc(widget.docs)
+            .get();
+    isoke = documentSnapshot.get('flagtwo');
   }
 }

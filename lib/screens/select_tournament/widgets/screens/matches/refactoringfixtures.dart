@@ -15,12 +15,16 @@ fixtures(
     required doc1,
     required scoreA,
     required scoreB,
+    required fixtureName,
+    
     ctx}) {
+     
   return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 5),
       // EdgeInsets.symmetric(horizontal: 30),
       child: InkWell(
-          onTap: () {
+          onTap: () { 
+           
             navigatorPush(
                 ctx: ctx,
                 screen: AddScore(
@@ -31,6 +35,8 @@ fixtures(
                   doc1: doc1,
                   scoreA: scoreA,
                   scoreB: scoreB,
+                  fixtureName: fixtureName,
+                 
                 ));
           },
           child: Container(

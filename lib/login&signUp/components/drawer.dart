@@ -11,6 +11,8 @@ import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
+import 'package:tournament_creator/screens/other/about.dart';
+import 'package:tournament_creator/screens/other/privacyAndPolicy.dart';
 // import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 
 // ignore: must_be_immutable
@@ -160,13 +162,13 @@ class _MyDrawerState extends State<MyDrawer> {
             icon: Icons.security ,
             text: 'A B O U T ',
             onTap: () {
-              navigatorPOP(context);
+              navigatorPush(ctx: context, screen: AboutScreen());
             }),
         MyListTile(
             icon: Icons.privacy_tip ,
             text:  'P R I V A C Y   P O L I C Y',
             onTap: () {
-              navigatorPOP(context);
+              navigatorPush(ctx: context, screen: PrivacyAndPolicy());
             }),
        
         MyListTile(

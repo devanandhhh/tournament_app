@@ -286,7 +286,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                                     dateController: dateController,
                                     categoryCN: categoryCN,
                                     limitsCN: limitsCN,
-                                    user: user.uid);
+                                    user: user.uid); 
 
                                 messengerScaffold1(
                                     ctx: context, text: 'Sucessfully Added');
