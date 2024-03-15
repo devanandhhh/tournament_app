@@ -23,7 +23,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   String? categoryCN;
   String? limitsCN;
   final category = ['7s', '9s', '11s'];
-  final limitsOfTeams = ['8 teams', '16 teams', '32 teams'];
+  final limitsOfTeams = ['8 teams', '16 teams']; 
   final tournamentNameController = TextEditingController();
   var categoryController = TextEditingController();
   final dateController = TextEditingController();
@@ -31,7 +31,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   final placeController = TextEditingController();
   String? selectImage;
   String? uniquefileName;
-  XFile? image;
+ 
   String? imageUrl = '';
 
   //add user
@@ -58,38 +58,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                     backgroundImage: obj.imageLink.isEmpty
                         ? Image.asset('assets/addimage2.png').image
                         : Image.file(File(obj.imageLink)).image
-                    // FileImage(File()) : Image.asset('assets/addimage2.png').image,
-                    // child: GestureDetector(
-                    //   onTap: () async {
-                    //     // String? pickImage = await pickImageFromGallery();
-                    //     // setState(() {
-                    //     //   selectImage = pickImage;
-                    //     // });
-                    //     XFile? file = await imageFromGallery();
-                    //     print('IMAGE FILE :${file?.path}');
-                    //     if (file == null) return;
-
-                    //     setState(() {
-                    //       image = file;
-                    //     });
-                    //     print('image uploaded:${image?.path}');
-                    //     //updating
-                    //     uniquefileName =
-                    //         DateTime.now().microsecondsSinceEpoch.toString();
-                    //     print('the num : $uniquefileName');
-                    //   },
-                    //   // child: selectImage != null
-                    //   //     ? ClipOval(
-                    //   //         child: Image.file(
-                    //   //           File(selectImage!),
-                    //   //           fit: BoxFit.cover,
-                    //   //           width: 150,
-                    //   //           height: 150,
-                    //   //         ),
-                    //   //       )
-                    //   //     : null,
-                    //   // not using
-                    // ),
+                 
                     ),
               ),
               const SizedBox(

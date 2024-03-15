@@ -1,13 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
-// import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_details.dart';
-// import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
 class TeamScreenView extends StatelessWidget {
   TeamScreenView({super.key, required this.doc1});
@@ -19,7 +13,8 @@ class TeamScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.yellow[100],
+    return Scaffold(
+        backgroundColor: Colors.yellow[100],
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('tournament')
@@ -47,34 +42,43 @@ class TeamScreenView extends StatelessWidget {
                     String teamImage = doc2['teamImage'];
                     String teamName = doc2['teamName'];
                     String managerName = doc2['managerName'];
-                    // String phoneNumber = doc2['phoneNumber'];
-                    // String place = doc2['place'];
 
                     return ListTile(
-                      // onTap: () => navigatorPush(
-                      //     ctx: context,
-                      //     screen: ViewTeamDetails(
-                      //         imageview: teamImage,
-                      //         teamName: teamName,
-                      //         managerName: managerName,
-                      //         phoneNumber: phoneNumber,
-                      //         placeName: place)),
                       title: Text(teamName),
                       subtitle: Text(managerName),
-                      leading: CircleAvatar(radius: 30,backgroundColor: Colors.teal,
+                      leading: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.teal,
                         child: ClipOval(
-                            child:Image.network(teamImage,fit: BoxFit.cover,width: 50,height: 50,)
-                        //      Image.file(
-                        //   File(teamImage),
-                        //   fit: BoxFit.cover,
-                        //   width: 50,
-                        //   height: 50,
-                        // )
-                        ),
+                            child: Image.network(teamImage,
+                                fit: BoxFit.cover,
+                                width: 50,
+                                height: 50,
+                                //error builder
+                                errorBuilder: ((context, error, stackTrace) =>
+                                    const Text('😢')),
+                                //loading builder
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                          final totalBytes =
+                              loadingProgress?.expectedTotalBytes;
+                          final bytesLoaded =
+                              loadingProgress?.cumulativeBytesLoaded;
+                          if (totalBytes != null && bytesLoaded != null) {
+                            return CircularProgressIndicator(
+                              backgroundColor: Colors.white70,
+                              value: bytesLoaded / totalBytes,
+                              color: Colors.teal[900],
+                              strokeWidth: 5.0,
+                            );
+                          } else {
+                            return child;
+                          }
+                        })),
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) =>const Divider(),
+                  separatorBuilder: (context, index) => const Divider(),
                   itemCount: snapshot.data!.docs.length);
             }));
   }

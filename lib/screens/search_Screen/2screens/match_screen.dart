@@ -73,7 +73,7 @@ class MatchScreenView extends StatelessWidget {
               ),
             ),
              SizedBox(
-              height: MediaQuery.of(context).size.height,
+              height:400 ,
               child: Column(
                 children: [
                   
@@ -123,7 +123,7 @@ class MatchScreenView extends StatelessWidget {
               ),
             ),  
                SizedBox(
-              height: MediaQuery.of(context).size.height,
+              height:250 ,
               child: Column(
                 children: [
                   

@@ -24,15 +24,11 @@ String ?uniqueId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( backgroundColor: Colors.yellow[100],
-        title: headingtext(text: 'Tournament Creator '),  
+      appBar: AppBar( backgroundColor:Colors.yellow[100], 
+        title: headingtext(text: 'Tournament Creator '),   
         actions: 
          [
-        //   IconButton(onPressed: (){
-        //    navigatorPush(
-        //   ctx: context, screen: const FavouiteScreen()); 
-        // }, icon:const Icon(Icons.favorite_border_outlined,size: 27,),),
-        //  iconSize30(icondata: Icons.favorite_border_outlined),
+   
           const SizedBox(
             width: 10,
           ),
@@ -62,11 +58,7 @@ String ?uniqueId;
               padding: const EdgeInsets.all(34.0),
               child: Text(' Hello!',
                   style: GoogleFonts.oswald(fontSize: 50, color: Colors.teal)
-                  //  TextStyle(
-                  //   color: Colors.teal,
-                  //   fontSize: 50,
-                  //   fontWeight: FontWeight.bold,
-                  // ),
+          
                   )),
           Expanded(
               child: Container(

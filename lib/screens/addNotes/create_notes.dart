@@ -83,7 +83,7 @@ class _CreateNotesState extends State<CreateNotes> {
                   scaffoldmessAdded(context);
                   //  setState(() {});
 
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(true);
                 },
                 child: Container(
                   height: 70,

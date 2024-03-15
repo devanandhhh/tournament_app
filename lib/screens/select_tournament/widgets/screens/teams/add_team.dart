@@ -56,39 +56,12 @@ class _AddTeamState extends State<AddTeam> {
                 backgroundImage: obj.imageLink.isEmpty
                     ? Image.asset('assets/addimage.png').image
                     : Image.file(File(obj.imageLink)).image, 
-                //  image != null ? FileImage(File(image!.path)) : Image.asset('assets/addimage.png').image,
-                // const AssetImage('assets/addimage.png'),
+             
                 radius: 70,
-                // child: GestureDetector(
-                //   onTap: () async {
-                //     XFile? file = await imageFromGallery();
-                //     setState(() {
-                //       image = file;
-                //     });
-
-                //     uniquefileName =
-                //         DateTime.now().microsecondsSinceEpoch.toString();
-                //         print('image selected and unique number created');
-                //   },
-                // ),
+               
               ),
             ),
-            //  onTap: () async {
-            //   String? pickImage = await pickImageFromGallery();
-            //   setState(() {
-            //     seletedImage = pickImage;
-            //   });
-            // },
-            // child: seletedImage != null
-            //     ? ClipOval(
-            //         child: Image.file(
-            //           File(seletedImage!),
-            //           fit: BoxFit.cover,
-            //           width: 130,
-            //           height: 130,
-            //         ),
-            //       )
-            //     : null)),
+           
             Form(
               key: formKey,
               child: Column(

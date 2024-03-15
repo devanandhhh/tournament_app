@@ -329,6 +329,29 @@ class _AddplayersState extends State<Addplayers> {
                               child: ClipOval(
                                   child: Image.network(
                                 playerphoto,
+                                //error builder
+                                errorBuilder: ((context, error, stackTrace) =>
+                                    const Text('😢')),
+                                //loading builder
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  final totalBytes =
+                                      loadingProgress?.expectedTotalBytes;
+                                  final bytesLoaded =
+                                      loadingProgress?.cumulativeBytesLoaded;
+                                  if (totalBytes != null &&
+                                      bytesLoaded != null) {
+                                    return CircularProgressIndicator(
+                                      backgroundColor: Colors.white70,
+                                      value: bytesLoaded / totalBytes,
+                                      color: Colors.teal[900],
+                                      strokeWidth: 5.0,
+                                    );
+                                  } else {
+                                    return child;
+                                  }
+                                },
+
                                 fit: BoxFit.cover,
                                 height: 35,
                                 width: 35,
@@ -382,23 +405,7 @@ class _AddplayersState extends State<Addplayers> {
                                                                   .image
                                                               : FileImage(File(
                                                                   obj.imageLink)),
-
-                                                          // FileImage(File(
-                                                          //     playerphoto)),
                                                           radius: 70,
-                                                          // child: InkWell(
-                                                          //   onTap: () async {
-                                                          //     String?
-                                                          //         editdetails =
-                                                          //         await pickImageFromGallery();
-                                                          //     setState(
-                                                          //       () {
-                                                          //         playerphoto =
-                                                          //             editdetails!;
-                                                          //       },
-                                                          //     );
-                                                          //   },
-                                                          // ),
                                                         ),
                                                       ),
                                                       sizedbox10(),
@@ -449,32 +456,6 @@ class _AddplayersState extends State<Addplayers> {
                                                                 );
                                                               },
                                                             ),
-                                                            // child:
-                                                            //     GestureDetector(
-                                                            //   onTap: () async {
-
-                                                            // String?
-                                                            //     editproof =
-                                                            //     await pickImageFromGallery();
-                                                            // setState(
-                                                            //   () {
-                                                            //     playerid =
-                                                            //         editproof!;
-                                                            //   },
-                                                            // );
-                                                            //  },
-
-                                                            // child: ClipRRect(
-                                                            //   borderRadius:
-                                                            //       BorderRadius
-                                                            //           .circular(
-                                                            //               10),
-                                                            // //  child:
-                                                            //   // Image
-                                                            //   //     .file(File(
-                                                            //   //         playerid)),
-                                                            // ),
-                                                            // ),
                                                           ),
                                                         ],
                                                       )
@@ -486,11 +467,7 @@ class _AddplayersState extends State<Addplayers> {
                                                 TextButton(
                                                     onPressed: () {
                                                       navigatorPOP(context);
-                                                      // setState(() {
-                                                      //   seletedImage =
-                                                      //       playerphoto;
-                                                      //   selectedId = playerid;
-                                                      // });
+
                                                       obj.imageLink = '';
                                                       obj2.imagelink2 = '';
                                                     },

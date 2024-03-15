@@ -66,7 +66,29 @@ fixtures(
                               borderRadius: BorderRadius.circular(10),
                               child:
                               //edited 
-                              Image.network(image1,fit: BoxFit.cover,)
+                              Image.network(image1,
+                               //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              Center(child: const Text('😢'))),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                              fit: BoxFit.cover,)
                               //  Image.file(
                               //   File(image1),
                               //   fit: BoxFit.cover,
@@ -104,7 +126,29 @@ fixtures(
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child:
-                              Image.network(image2,fit: BoxFit.cover,)
+                              Image.network(image2,
+                               //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              Center(child: const Text('😢'))),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                              fit: BoxFit.cover,)
                               // Image.file(
                               //   File(image2),
                               //   fit: BoxFit.cover,
@@ -164,7 +208,31 @@ fixtureForUser(
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: 
-                      Image.network(image1,fit: BoxFit.cover,)
+                      Image.network(image1,
+                        //-----------------------------
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              Center(child: const Text('😢',),)),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                            //----------------------------
+                      fit: BoxFit.cover,)
                       // Image.file(
                       //   File(image1),
                       //   fit: BoxFit.cover,
@@ -197,7 +265,31 @@ fixtureForUser(
                   //for image
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child:Image.network(image2,fit: BoxFit.cover,)
+                      child:Image.network(image2,
+                        //-----------------------------
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              Center(child: const Text('😢'))),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                            //----------------------------
+                      fit: BoxFit.cover,)
                       //  Image.file(
                       //   File(image2),
                       //   fit: BoxFit.cover,

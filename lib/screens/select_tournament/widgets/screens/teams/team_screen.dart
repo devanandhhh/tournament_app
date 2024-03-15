@@ -110,6 +110,25 @@ class _TeamscreenState extends State<Teamscreen> {
                             ? null
                             : Image.network(
                                 teamImage,
+                                 //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return CircularProgressIndicator(
+                                backgroundColor: Colors.white70,
+                                value: bytesLoaded / totalBytes,
+                                color: Colors.teal[900],
+                                strokeWidth: 5.0,
+                              );
+                            } else {
+                              return child;
+                            }},
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -167,54 +186,7 @@ class _TeamscreenState extends State<Teamscreen> {
                                                     : Image.file(
                                                             File(obj.imageLink))
                                                         .image,
-                                                // FileImage(File(teamImage)),
-                                                // child: InkWell(
-                                                //   onTap: () async {
-
-                                                // String? pickImage =
-                                                //     await pickImageFromGallery();
-                                                // setState(
-                                                //   () {
-                                                //     teamImage = pickImage!;
-                                                //   },
-                                                // );
-                                                // try {
-                                                //   XFile? file =
-                                                //       await imageFromGallery();
-                                                //   print('image picked');
-                                                //   dialogShowing(
-                                                //       ctx: context);
-                                                //   uniquenumber = DateTime
-                                                //           .now()
-                                                //       .millisecondsSinceEpoch
-                                                //       .toString();
-                                                //   await FirebaseStorage
-                                                //       .instance
-                                                //       .ref()
-                                                //       .child('TeamImages')
-                                                //       .child(uniquenumber!)
-                                                //       .putFile(
-                                                //           File(file!.path));
-                                                //   imageurl =
-                                                //       await FirebaseStorage
-                                                //           .instance
-                                                //           .ref()
-                                                //           .child(
-                                                //               'TeamImages')
-                                                //           .child(
-                                                //               uniquenumber!)
-                                                //           .getDownloadURL();
-                                                //   setState(
-                                                //     () {
-                                                //       teamImage = imageurl!;
-                                                //     },
-                                                //   );
-                                                //   navigatorPOP(context);
-                                                // } catch (e) {
-                                                //   print('error in $e');
-                                                // }
-                                                //},
-                                                // )
+                                               
                                               ),
                                             ),
                                             sizedbox30(),
@@ -253,9 +225,7 @@ class _TeamscreenState extends State<Teamscreen> {
                                             DatabaseFunctions.deleteFileteam(
                                               fileName: fileName,
                                             );
-                                            // setState(() {
-                                            // seletedImage = teamImage;
-                                            //  teamImage = seletedImage!;
+                                           
                                             obj.imageLink = '';
                                             // });
                                           },
@@ -292,9 +262,7 @@ class _TeamscreenState extends State<Teamscreen> {
                                                 .child(uniquenumber!)
                                                 .getDownloadURL();
 
-                                            // DatabaseFunctions.deleteFile(
-                                            //     fileName: fileName,
-                                            //     foldername: 'TeamImages');
+                                          
                                             try{
                                             DatabaseFunctions.deleteFileteam(
                                                 fileName: fileName);

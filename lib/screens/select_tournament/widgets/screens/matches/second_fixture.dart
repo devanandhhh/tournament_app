@@ -28,7 +28,7 @@ class _SecondFixtureState extends State<SecondFixture> {
     flagFunction1();
 
     print(isValue);
-    super.initState();
+    super.initState(); 
   }
 
   flagFunction1() async {
@@ -46,21 +46,7 @@ class _SecondFixtureState extends State<SecondFixture> {
         backgroundColor: Colors.yellow[100],
         appBar: appbardecorations(name: 'Second Round Fixtures'),
         body:
-            //  StreamBuilder(
-            //   stream: FirebaseFirestore.instance
-            //       .collection('secondRound')
-            //       .where('tournamentId', isEqualTo: docs)
-            //       .snapshots(),
-            //   builder: (context, snapshot) {
-            //     return ListView.separated(
-            //               itemBuilder: (context, index) {
-            //                 //return
-            //                 return secondRound[index];
-            //               },
-            //               separatorBuilder: (context, index) => sizedbox30(),
-            //               itemCount: secondRound.length);
-            //   },
-            // ),
+         
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('secondRound')
@@ -194,6 +180,7 @@ class _SecondFixtureState extends State<SecondFixture> {
                                     // docs: widget.docs,
                                     // winners: winners,
                                   ));
+                                  navigatorPOP(context); 
                             },
                             child: const Text('Create 3nd Round'))
                       ],
@@ -208,11 +195,7 @@ class _SecondFixtureState extends State<SecondFixture> {
                         winners: winners,
                         ));
               }
-              // navigatorPush(
-              //     ctx: context,
-              //     screen: SecondFixture(
-              //       docs: docs,
-              //     ));
+            
             } else {
               trueorFalseList.clear();
               showDialog(

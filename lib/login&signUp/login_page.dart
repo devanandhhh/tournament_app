@@ -23,18 +23,12 @@ class _LoginPageState extends State<LoginPage> {
   void signInUserIn() async {
     if (formKey.currentState!.validate()) {
       // sign user in method
-      // showDialog(context: context, builder: (context){
-      //   return const Center(child: CircularProgressIndicator(),);
-      // });
+     
       //sign in
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
-        // navigatorPOP(context);
-        // sign user in method
-        // showDialog(context: context, builder: (context){
-        //   return const Center(child: CircularProgressIndicator(),);
-        // });
+       
 
         // navigatorPOP(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -54,20 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     }
-    // sign user in method
-    // showDialog(context: context, builder: (context){
-    //   return const Center(child: CircularProgressIndicator(),);
-    // });
-
-    // }on FirebaseAuthException catch(e){
-    //   if(e.code=='user-not-found'){
-    //     //show error
-    //     print('user not found');
-
-    //   }else if(e.code=='wrong-password'){
-
-    //   }
-    // }
+  
     //navigatorPOP(context);
   }
   //function
@@ -77,26 +58,14 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: Colors.yellow[100],
         body:
-        //  Stack(fit: StackFit.expand, children: [
-        //   SizedBox(
-        //       height: 200,
-        //       width: 300,
-        //       child: Image.asset(
-        //         'assets/demo.jpg' , 
-        //         fit: BoxFit.cover,
-        //       )),
+      
           SafeArea(
             child: SingleChildScrollView(
               child: Form(
                 key: formKey,
                 child: Column(
                   children: [
-                    // Container(
-                    //   height: 330 ,
-                    //   width:  double.infinity,
-                    //   child: Image.asset('assets/messi.jpg'),
-                    //   decoration: BoxDecoration(),
-                    // ),
+                  
                     const SizedBox(
                       height: 110,
                     ),
@@ -114,13 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 25,
                     ),
-                    //user textfield
-                    // MyTextfield(
-                    //   controller: emailController,
-                    //   validateOntap:Validator.validateEmail,
-                    //   hinttext: 'Email',
-                    //   obscureText: false,
-                    // ),
+                  
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: TextFormField(
@@ -144,12 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 25,
                     ),
-                    // MyTextfield(
-                    //   controller: passwordController,
-                    //   validateOntap:Validator.validatePassword,
-                    //   hinttext: 'Password',
-                    //   obscureText: true,
-                    // ),
+                   
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: TextFormField(

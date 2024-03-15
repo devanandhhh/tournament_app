@@ -29,12 +29,7 @@ class _UserViewState extends State<UserView> {
               widget.tournamentname,
               style: tealcolor(),
             ),
-            // actions:  [
-            //   Likebutton(doc1: widget.doc1,),
-            //  const SizedBox(
-            //     width: 20,
-            //   )
-            // ],
+            
             bottom: TabBar(
                 labelStyle: font17(),
                 indicator: underlineDecoration(),

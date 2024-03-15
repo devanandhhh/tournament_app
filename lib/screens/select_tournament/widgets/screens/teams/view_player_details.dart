@@ -54,6 +54,27 @@ class View_player_details extends StatelessWidget {
                 child: InstaImageViewer(
                   child: Image.network(
                     playerphoto,
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -94,6 +115,29 @@ class View_player_details extends StatelessWidget {
                 child: InstaImageViewer(
                   child: Image.network(
                     playerProff,
+                    //-----------------------------
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                            //----------------------------
                     fit: BoxFit.cover,
                   ),
                 ),

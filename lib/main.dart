@@ -23,8 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      //darkTheme: ThemeData.dark(),
-      //theme: ThemeData(primaryColor: Colors.teal,primarySwatch: Colors.amber),
+     
       title: 'Tournify',
 
       home:

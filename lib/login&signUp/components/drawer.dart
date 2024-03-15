@@ -93,7 +93,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               child: InkWell(
                                   onTap: () async {
                                     String? pickimage =
-                                        await pickImageFromGallery();
+                                        await pickImageFromGallery(); 
 
                                     setState(() {
                                       image = pickimage;

@@ -47,9 +47,7 @@ bool? isoke ;
       body: widget.trueorFalse
           ? StreamBuilder(
               stream: FirebaseFirestore.instance
-                  // .collection('fixtures')
-                  // .where('tournamentID', isEqualTo: docs)
-                  // .snapshots(),
+                 
                   .collection('tournament')
                   .doc(widget.docs)
                   .collection('team')
@@ -69,7 +67,7 @@ bool? isoke ;
                   });
                 }
 
-                //FirebaseFirestore.instance.collection('tournament').doc(docs).get();
+                
                 //generate matches
                 List<Widget> fixtureWidget = [];
 
@@ -252,6 +250,7 @@ bool? isoke ;
                                   docs: widget.docs,
                                   winners: winners,
                                 ));
+                                navigatorPOP(context);
                           },
                           child: const Text('Create 2nd Round'))
                     ],
@@ -267,11 +266,7 @@ bool? isoke ;
                     winners: winners,
                   ));
             }
-            // navigatorPush(
-            //     ctx: context,
-            //     screen: SecondFixture(
-            //       docs: docs,
-            //     ));
+           
           } else {
             trueorFalseList.clear();
             showDialog(

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
@@ -76,29 +75,41 @@ class _SampleScreenState extends State<SampleScreen> {
                 String date = iteam['Date'];
                 return ListTile(
                   onTap: () {
-                   // print('pa ${iteam.id}');
+                    // print('pa ${iteam.id}');
                     navigatorPush(
-
                         ctx: context,
                         screen: UserView(
                           tournamentname: tournamentName,
                           doc1: iteam.id,
-                          
                         ));
                   },
                   leading: CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.teal,
                     child: ClipOval(
-                        child:
-                        Image.network(dprofile,fit: BoxFit.cover,width: 50,height: 50,)
-                    //      Image.file(
-                    //   File(dprofile),
-                    //   fit: BoxFit.cover,
-                    //   width: 50,
-                    //   height: 50,
-                    // )
-                    ),
+                        child: Image.network(dprofile,
+                            fit: BoxFit.cover,
+                            width: 50,
+                            height: 50,
+                            //error builder
+                            errorBuilder: ((context, error, stackTrace) =>
+                                const Text('😢')),
+                            //loading builder
+                            loadingBuilder: (context, child, loadingProgress) {
+                      final totalBytes = loadingProgress?.expectedTotalBytes;
+                      final bytesLoaded =
+                          loadingProgress?.cumulativeBytesLoaded;
+                      if (totalBytes != null && bytesLoaded != null) {
+                        return CircularProgressIndicator(
+                          backgroundColor: Colors.white70,
+                          value: bytesLoaded / totalBytes,
+                          color: Colors.teal[900],
+                          strokeWidth: 5.0,
+                        );
+                      } else {
+                        return child;
+                      }
+                    })),
                   ),
                   title: Text(tournamentName),
                   subtitle: Text(date),

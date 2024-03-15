@@ -51,10 +51,6 @@ class _TournmentListState extends State<TournmentList> {
               .collection('tournament')
               .where('userID', isEqualTo: user.uid)
               .snapshots(),
-          // stream:
-          // FirebaseFirestore.instance
-          //     .collection('tournament_details')
-          //     .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(
@@ -98,9 +94,6 @@ class _TournmentListState extends State<TournmentList> {
                                       details: viewDetails,
                                       limits: limits1,
                                       limitOfTeams: limitOfTeams,
-
-                                      // detailsView: detailsView,
-                                      // dateController: dateController,
                                     )));
                       },
                       leading: CircleAvatar(
@@ -109,17 +102,30 @@ class _TournmentListState extends State<TournmentList> {
                         child: ClipOval(
                             child: Image.network(
                           image,
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return CircularProgressIndicator(
+                                backgroundColor: Colors.white70,
+                                value: bytesLoaded / totalBytes,
+                                color: Colors.teal[900],
+                                strokeWidth: 5.0,
+                              );
+                            } else {
+                              return child;
+                            }
+                          },
                           fit: BoxFit.cover,
                           width: 50,
                           height: 50,
                         )),
-                        // child: ClipOval(
-                        //     child: Image.file(
-                        //   File(image),
-                        //   fit: BoxFit.cover,
-                        //   width: 50,
-                        //   height: 50,
-                        // )),
                       ),
                       title: Text(tournamentName),
                       subtitle: Text(date),
@@ -176,54 +182,6 @@ class _TournmentListState extends State<TournmentList> {
                                                               obj.imageLink))
                                                           .image,
                                                   maxRadius: 70,
-                                                  // child: GestureDetector(
-                                                  //   onTap: () async {
-                                                  //     // imageFromGallery();
-
-                                                  //     // String? pickimage =
-                                                  //     //     await pickImageFromGallery();
-                                                  //     // setState(() {
-                                                  //     //   image = pickimage!;
-                                                  //     // });
-                                                  //     //imagetxt=await imageFromGallery();
-
-                                                  //     // try {
-                                                  //     //   String file1 =
-                                                  //     //       await imageFromGallery();
-                                                  //     //   print(
-                                                  //     //       'image edited $file1');
-                                                  //     //   dialogShowing(
-                                                  //     //       ctx: context);
-                                                  //     //   uniquenumber = DateTime
-                                                  //     //           .now()
-                                                  //     //       .millisecondsSinceEpoch
-                                                  //     //       .toString();
-
-                                                  //     //   await FirebaseStorage
-                                                  //     //       .instance
-                                                  //     //       .ref()
-                                                  //     //       .child(
-                                                  //     //           'TournamentImages')
-                                                  //     //       .child(uniquenumber!)
-                                                  //     //       .putFile(File(file1));
-                                                  //     //   urlImage =
-                                                  //     //       await FirebaseStorage
-                                                  //     //           .instance
-                                                  //     //           .ref()
-                                                  //     //           .child(
-                                                  //     //               'TournamentImages')
-                                                  //     //           .child(
-                                                  //     //               uniquenumber!)
-                                                  //     //           .getDownloadURL();
-                                                  //     //   setState(() {
-                                                  //     //     image = urlImage!;
-                                                  //     //   });
-                                                  //     //   navigatorPOP(context);
-                                                  //     // } catch (e) {
-                                                  //     //   print('Error is : $e');
-                                                  //     // }
-                                                  //   },
-                                                  // ),
                                                 ),
                                               ),
                                               Column(
@@ -239,10 +197,6 @@ class _TournmentListState extends State<TournmentList> {
                                                       controller:
                                                           dateController,
                                                       labeltxt: 'Date'),
-                                                  // editingtextformOntap(
-                                                  //     labeltxt: 'Date',
-                                                  //     controller:
-                                                  //         dateController,context: context),
 
                                                   editingtextform(
                                                       labeltxt: "Place",
@@ -284,72 +238,13 @@ class _TournmentListState extends State<TournmentList> {
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
-                                                // setState(() {
-                                                //   newImage = '';
-                                                // });
+
                                                 obj.imageLink = '';
                                               },
                                               child: const Text('Cancel')),
                                           TextButton(
                                               onPressed: () async {
-                                                //   await DatabaseFunctions
-                                                //       .editTournament(
-                                                //           documentId: docs.id,
-                                                //           tournamentImage: image,
-                                                //           tournamentNameController:
-                                                //               tournamentNameController,
-                                                //           dateController:
-                                                //               dateController,
-                                                //           placeController:
-                                                //               placeController,
-                                                //           category: categoryy,
-                                                //           limits: limits);
-                                                //   tournamentNameController
-                                                //       .clear();
-                                                //   dateController.clear();
-                                                //   // ignore: use_build_context_synchronously
-                                                //   Navigator.of(context).pop();
-                                                //   dataSucessSnackbar();
-                                                //   // ignore: use_build_context_synchronously
-                                                //   ScaffoldMessenger.of(context)
-                                                //       .showSnackBar(
-                                                //           updateSucessSnackbar());
-                                                //-----------------------------------
-                                                // await FirebaseFirestore.instance
-                                                //     .collection('tournament')
-                                                //     .doc(docs.id)
-                                                //     .update({
-                                                //   'TournamentImage': image,
-                                                //   'TournamentName':
-                                                //       tournamentNameController
-                                                //           .text,
-                                                //   'Date': dateController.text,
-                                                //   "Place": placeController.text,
-                                                //   'Category': categoryy,
-                                                //   'LimitOfTeam': limits,
-                                                // });
-                                                //--------
-                                                // DatabaseFunctions.deleteFile(
-                                                //    fileName:  filename,foldername: 'TournamentImage');
                                                 obj.imageLink.isEmpty
-                                                    // ? await FirebaseFirestore
-                                                    //     .instance
-                                                    //     .collection(
-                                                    //         'tournament')
-                                                    //     .doc(docs.id)
-                                                    //     .update({
-                                                    //     'TournamentImage':
-                                                    //         image,
-                                                    //     'TournamentName':
-                                                    //         tournamentNameController
-                                                    //             .text,
-                                                    //     'Date':
-                                                    //         dateController.text,
-                                                    //     "Place": placeController
-                                                    //         .text,
-                                                    //     'Category': categoryy,
-                                                    //     'LimitOfTeam': limits,
-                                                    //   })
                                                     ? DatabaseFunctions.edittournament1(
                                                         document1: docs.id,
                                                         image: image,
@@ -400,7 +295,7 @@ class _TournmentListState extends State<TournmentList> {
 
                                                   tournamentNameController
                                                       .clear();
-obj.imageLink='';
+                                                  obj.imageLink = '';
                                                   dateController.clear();
                                                   navigatorPOP(context);
                                                   dataSucessSnackbar();
@@ -445,14 +340,4 @@ obj.imageLink='';
           },
         ));
   }
-
-  // Future<void> imagePicking() async {
-  //   final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     setState(() {
-  //       newImage = image.path.toString();
-  //     });
-  //     print(newImage);
-  //   }
-  // }
 }

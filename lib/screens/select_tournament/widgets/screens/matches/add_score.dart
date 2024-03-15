@@ -1,5 +1,3 @@
-// import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/home_notes.dart';
@@ -7,10 +5,6 @@ import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
-// import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
-// import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
-// import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
-// import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/players_view/players_view.dart';
 
 // ignore: must_be_immutable
 class AddScore extends StatefulWidget {
@@ -42,28 +36,6 @@ class _AddScoreState extends State<AddScore> {
 
   TextEditingController team2ScoreController = TextEditingController();
 
-//    bool flagsecond=true;
-// bool? flagsecondd;
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   setState(() {
-
-//   //   });
-//   //   flagFunction2();
-//   // }
-//   flagFunction2() async {
-//     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-//         await FirebaseFirestore.instance
-//             .collection('tournament')
-//             .doc(widget.doc1)
-//             .get();
-//     flagsecondd = documentSnapshot.get('flagtwo');
-//     setState(() {
-
-//     });
-//   }
-
   final formkey = GlobalKey<FormState>();
 
   @override
@@ -79,17 +51,6 @@ class _AddScoreState extends State<AddScore> {
         actions: [
           IconButton(
             onPressed: () async {
-              // bool flagsecondd;
-              // try{
-              // DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-              //     await FirebaseFirestore.instance
-              //         .collection('tournament')
-              //         .doc(widget.doc1)
-              //         .get();
-              // flagsecondd = documentSnapshot.get('flagtwo');
-              // setState(() {});
-
-              // if (flagsecondd) {
               if (formkey.currentState!.validate()) {
                 showDialog(
                   context: context,
@@ -103,21 +64,6 @@ class _AddScoreState extends State<AddScore> {
                           child: const Text('No')),
                       TextButton(
                           onPressed: () async {
-                            // flagFunction2();
-                            // setState(() {
-
-                            // });
-                            // if (flagsecond==flagsecondd) {
-                            // bool flagsecondd;
-                            // DocumentSnapshot<Map<String, dynamic>>
-                            //     documentSnapshot = await FirebaseFirestore
-                            //         .instance
-                            //         .collection('tournament')
-                            //         .doc(widget.doc1)
-                            //         .get();
-                            // flagsecondd = documentSnapshot.get('flagtwo');
-                            // setState(() {});
-                            // if (flagsecondd) {
                             bool falseOrNot;
                             navigatorPOP(context);
                             navigatorPOP(context);
@@ -155,24 +101,6 @@ class _AddScoreState extends State<AddScore> {
                             });
 
                             print('score added true');
-                            // } else {
-                            //   showDialog(
-                            //     context: context,
-                            //     builder: (context) {
-                            //       return AlertDialog(
-                            //         title: Text(
-                            //             'Already created the 2nd fixtures'),
-                            //         actions: [
-                            //           TextButton(
-                            //               onPressed: () {
-                            //                 navigatorPOP(context);
-                            //               },
-                            //               child: Text('ok'))
-                            //         ],
-                            //       );
-                            //     },
-                            //   );
-                            // }
                           },
                           child: const Text('Yes ')),
                     ],
@@ -181,28 +109,6 @@ class _AddScoreState extends State<AddScore> {
               } else {
                 print(' please enter score');
               }
-
-              // } else {
-              //   showDialog(
-              //     context: context,
-              //     builder: (context) {
-              //       return AlertDialog(
-              //         title: Text('Already created the 2nd fixtures'),
-              //         actions: [
-              //           TextButton(
-              //               onPressed: () {
-              //                 navigatorPOP(context);
-              //               },
-              //               child: Text('ok'))
-              //         ],
-              //       );
-              //     },
-              //   );
-              //   // }
-              // }
-              //  }catch(e){
-              //   print('error is $e');
-              // }
             },
             icon: const Icon(
               Icons.check_circle_outline_outlined,
@@ -218,8 +124,8 @@ class _AddScoreState extends State<AddScore> {
         child: Column(
           // crossAxisAlignment : CrossAxisAlignment.start ,
           children: [
-        //
-        
+            //
+
             Padding(
               padding: const EdgeInsets.only(left: 30, top: 10, right: 30),
               child: Container(
@@ -248,20 +154,37 @@ class _AddScoreState extends State<AddScore> {
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network(
                                 widget.image1!,
+                                //error builder
+                                errorBuilder: ((context, error, stackTrace) =>
+                                    Center(child: const Text('😢'))),
+                                //loading builder
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  final totalBytes =
+                                      loadingProgress?.expectedTotalBytes;
+                                  final bytesLoaded =
+                                      loadingProgress?.cumulativeBytesLoaded;
+                                  if (totalBytes != null &&
+                                      bytesLoaded != null) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        backgroundColor: Colors.white70,
+                                        value: bytesLoaded / totalBytes,
+                                        color: Colors.teal[900],
+                                        strokeWidth: 5.0,
+                                      ),
+                                    );
+                                  } else {
+                                    return child;
+                                  }
+                                },
                                 fit: BoxFit.cover,
-                              )
-                              //  Image.file(
-                              //   File(image1!),
-                              //   fit: BoxFit.cover,
-                              // ),
-                              ),
+                              )),
                         ),
                         Container(
                           height: 40,
                           width: 25,
-                          //   decoration: BoxDecoration(
                           color: Colors.amber[100],
-                          //     borderRadius: BorderRadius.circular(10)),
                           child: TextFormField(
                             maxLength: 1,
                             validator: (value) {
@@ -315,6 +238,30 @@ class _AddScoreState extends State<AddScore> {
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network(
                                 widget.image2!,
+                                //error builder
+                                errorBuilder: ((context, error, stackTrace) =>
+                                    const Text('😢')),
+                                //loading builder
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  final totalBytes =
+                                      loadingProgress?.expectedTotalBytes;
+                                  final bytesLoaded =
+                                      loadingProgress?.cumulativeBytesLoaded;
+                                  if (totalBytes != null &&
+                                      bytesLoaded != null) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        backgroundColor: Colors.white70,
+                                        value: bytesLoaded / totalBytes,
+                                        color: Colors.teal[900],
+                                        strokeWidth: 5.0,
+                                      ),
+                                    );
+                                  } else {
+                                    return child;
+                                  }
+                                },
                                 fit: BoxFit.cover,
                               )
                               // Image.file(

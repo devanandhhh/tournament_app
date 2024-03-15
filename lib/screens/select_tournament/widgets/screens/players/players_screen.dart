@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
@@ -42,15 +41,30 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       backgroundColor: Colors.teal,
                       radius: 30,
                       child: ClipOval(
-                        child: Image.network(playerphoto, fit: BoxFit.cover,width: 50,height: 50,),
-                      //     child: Image.file(
-                      //   File(
-                      //     playerphoto,
-                      //   ),
-                      //   fit: BoxFit.cover,
-                      //   width: 50,
-                      //   height: 50,
-                      // )
+                        child: Image.network(
+                          playerphoto,
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return CircularProgressIndicator(
+                                backgroundColor: Colors.white70,
+                                value: bytesLoaded / totalBytes,
+                                color: Colors.teal[900],
+                                strokeWidth: 5.0,
+                              );
+                            } else {
+                              return child;
+                            }
+                          },
+                          fit: BoxFit.cover, width: 50, height: 50,
+                        ),
                       ),
                     ),
                     title: Text(playerName),
