@@ -24,7 +24,7 @@ class ViewScreen extends StatelessWidget {
                 style: fontW30(),
               ),
               Text(
-                notes!.title!,
+                notes!.title!, 
                 style: fontW24(),
               ),
               Text(

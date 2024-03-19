@@ -22,9 +22,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(theme: ThemeData(primaryColor: Colors.teal,primarySwatch: Colors.amber),
-      title: 'tournament app',
-      home:const SplashScreen(),
+    return const MaterialApp(
+     
+      title: 'Tournify',
+
+      home:
+       SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
@@ -26,80 +25,126 @@ class View_player_details extends StatelessWidget {
       backgroundColor: Colors.yellow[100],
       body: Padding(
         padding: const EdgeInsets.all(28.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Team Name   ',
-            style: font17(),
-          ),
-          sizedbox10(),
-          Text(
-            teamName,
-            style:googleFont()
-            // TextStyle(fontSize: 23, fontWeight: FontWeight.w300),
-          ),
-          sizedbox10(),
-          Text(
-            'Player Photo',
-            style: font17(),
-          ),
-          sizedbox10(),
-          Container(
-            height: 200,
-            width: 180,
-            decoration: BoxDecoration(
+        child: SingleChildScrollView(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              'Team Name   ',
+              style: font17(),
+            ),
+            sizedbox10(),
+            Text(
+              teamName,
+              style:googleFont()
+              // TextStyle(fontSize: 23, fontWeight: FontWeight.w300),
+            ),
+            sizedbox10(),
+            Text(
+              'Player Photo',
+              style: font17(),
+            ),
+            sizedbox10(),
+            Container(
+              height: 200,
+              width: 180,
+              decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.circular(10)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: InstaImageViewer(
+                  child: Image.network(
+                    playerphoto,
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            sizedbox10(),
+            Text(
+              'Player Name',
+              style: font17(),
+            ),
+            sizedbox10(),
+            Text(
+              playerName,
+              style:googleFont()
+            ),
+            sizedbox10(),
+            Text(
+              'Date of Birth',
+              style: font17(),
+            ),
+            sizedbox10(),
+            Text(playerDoB,style: googleFont(),),
+            sizedbox10(),
+            Text(
+              'Player ID Proof',
+              style: font17(),
+            ),
+            sizedbox10(),
+            Container(
+              height: 200,
+              width: 380,
+              decoration: BoxDecoration(
                 color: Colors.green[100],
-                borderRadius: BorderRadius.circular(10)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: InstaImageViewer(
-                child: Image.file(
-                  File(playerphoto),
-                  fit: BoxFit.cover,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: InstaImageViewer(
+                  child: Image.network(
+                    playerProff,
+                    //-----------------------------
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                            //----------------------------
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-          ),
-          sizedbox10(),
-          Text(
-            'Player Name',
-            style: font17(),
-          ),
-          sizedbox10(),
-          Text(
-            playerName,
-            style:googleFont()
-          ),
-          sizedbox10(),
-          Text(
-            'Date of Birth',
-            style: font17(),
-          ),
-          sizedbox10(),
-          Text(playerDoB,style: googleFont(),),
-          sizedbox10(),
-          Text(
-            'Player ID Proof',
-            style: font17(),
-          ),
-          sizedbox10(),
-          Container(
-            height: 200,
-            width: 380,
-            decoration: BoxDecoration(
-              color: Colors.green[100],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: InstaImageViewer(
-                child: Image.file(
-                  File(playerProff),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          )
-        ]),
+            ),sizedbox10()
+          ]),
+        ),
       ),
     );
   }
