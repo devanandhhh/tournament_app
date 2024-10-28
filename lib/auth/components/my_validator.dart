@@ -45,12 +45,7 @@ class Validator {
         ? 'Enter a valid email address'
         : null;
   }
-// String? validatePassword(String? value){
-// const pattern="^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$";
-// final regex=RegExp(pattern);
-// return value!.isNotEmpty&&regex.hasMatch(value)?'password should contain letters and Numbers':null;
 
-// }
   static String? validatePassword1(String? value) {
     if (value == null || value.length < 4) {
       return 'Password is to short';

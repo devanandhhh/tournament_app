@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
 // import 'package:tournament_creator/database/dbfuntions.dart';
 // import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 // import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
@@ -84,12 +84,12 @@ alertDialog1({required ctx, required docss,String? filename,}) {
 }
 
 dataSucessSnackbar() => print('Data edited sucessfully ');
-updateSucessSnackbar() {
-  return  SnackBar(
-    content:const Text('Updated data Sucessfully '),
-    backgroundColor: Colors.green[400],
-  );
-}
+// updateSucessSnackbar() {
+//   return  SnackBar(
+//     content:const Text('Updated data Sucessfully '),
+//     backgroundColor: Colors.green[400],
+//   );
+// }
 
 Future<String?> pickImageFromGallery() async {
   final pickedImage =

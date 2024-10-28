@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/hive_model/notes.dart';
+import 'package:tournament_creator/database/hive_model/notes.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/dbfunctions.dart';
 
 fontW30() {
@@ -37,13 +37,14 @@ updateToDataBase(String key, String titleText, String contentText) {
 
 scaffoldmessAdded(ctx) {
   return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
-    content:const Text('Added sucessfully'),
+    content: const Text('Added sucessfully'),
     backgroundColor: Colors.green[400],
   ));
 }
-messengerScaffold1({required ctx ,required String text}){
-   return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+
+messengerScaffold1({required ctx, required String text}) {
+  return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
     content: Text(text),
     backgroundColor: Colors.green[400],
   ));
-} 
+}

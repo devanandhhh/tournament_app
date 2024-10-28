@@ -1,15 +1,13 @@
-// import 'dart:html';
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/login&signUp/components/my_list_tile.dart';
+import 'package:tournament_creator/auth/components/my_list_tile.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/other/about.dart';
 import 'package:tournament_creator/screens/other/privacyAndPolicy.dart';
@@ -25,15 +23,13 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+
   final user = FirebaseAuth.instance.currentUser;
   final firestore1 = FirebaseFirestore.instance;
   TextEditingController userNameController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
-
-  // String? image
   String? selectedImage;
-//first view method
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +67,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 emailController.text = email;
                 String documentId = snapshot.id;
                 selectedImage = image;
-                // ignore: use_build_context_synchronously
+                
                 showDialog(
+                  // ignore: use_build_context_synchronously
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('User Profile'),
+                    title: const Text('User Profile'),
                     scrollable: true,
                     content: StatefulBuilder(
                       builder: (context, setState) => SingleChildScrollView(

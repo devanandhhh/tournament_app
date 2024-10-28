@@ -1,18 +1,18 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:image_picker/image_picker.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/datePicker.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
-import 'package:tournament_creator/sample.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
@@ -225,9 +225,22 @@ class _TournmentListState extends State<TournmentList> {
                                                   const Text('Limit of Team'),
 
                                                   sizedbox10(),
-                                                  Text(
-                                                    limits,
-                                                    style: font17(),
+                                                  InkWell(
+                                                    onTap: () =>
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                      SnackbarDecoraction()
+                                                          .kSnakbar(
+                                                        text:
+                                                            "You Can't Edit this option after Creating",
+                                                        col: Colors.red[300],
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      limits,
+                                                      style: font17(),
+                                                    ),
                                                   )
                                                 ],
                                               ),
@@ -297,15 +310,24 @@ class _TournmentListState extends State<TournmentList> {
                                                       .clear();
                                                   obj.imageLink = '';
                                                   dateController.clear();
+                                                  // ignore: use_build_context_synchronously
                                                   navigatorPOP(context);
                                                   dataSucessSnackbar();
                                                   // ignore: use_build_context_synchronously
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
-                                                          updateSucessSnackbar());
+                                                    //updateSucessSnackbar(),
+                                                    SnackbarDecoraction()
+                                                        .kSnakbar(
+                                                      text:
+                                                          'Update data Successfully ',
+                                                      col: Colors.green[300],
+                                                    ),
+                                                  );
                                                 } catch (e) {
-                                                  print('gott error');
+                                                  log('gott error');
                                                 }
+                                                // ignore: use_build_context_synchronously
                                                 navigatorPOP(context);
                                               },
                                               child: const Text('Save')),

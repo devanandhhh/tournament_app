@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_player_details.dart';
 
 // ignore: must_be_immutable

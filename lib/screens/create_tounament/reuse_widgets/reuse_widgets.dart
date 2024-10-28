@@ -7,10 +7,7 @@ appbardecorations({required String name}) {
     backgroundColor: Colors.yellow[100],
     title: Text(name,
         style: GoogleFonts.oswald(
-            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.teal)
-        //  const TextStyle(
-        //     color: Colors.teal, fontSize: 30, fontWeight: FontWeight.bold),
-        ),
+            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.teal)),
   );
 }
 
@@ -27,25 +24,22 @@ searchbarContainer({required String searchIteam}) {
           padding: EdgeInsets.all(18.0),
           child: Icon(Icons.search),
         ),
-        Text(searchIteam, style: GoogleFonts.oswald(fontSize: 18)
-            //  TextStyle(
-            //     color: Colors.blueGrey,
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 18),
-            )
+        Text(searchIteam, style: GoogleFonts.oswald(fontSize: 18))
       ],
     ),
   );
 }
 
 messengerScaffold({required String text, required BuildContext ctx}) {
-  return ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
-    content: Text(
-      text,
-      style: const TextStyle(color: Colors.white),
+  return ScaffoldMessenger.of(ctx).showSnackBar(
+    SnackBar(
+      content: Text(
+        text,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red[400],
     ),
-    backgroundColor: Colors.red[400],
-  ));
+  );
 }
 
 sizedbox10() {
@@ -61,28 +55,25 @@ containerButtonCR({required String txt}) {
     decoration: BoxDecoration(
         color: Colors.teal, borderRadius: BorderRadius.circular(8)),
     child: Center(
-        child: Text(txt,
-            style: GoogleFonts.oswald(
-                color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)
-            // const TextStyle(
-            //     color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
-            )),
+      child: Text(txt,
+          style: GoogleFonts.oswald(
+              color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
+    ),
   );
 }
 
 hintText({required String hintTxt}) {
   return Text(hintTxt,
-      style: GoogleFonts.oswald(fontSize: 20, fontWeight: FontWeight.w400)
-      //const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-      );
+      style: GoogleFonts.oswald(fontSize: 20, fontWeight: FontWeight.w400));
 }
 
 inputdecorationtxtFormField() {
   return InputDecoration(
-      filled: true,
-      fillColor: const Color.fromARGB(255, 216, 214, 198),
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none));
+    filled: true,
+    fillColor: const Color.fromARGB(255, 216, 214, 198),
+    border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+  );
 }
 
 addTeamButton({required String txt, color}) {
@@ -92,12 +83,10 @@ addTeamButton({required String txt, color}) {
     decoration:
         BoxDecoration(color: color, borderRadius: BorderRadius.circular(8)),
     child: Center(
-        child: Text(txt,
-            style: GoogleFonts.oswald(
-                color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)
-            // const TextStyle(
-            //     color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
-            )),
+      child: Text(txt,
+          style: GoogleFonts.oswald(
+              color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
+    ),
   );
 }
 

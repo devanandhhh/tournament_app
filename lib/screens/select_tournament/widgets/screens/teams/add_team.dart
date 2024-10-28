@@ -5,11 +5,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
-import 'package:tournament_creator/sample.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/team_screen.dart';
 

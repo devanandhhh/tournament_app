@@ -9,11 +9,11 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.yellow[100],
       appBar: appbardecorations(name: 'About Us '),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: EdgeInsets.all(18.0),
               child: Text(
                 '''Welcome to our App, the creator of the Tournament Creator app.
                   

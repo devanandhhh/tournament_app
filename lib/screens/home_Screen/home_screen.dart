@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tournament_creator/login&signUp/components/drawer.dart';
+import 'package:tournament_creator/auth/components/drawer.dart';
 import 'package:tournament_creator/screens/addNotes/home_notes.dart';
 import 'package:tournament_creator/screens/create_tounament/create_tournament.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/list_tournify.dart';
 import 'package:tournament_creator/screens/search_Screen/sample_screen.dart';
 // import 'package:tournament_creator/screens/search_Screen/search_screen.dart';

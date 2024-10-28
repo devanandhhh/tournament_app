@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
@@ -55,23 +54,54 @@ class ViewTournamentDetails extends StatelessWidget {
                 SizedBox(
                   height: 350,
                   width: 380,
-                  
                   child: Column(
                     //crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       sizedbox10(),
-                      Text('Tournament Name',style:stylefont()),
+                      Text('Tournament Name', style: stylefont()),
                       sizedbox10(),
-                      Text(name,style:styleTeal()), sizedbox10(),
-                      Text('Date',style: stylefont(),),sizedbox10(),
-                      Text(date,style: styleTeal(),),sizedbox10(),
-                      Text('Place',style: stylefont(),),sizedbox10(),
-                      Text(place,style: styleTeal(),),sizedbox10(),
-                      Text('Category',style: stylefont(),),sizedbox10(),
-                      Text(category,style: styleTeal(),),sizedbox10(),
-                      Text("Limit Of Teams",style: stylefont(),),sizedbox10(),
-                      Text(limit,style: styleTeal(),),sizedbox10(),
-                      
+                      Text(name, style: styleTeal()),
+                      sizedbox10(),
+                      Text(
+                        'Date',
+                        style: stylefont(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        date,
+                        style: styleTeal(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        'Place',
+                        style: stylefont(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        place,
+                        style: styleTeal(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        'Category',
+                        style: stylefont(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        category,
+                        style: styleTeal(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        "Limit Of Teams",
+                        style: stylefont(),
+                      ),
+                      sizedbox10(),
+                      Text(
+                        limit,
+                        style: styleTeal(),
+                      ),
+                      sizedbox10(),
                     ],
                   ),
                 )

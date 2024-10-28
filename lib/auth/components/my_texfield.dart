@@ -20,10 +20,10 @@ String? Function(String?)? validateOntap;
                     obscureText: obscureText,
                     decoration: InputDecoration(
                       
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder:const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder:const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.black)),
                         fillColor: Colors.yellow[100],

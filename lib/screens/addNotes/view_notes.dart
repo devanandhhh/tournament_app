@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/hive_model/notes.dart';
+import 'package:tournament_creator/database/hive_model/notes.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 

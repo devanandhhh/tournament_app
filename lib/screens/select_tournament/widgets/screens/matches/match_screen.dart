@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 // import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/fixtures_screen.dart';

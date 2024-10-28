@@ -1,13 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:flutter/material.dart';
-// import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
-// import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 
 class DatabaseFunctions {
 
-
-  static addTournament1( 
+  //----For Tournaments------
+  static addTournament1(
       {required selectImage,
       required uniquefileName,
       required tournamentNameController,
@@ -18,17 +17,16 @@ class DatabaseFunctions {
       required user}) async {
     await FirebaseFirestore.instance.collection('tournament').add({
       'TournamentImage': selectImage,
-      'UniqueFileName':uniquefileName,
+      'UniqueFileName': uniquefileName,
       "TournamentName": tournamentNameController.text,
       'Place': placeController.text,
       'Date': dateController.text,
       'Category': categoryCN,
       'LimitOfTeam': limitsCN,
       'userID': user,
-      'flag':true,
-      'flagtwo':true,
-      'flagthree':true
-      
+      'flag': true,
+      'flagtwo': true,
+      'flagthree': true
     });
   }
 
@@ -46,7 +44,7 @@ class DatabaseFunctions {
         .doc(document1)
         .update({
       'TournamentImage': image,
-      'UniqueFileName':uniquefileName,
+      'UniqueFileName': uniquefileName,
       'TournamentName': tournamentNameController.text,
       'Date': dateController.text,
       "Place": placeController.text,
@@ -54,7 +52,9 @@ class DatabaseFunctions {
       'LimitOfTeam': limits,
     });
   }
+  
 
+  //--------For Teams ------------
   static addteam1(
       {required document,
       required teamNameController,
@@ -73,20 +73,19 @@ class DatabaseFunctions {
       'phoneNumber': phoneNumberController.text,
       'place': placeController.text,
       'teamImage': seletedImage,
-      'uniqueFileName':uniquenumber
+      'uniqueFileName': uniquenumber
     });
   }
 
-  static editteam1({
-    required document1,
-    required document2,
-    required teamImage,
-    required teamNameController,
-    required managerNameController,
-    required phoneNumberController,
-    required placeController,
-    required uniquenumber
-  }) async {
+  static editteam1(
+      {required document1,
+      required document2,
+      required teamImage,
+      required teamNameController,
+      required managerNameController,
+      required phoneNumberController,
+      required placeController,
+      required uniquenumber}) async {
     await FirebaseFirestore.instance
         .collection('tournament')
         .doc(document1)
@@ -98,10 +97,13 @@ class DatabaseFunctions {
       'managerName': managerNameController.text,
       'phoneNumber': phoneNumberController.text,
       'place': placeController.text,
-      'uniqueFileName':uniquenumber
+      'uniqueFileName': uniquenumber
     });
   }
 
+
+
+  //------For Players---------------
   static addplayer1(
       {required playerImage,
       required playerNameController,
@@ -118,8 +120,8 @@ class DatabaseFunctions {
       'PlayerId': playerID,
       'tournamentID': document1,
       'teamID': document2,
-      'uniqueFileName1':uniquenumber1,
-      'uniqueFileName2':uniquenumber2
+      'uniqueFileName1': uniquenumber1,
+      'uniqueFileName2': uniquenumber2
     });
   }
 
@@ -139,46 +141,51 @@ class DatabaseFunctions {
       'PlayerName': playerNameEditController.text,
       'DateOfBirth': playerAgeEditController.text,
       'PlayerId': playerid,
-      'uniqueFileName1':uniquenumber1,
-      'uniqueFileName2':uniquenumber2
+      'uniqueFileName1': uniquenumber1,
+      'uniqueFileName2': uniquenumber2
     });
   }
 
-  //------------------------
-static Future<void> deleteFile({required String fileName,required foldername}) async {
-  try {
-    await FirebaseStorage.instance
-        .ref()
-        .child(foldername)
-        .child(fileName)
-        .delete();
-  } catch (e) {
-    print('error got it : $e');
-  }
-}
-static Future<void> deleteFileteam({required String fileName}) async {
-  try {
-    await FirebaseStorage.instance
-        .ref()
-        .child('TeamImages')
-        .child(fileName)
-        .delete();
-  } catch (e) {
-    print('error got it : $e');
-  }
-}
-static Future<void> deleteFiletournament({required unique}) async {
-  try {
-    await FirebaseStorage.instance
-        .ref()
-        .child('TournamentImages')
-        .child(unique)
-        .delete();
-        print('delete from storage');
-  } catch (e) {
-    print('error got it : $e');
-  }
-}
+  //------------------------------------------------------------------
 
-}
+  //For Delete File   <--
+  static Future<void> deleteFile(
+      {required String fileName, required foldername}) async {
+    try {
+      await FirebaseStorage.instance
+          .ref()
+          .child(foldername)
+          .child(fileName)
+          .delete();
+    } catch (e) {
+      // print('error got it : $e');
+      log('error got it : $e');
+    }
+  }
 
+  static Future<void> deleteFileteam({required String fileName}) async {
+    try {
+      await FirebaseStorage.instance
+          .ref()
+          .child('TeamImages')
+          .child(fileName)
+          .delete();
+    } catch (e) {
+      log('error got it : $e');
+    }
+  }
+
+  static Future<void> deleteFiletournament({required unique}) async {
+    try {
+      await FirebaseStorage.instance
+          .ref()
+          .child('TournamentImages')
+          .child(unique)
+          .delete();
+      //print('delete from storage');
+      log('delete from storage');
+    } catch (e) {
+      log('error got it : $e');
+    }
+  }
+}

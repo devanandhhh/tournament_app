@@ -13,7 +13,7 @@ class PrivacyAndPolicy extends StatelessWidget {
           child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding:  EdgeInsets.all(24.0),
             child: Text(
               '''
 At Tournament Creator, your privacy is our priority. We want you to feel confident and secure while using our app.

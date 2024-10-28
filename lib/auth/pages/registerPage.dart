@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/login&signUp/components/my_texfield.dart';
-import 'package:tournament_creator/login&signUp/components/my_button.dart';
-import 'package:tournament_creator/login&signUp/components/my_validator.dart';
+import 'package:tournament_creator/auth/components/my_texfield.dart';
+import 'package:tournament_creator/auth/components/my_button.dart';
+import 'package:tournament_creator/auth/components/my_validator.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 
 class Register_page extends StatefulWidget {

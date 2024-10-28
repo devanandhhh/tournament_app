@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:tournament_creator/hive_model/notes.dart';
+import 'package:tournament_creator/database/hive_model/notes.dart';
 import 'package:tournament_creator/main.dart';
 
 import 'package:tournament_creator/screens/addNotes/widgets/dbfunctions.dart';
@@ -9,7 +9,7 @@ import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_
 
 // ignore: must_be_immutable
 class CreateNotes extends StatefulWidget {
-  CreateNotes({super.key});
+  const CreateNotes({super.key});
 
   @override
   State<CreateNotes> createState() => _CreateNotesState();
@@ -34,13 +34,13 @@ class _CreateNotesState extends State<CreateNotes> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Column(children: [
-                sizedbox10(),
-                Container(
-                    height: 620,
-                    width: 380,
+              Column(
+                children: [
+                  Container(
+                    height: MediaQuery.sizeOf(context).height * 0.77,
+                    // height: 620,
+                    width: MediaQuery.sizeOf(context).width,
                     decoration: BoxDecoration(
-                        // color: Colors.amber[100],
                         border: Border.all(width: 3, color: Colors.grey),
                         borderRadius: BorderRadius.circular(10)),
                     child: Padding(
@@ -70,11 +70,11 @@ class _CreateNotesState extends State<CreateNotes> {
                           ),
                         ],
                       ),
-                    )),
-                const SizedBox(
-                  height: 40,
-                ),
-              ]),
+                    ),
+                  ),
+                  sizedbox10(),
+                ],
+              ),
               InkWell(
                 onTap: () {
                   savedata(Notes(

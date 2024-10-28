@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 ImagePickers obj=ImagePickers();
@@ -24,4 +26,16 @@ class ImagePicker2 {
       print( imagelink2);
     }
   }
+}
+class SnackbarDecoraction{
+SnackBar kSnakbar({required String text, Color? col = Colors.grey}) {
+  return SnackBar(
+    duration: const Duration(seconds: 3),
+    content: Text(text,
+        style: GoogleFonts.mukta(textStyle: const TextStyle(fontSize: 17))
+        ),
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: col,
+  );
+}
 }

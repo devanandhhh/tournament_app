@@ -11,6 +11,13 @@ bgblacktext({required String text1}) {
 
 containerButtons({required String name}) {
   return Container(
+      width: 300,
+      height: 58,
+      decoration: BoxDecoration(
+          color:
+          //Colors.grey[400],
+          const Color.fromARGB(255, 216, 214, 198),
+          borderRadius: BorderRadius.circular(5)),
       child: Center(
           child: Text(
         name,
@@ -19,14 +26,7 @@ containerButtons({required String name}) {
         //   fontWeight: FontWeight.bold,
         //   fontSize: 21,
         // ),
-      )),
-      width: 300,
-      height: 58,
-      decoration: BoxDecoration(
-          color:
-          //Colors.grey[400],
-          const Color.fromARGB(255, 216, 214, 198),
-          borderRadius: BorderRadius.circular(5)));
+      )));
 }
 
 headingtext({required String text}) {

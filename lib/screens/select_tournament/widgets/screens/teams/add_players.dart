@@ -2,15 +2,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
-import 'package:tournament_creator/sample.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_player_details.dart';
@@ -59,12 +57,6 @@ class _AddplayersState extends State<Addplayers> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      // onTap: () async {
-                      //   String? pickPlayerImage = await pickImageFromGallery();
-                      //   setState(() {
-                      //     playerImage = pickPlayerImage;
-                      //   });
-                      // },
                       onTap: () async {
                         await obj.imagePicking();
                         setState(() {});
@@ -674,7 +666,13 @@ class _AddplayersState extends State<Addplayers> {
                                                       ScaffoldMessenger.of(
                                                               context)
                                                           .showSnackBar(
-                                                              updateSucessSnackbar());
+                                                              //updateSucessSnackbar()
+                                                              SnackbarDecoraction().kSnakbar(
+                                                                  text:
+                                                                      'Updata Data Successfully',
+                                                                  col: Colors
+                                                                          .green[
+                                                                      300]));
 
                                                       // ignore: use_build_context_synchronously
                                                       navigatorPOP(context);
@@ -702,7 +700,7 @@ class _AddplayersState extends State<Addplayers> {
                                                     onPressed: () {
                                                       navigatorPOP(context);
                                                     },
-                                                    child: Text('Cancel')),
+                                                    child:const Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
                                                       print('here');

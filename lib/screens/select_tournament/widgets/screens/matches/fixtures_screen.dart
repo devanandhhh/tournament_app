@@ -1,10 +1,12 @@
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/matches/refactoringfixtures.dart';
@@ -18,7 +20,7 @@ class FixtureScreen extends StatefulWidget {
       required this.documentlength,
       required this.trueorFalse});
 //List<List<String?>>groupedTeams;
-  var docs;
+  dynamic docs;
   int documentlength;
   bool trueorFalse;
   
@@ -98,7 +100,7 @@ bool? isoke ;
                       'winnerName': null,
                       'winnerImg': null
                     });
-                    print('score added false');
+                    log('score added false');
                   }
                 }
                 //return listview
@@ -147,7 +149,7 @@ bool? isoke ;
               }),
       bottomNavigationBar: InkWell(
         onTap: () async {
-              print('isoke is $isoke');
+              log('isoke is $isoke');
             
           QuerySnapshot snapshot = await FirebaseFirestore.instance
               .collection('fixtures')
@@ -155,6 +157,7 @@ bool? isoke ;
               .get();
 
           if (snapshot.docs.isEmpty) {
+            // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('No data available')));
             return;
@@ -234,7 +237,7 @@ bool? isoke ;
                                 'winnerName': null,
                                 'winnerImg': null
                               });
-                              print('score added false');
+                              log('score added false');
                             }
                             //for disable the edit option in score screen
                             // await FirebaseFirestore.instance

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tournament_creator/screens/addNotes/home_notes.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 
 // ignore: must_be_immutable

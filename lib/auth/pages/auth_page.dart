@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/login&signUp/loginOrRegister.dart';
-import 'package:tournament_creator/screens/home/home_screen.dart';
+import 'package:tournament_creator/auth/pages/loginOrRegister.dart';
+import 'package:tournament_creator/screens/home_Screen/home_screen.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -15,7 +15,7 @@ class AuthPage extends StatelessWidget {
           return HomeScreen();
 
         }else{
-          return LoginOrRegisterPage();
+          return const LoginOrRegisterPage();
         }
       },)
     );

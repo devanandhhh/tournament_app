@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/login&signUp/login_page.dart';
-import 'package:tournament_creator/login&signUp/registerPage.dart';
+import 'package:tournament_creator/auth/pages/login_page.dart';
+import 'package:tournament_creator/auth/pages/registerPage.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {
   const LoginOrRegisterPage({super.key});
@@ -10,21 +10,22 @@ class LoginOrRegisterPage extends StatefulWidget {
 }
 
 class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
-  bool showLoginPage=true;
+  bool showLoginPage = true;
 
-togglepages(){
-  setState(() {
-    
-    showLoginPage=!showLoginPage;
-  });
-}
+  togglepages() {
+    setState(() {
+      showLoginPage = !showLoginPage;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    if(showLoginPage){
+    if (showLoginPage) {
       return LoginPage(onTap: togglepages);
-    }else{
-      return Register_page(onTap:togglepages,);
+    } else {
+      return Register_page(
+        onTap: togglepages,
+      );
     }
   }
 }

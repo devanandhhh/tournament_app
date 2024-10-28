@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
-import 'package:tournament_creator/sample.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 // import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
@@ -80,7 +80,7 @@ class _TeamscreenState extends State<Teamscreen> {
                 String managerName = doc2['managerName'];
                 String phoneNumber = doc2['phoneNumber'];
                 String place = doc2['place'];
-                String fileName = doc2['uniqueFileName']??'';
+                String fileName = doc2['uniqueFileName'] ?? '';
                 seletedImage = teamImage;
                 TextEditingController teamNameController =
                     TextEditingController(text: teamName);
@@ -110,25 +110,28 @@ class _TeamscreenState extends State<Teamscreen> {
                             ? null
                             : Image.network(
                                 teamImage,
-                                 //error builder
-                          errorBuilder: ((context, error, stackTrace) =>
-                              const Text('😢')),
-                          //loading builder
-                          loadingBuilder: (context, child, loadingProgress) {
-                            final totalBytes =
-                                loadingProgress?.expectedTotalBytes;
-                            final bytesLoaded =
-                                loadingProgress?.cumulativeBytesLoaded;
-                            if (totalBytes != null && bytesLoaded != null) {
-                              return CircularProgressIndicator(
-                                backgroundColor: Colors.white70,
-                                value: bytesLoaded / totalBytes,
-                                color: Colors.teal[900],
-                                strokeWidth: 5.0,
-                              );
-                            } else {
-                              return child;
-                            }},
+                                //error builder
+                                errorBuilder: ((context, error, stackTrace) =>
+                                    const Text('😢')),
+                                //loading builder
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  final totalBytes =
+                                      loadingProgress?.expectedTotalBytes;
+                                  final bytesLoaded =
+                                      loadingProgress?.cumulativeBytesLoaded;
+                                  if (totalBytes != null &&
+                                      bytesLoaded != null) {
+                                    return CircularProgressIndicator(
+                                      backgroundColor: Colors.white70,
+                                      value: bytesLoaded / totalBytes,
+                                      color: Colors.teal[900],
+                                      strokeWidth: 5.0,
+                                    );
+                                  } else {
+                                    return child;
+                                  }
+                                },
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -186,7 +189,6 @@ class _TeamscreenState extends State<Teamscreen> {
                                                     : Image.file(
                                                             File(obj.imageLink))
                                                         .image,
-                                               
                                               ),
                                             ),
                                             sizedbox30(),
@@ -225,7 +227,7 @@ class _TeamscreenState extends State<Teamscreen> {
                                             DatabaseFunctions.deleteFileteam(
                                               fileName: fileName,
                                             );
-                                           
+
                                             obj.imageLink = '';
                                             // });
                                           },
@@ -262,41 +264,54 @@ class _TeamscreenState extends State<Teamscreen> {
                                                 .child(uniquenumber!)
                                                 .getDownloadURL();
 
-                                          
-                                            try{
-                                            DatabaseFunctions.deleteFileteam(
-                                                fileName: fileName);
-                                            DatabaseFunctions.editteam1(
-                                                document1: widget.doc1,
-                                                document2: doc2.id,
-                                                teamImage: imageurl,
-                                                teamNameController:
-                                                    teamNameController,
-                                                managerNameController:
-                                                    managerNameController,
-                                                phoneNumberController:
-                                                    phoneNumberController,
-                                                placeController:
-                                                    placeController,
-                                                uniquenumber: uniquenumber);
+                                            try {
+                                              DatabaseFunctions.deleteFileteam(
+                                                  fileName: fileName);
+                                              DatabaseFunctions.editteam1(
+                                                  document1: widget.doc1,
+                                                  document2: doc2.id,
+                                                  teamImage: imageurl,
+                                                  teamNameController:
+                                                      teamNameController,
+                                                  managerNameController:
+                                                      managerNameController,
+                                                  phoneNumberController:
+                                                      phoneNumberController,
+                                                  placeController:
+                                                      placeController,
+                                                  uniquenumber: uniquenumber);
 
-                                            teamNameController.clear();
-                                            managerNameController.clear();
-                                            phoneNumberController.clear();
-                                            placeController.clear();
-                                            // ignore: use_build_context_synchronously
+                                              teamNameController.clear();
+                                              managerNameController.clear();
+                                              phoneNumberController.clear();
+                                              placeController.clear();
+                                              // ignore: use_build_context_synchronously
+                                              navigatorPOP(context);
+                                              obj.imageLink = '';
+
+                                              dataSucessSnackbar();
+                                              // ignore: use_build_context_synchronously
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                      //updateSucessSnackbar()
+                                                      SnackbarDecoraction()
+                                                          .kSnakbar(
+                                                text:
+                                                    'Update Data Successfully',
+                                                col: Colors.green[300],
+                                              ));
+                                            } catch (e) {
+                                              print('gott error $e');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackbarDecoraction().kSnakbar(
+                                                  text:
+                                                      'Please try again ,After some times',
+                                                  col: Colors.red[300],
+                                                ),
+                                              );
+                                            }
                                             navigatorPOP(context);
-                                            obj.imageLink = '';
-
-                                            dataSucessSnackbar();
-                                            // ignore: use_build_context_synchronously
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                                    updateSucessSnackbar());
-                                                    } catch (e) {
-                                                  print('gott error $e');
-                                                }
-                                                navigatorPOP(context);
                                           },
                                           child: const Text('Save'))
                                     ],

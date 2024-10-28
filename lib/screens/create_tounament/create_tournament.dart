@@ -1,13 +1,14 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:flutter/widgets.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
-import 'package:tournament_creator/sample.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 
@@ -23,7 +24,9 @@ class _CreateTournamentState extends State<CreateTournament> {
   String? categoryCN;
   String? limitsCN;
   final category = ['7s', '9s', '11s'];
-  final limitsOfTeams = ['8 teams', '16 teams']; 
+  final limitsOfTeams = [
+    '8 teams',
+  ];
   final tournamentNameController = TextEditingController();
   var categoryController = TextEditingController();
   final dateController = TextEditingController();
@@ -31,7 +34,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   final placeController = TextEditingController();
   String? selectImage;
   String? uniquefileName;
- 
+
   String? imageUrl = '';
 
   //add user
@@ -57,13 +60,10 @@ class _CreateTournamentState extends State<CreateTournament> {
                     maxRadius: 51,
                     backgroundImage: obj.imageLink.isEmpty
                         ? Image.asset('assets/addimage2.png').image
-                        : Image.file(File(obj.imageLink)).image
-                 
-                    ),
+                        : Image.file(File(obj.imageLink)).image),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              sizedbox10(),
+              sizedbox10(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -85,7 +85,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   hintText(hintTxt: 'Enter Your Place '),
                   sizedbox10(),
                   TextFormField(
-                     textCapitalization: TextCapitalization.words,
+                    textCapitalization: TextCapitalization.words,
                     controller: placeController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: inputdecorationtxtFormField(),
@@ -149,11 +149,12 @@ class _CreateTournamentState extends State<CreateTournament> {
                       return DropdownMenuItem(value: e, child: Text(e));
                     }).toList(),
                     onChanged: (value) {
-                      print(value);
+                      // print(value);
+
                       if (value != null) {
                         categoryController = TextEditingController(text: value);
                         categoryCN = categoryController.text;
-                        print(categoryController);
+                        log(categoryController.text);
                       }
                     },
                     hint: const Text('Select category'),
@@ -169,7 +170,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                             borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide.none)),
                     onChanged: (newValue) {
-                      print(newValue);
+                      // print(newValue);
                       if (newValue != null) {
                         limitController = TextEditingController(text: newValue);
                         limitsCN = limitController.text;
@@ -225,14 +226,14 @@ class _CreateTournamentState extends State<CreateTournament> {
                                   categoryCN != null &&
                                   //image != null
                                   obj.imageLink.isNotEmpty) {
-                                print('halo');
+                                //print('halo');
 
                                 dialogShowing(ctx: context);
 
                                 uniquefileName = DateTime.now()
                                     .microsecondsSinceEpoch
                                     .toString();
-                                print('the num : $uniquefileName');
+                                log('the num : $uniquefileName');
 
                                 await FirebaseStorage.instance
                                     .ref()
@@ -255,10 +256,12 @@ class _CreateTournamentState extends State<CreateTournament> {
                                     dateController: dateController,
                                     categoryCN: categoryCN,
                                     limitsCN: limitsCN,
-                                    user: user.uid); 
+                                    user: user.uid);
 
                                 messengerScaffold1(
-                                    ctx: context, text: 'Sucessfully Added');
+                                    // ignore: use_build_context_synchronously
+                                    ctx: context,
+                                    text: 'Sucessfully Added');
 
                                 tournamentNameController.clear();
                                 dateController.clear();
@@ -269,10 +272,10 @@ class _CreateTournamentState extends State<CreateTournament> {
                                 // image=null;
                                 obj.imageLink = '';
                                 //  });
-                                Navigator.pop(context);
-                                navigatorPOP(context);
                                 // ignore: use_build_context_synchronously
-                                // Navigator.pushReplacement(context,MaterialPageRoute(builder: (ctx)=>HomeScreen(uniqueId: uniqueId,)) );
+                                Navigator.pop(context);
+                                // ignore: use_build_context_synchronously
+                                navigatorPOP(context);
                               }
                             }
                           },
@@ -288,12 +291,12 @@ class _CreateTournamentState extends State<CreateTournament> {
     );
   }
 
-  Future<String?> pickImageFromGallery() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      return pickedImage.path;
-    }
-    return null;
-  }
+  // Future<String?> pickImageFromGallery() async {
+  //   final pickedImage =
+  //       await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (pickedImage != null) {
+  //     return pickedImage.path;
+  //   }
+  //   return null;
+  // }
 }
