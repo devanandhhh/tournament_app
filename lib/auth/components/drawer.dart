@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,13 +23,11 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-
   final user = FirebaseAuth.instance.currentUser;
   final firestore1 = FirebaseFirestore.instance;
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   String? selectedImage;
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +65,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 emailController.text = email;
                 String documentId = snapshot.id;
                 selectedImage = image;
-                
+
                 showDialog(
                   // ignore: use_build_context_synchronously
                   context: context,
@@ -91,7 +88,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               child: InkWell(
                                   onTap: () async {
                                     String? pickimage =
-                                        await pickImageFromGallery(); 
+                                        await pickImageFromGallery();
 
                                     setState(() {
                                       image = pickimage;
@@ -156,19 +153,19 @@ class _MyDrawerState extends State<MyDrawer> {
             // navigatorPush(ctx: context, screen: ProfilePage());
           },
         ),
-         MyListTile(
-            icon: Icons.security ,
+        MyListTile(
+            icon: Icons.security,
             text: 'A B O U T ',
             onTap: () {
               navigatorPush(ctx: context, screen: const AboutScreen());
             }),
         MyListTile(
-            icon: Icons.privacy_tip ,
-            text:  'P R I V A C Y   P O L I C Y',
+            icon: Icons.privacy_tip,
+            text: 'P R I V A C Y   P O L I C Y',
             onTap: () {
               navigatorPush(ctx: context, screen: const PrivacyAndPolicy());
             }),
-       
+
         MyListTile(
           icon: Icons.logout,
           text: 'L O G O U T',
@@ -181,8 +178,8 @@ class _MyDrawerState extends State<MyDrawer> {
           height: 170,
         ),
         const Padding(
-          padding: EdgeInsets.only(left: 20,right: 20,bottom: 10),
-          child: Divider(), 
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          child: Divider(),
         ),
         Row(
           children: [
@@ -196,11 +193,15 @@ class _MyDrawerState extends State<MyDrawer> {
           ],
         ),
         const Padding(
-          padding: EdgeInsets.only(left: 20,right: 20,top: 10),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 10),
           child: Divider(),
         ),
         sizedbox30(),
-        Center(child: Text('Version 1.03',style: GoogleFonts.aBeeZee(fontSize: 20,color: Colors.white),)) 
+        Center(
+            child: Text(
+          'Version 1.03',
+          style: GoogleFonts.aBeeZee(fontSize: 20, color: Colors.white),
+        ))
       ]),
     );
   }
