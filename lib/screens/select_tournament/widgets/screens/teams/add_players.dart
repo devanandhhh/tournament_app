@@ -233,7 +233,10 @@ class _AddplayersState extends State<Addplayers> {
                           });
 
                           // ignore: use_build_context_synchronously
-                          scaffoldmessAdded(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackbarDecoraction().kSnakbar(
+                                  text: 'Delete Added Successfully',
+                                  col: Colors.green[300]));
                           navigatorPOP(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -700,7 +703,8 @@ class _AddplayersState extends State<Addplayers> {
                                                     onPressed: () {
                                                       navigatorPOP(context);
                                                     },
-                                                    child:const Text('Cancel')),
+                                                    child:
+                                                        const Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
                                                       print('here');
@@ -729,8 +733,15 @@ class _AddplayersState extends State<Addplayers> {
                                                           .doc(doc3.id)
                                                           .delete();
                                                       navigatorPOP(context);
-                                                      scaffoldmessenger(
-                                                          context);
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackbarDecoraction()
+                                                              .kSnakbar(
+                                                                  text:
+                                                                      'Delete Data Successfully',
+                                                                  col: Colors
+                                                                          .green[
+                                                                      300]));
                                                     },
                                                     child: const Text('Ok'))
                                               ],

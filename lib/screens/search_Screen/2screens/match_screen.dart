@@ -10,6 +10,11 @@ import 'package:tournament_creator/screens/select_tournament/widgets/screens/mat
 class MatchScreenView extends StatelessWidget {
   MatchScreenView({super.key, required this.docu});
   dynamic docu;
+  final ScrollController controller1 = ScrollController();
+  final ScrollController controller2 = ScrollController();
+  final ScrollController controller3 = ScrollController();
+  final ScrollController mainController =ScrollController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +22,14 @@ class MatchScreenView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.yellow[100],
       body: Scrollbar(
+        controller: mainController,
         thumbVisibility: true,
         trackVisibility: true,
         thickness: 20,
         radius: const Radius.circular(7),
         interactive: true,
         child: SingleChildScrollView(
+          controller: mainController,primary: false,
           child: Column(
             children: [
               SizedBox(
@@ -50,6 +57,8 @@ class MatchScreenView extends StatelessWidget {
                             );
                           }
                           return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
                             itemBuilder: (context, index) {
                               var docc = snapshot.data!.docs[index];
                               String teamA = docc['teamA'];
@@ -104,6 +113,8 @@ class MatchScreenView extends StatelessWidget {
                             );
                           }
                           return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
                             itemBuilder: (context, index) {
                               var docc = snapshot.data!.docs[index];
                               String teamA = docc['teamA'];
@@ -158,6 +169,8 @@ class MatchScreenView extends StatelessWidget {
                             );
                           }
                           return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
                             itemBuilder: (context, index) {
                               var docc = snapshot.data!.docs[index];
                               String teamA = docc['teamA'];

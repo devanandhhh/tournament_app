@@ -83,7 +83,7 @@ alertDialog1({required ctx, required docss,String? filename,}) {
   );
 }
 
-dataSucessSnackbar() => print('Data edited sucessfully ');
+// dataSucessSnackbar() => print('Data edited sucessfully ');
 // updateSucessSnackbar() {
 //   return  SnackBar(
 //     content:const Text('Updated data Sucessfully '),
@@ -93,7 +93,7 @@ dataSucessSnackbar() => print('Data edited sucessfully ');
 
 Future<String?> pickImageFromGallery() async {
   final pickedImage =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
+      await ImagePicker().pickImage(source: ImageSource.gallery); 
   if (pickedImage != null) {
     return pickedImage.path;
   }

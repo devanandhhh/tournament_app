@@ -257,10 +257,70 @@ class _TournmentListState extends State<TournmentList> {
                                               child: const Text('Cancel')),
                                           TextButton(
                                               onPressed: () async {
-                                                obj.imageLink.isEmpty
-                                                    ? DatabaseFunctions.edittournament1(
+                                                if (obj.imageLink == '') {
+                                                  DatabaseFunctions.edittournament1(
+                                                      document1: docs.id,
+                                                      image: image,
+                                                      tournamentNameController:
+                                                          tournamentNameController,
+                                                      dateController:
+                                                          dateController,
+                                                      placeController:
+                                                          placeController,
+                                                      categoryy: categoryy,
+                                                      uniquefileName: filename, 
+                                                      limits: limits);     
+                                                      
+                                                       navigatorPOP(context);
+                                                      dialogShowing(ctx: context);
+                                                       
+                                                    log('Data edited sucessfully ');
+                                                    // ignore: use_build_context_synchronously
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      //updateSucessSnackbar(),
+                                                      SnackbarDecoraction()
+                                                          .kSnakbar(
+                                                        text:
+                                                            'Update data Successfully ',
+                                                        col: Colors.green[300],
+                                                      ),
+                                                    );
+                                                } else {
+                                                  uniquenumber = DateTime.now()
+                                                      .millisecondsSinceEpoch
+                                                      .toString();
+                                                  String anotherUnique =
+                                                      DateTime.now()
+                                                          .millisecondsSinceEpoch
+                                                          .toString();
+                                                  log('it works the anotherUnique $anotherUnique');
+                                                  dialogShowing(ctx: context);
+
+                                                  await FirebaseStorage.instance
+                                                      .ref()
+                                                      .child('TournamentImages')
+                                                      .child(uniquenumber ??
+                                                          anotherUnique)
+                                                      .putFile(
+                                                          File(obj.imageLink));
+                                                  urlImage =
+                                                      await FirebaseStorage
+                                                          .instance
+                                                          .ref()
+                                                          .child(
+                                                              'TournamentImages')
+                                                          .child(uniquenumber ??
+                                                              anotherUnique)
+                                                          .getDownloadURL();
+                                                  try {
+                                                    DatabaseFunctions
+                                                        .deleteFiletournament(
+                                                            unique: filename);
+                                                    DatabaseFunctions.edittournament1(
                                                         document1: docs.id,
-                                                        image: image,
+                                                        image: urlImage,
                                                         tournamentNameController:
                                                             tournamentNameController,
                                                         dateController:
@@ -269,66 +329,35 @@ class _TournmentListState extends State<TournmentList> {
                                                             placeController,
                                                         categoryy: categoryy,
                                                         uniquefileName:
-                                                            filename,
-                                                        limits: limits)
-                                                    : uniquenumber = DateTime
-                                                            .now()
-                                                        .millisecondsSinceEpoch
-                                                        .toString();
-                                                dialogShowing(ctx: context);
-                                                await FirebaseStorage.instance
-                                                    .ref()
-                                                    .child('TournamentImages')
-                                                    .child(uniquenumber!)
-                                                    .putFile(
-                                                        File(obj.imageLink));
-                                                urlImage = await FirebaseStorage
-                                                    .instance
-                                                    .ref()
-                                                    .child('TournamentImages')
-                                                    .child(uniquenumber!)
-                                                    .getDownloadURL();
-                                                try {
-                                                  DatabaseFunctions
-                                                      .deleteFiletournament(
-                                                          unique: filename);
-                                                  DatabaseFunctions.edittournament1(
-                                                      document1: docs.id,
-                                                      image: urlImage,
-                                                      tournamentNameController:
-                                                          tournamentNameController,
-                                                      dateController:
-                                                          dateController,
-                                                      placeController:
-                                                          placeController,
-                                                      categoryy: categoryy,
-                                                      uniquefileName:
-                                                          uniquenumber,
-                                                      limits: limits);
+                                                            uniquenumber,
+                                                        limits: limits);
 
-                                                  tournamentNameController
-                                                      .clear();
-                                                  obj.imageLink = '';
-                                                  dateController.clear();
+                                                    tournamentNameController
+                                                        .clear();
+                                                    obj.imageLink = '';
+                                                    dateController.clear();
+                                                    // ignore: use_build_context_synchronously
+                                                    navigatorPOP(context);
+                                                    log('Data edited sucessfully ');
+                                                    // ignore: use_build_context_synchronously
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      //updateSucessSnackbar(),
+                                                      SnackbarDecoraction()
+                                                          .kSnakbar(
+                                                        text:
+                                                            'Update data Successfully ',
+                                                        col: Colors.green[300],
+                                                      ),
+                                                    );
+                                                  } catch (e) {
+                                                    log('gott error $e');
+                                                    navigatorPOP(context);
+                                                  }
                                                   // ignore: use_build_context_synchronously
                                                   navigatorPOP(context);
-                                                  dataSucessSnackbar();
-                                                  // ignore: use_build_context_synchronously
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    //updateSucessSnackbar(),
-                                                    SnackbarDecoraction()
-                                                        .kSnakbar(
-                                                      text:
-                                                          'Update data Successfully ',
-                                                      col: Colors.green[300],
-                                                    ),
-                                                  );
-                                                } catch (e) {
-                                                  log('gott error');
                                                 }
-                                                // ignore: use_build_context_synchronously
-                                                navigatorPOP(context);
                                               },
                                               child: const Text('Save')),
                                         ],

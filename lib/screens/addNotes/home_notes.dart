@@ -9,6 +9,7 @@ import 'package:tournament_creator/screens/addNotes/view_notes.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 
 // ignore: must_be_immutable
 class AddNotes extends StatefulWidget {
@@ -24,7 +25,6 @@ class _AddNotesState extends State<AddNotes> {
   Box databox = Hive.box(hivekey);
   // Future<void> createNote(Map<String, dynamic> newNote) async {}
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,16 +35,17 @@ class _AddNotesState extends State<AddNotes> {
           child: FloatingActionButton(
               backgroundColor: Colors.teal,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CreateNotes())).then((value) {
-                      if(value==true){
-                        setState(() {
-                          databox;
-                        });
-                      }
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CreateNotes()))
+                    .then((value) {
+                  if (value == true) {
+                    setState(() {
+                      databox;
                     });
-                    
-                    
+                  }
+                });
               },
               child: const Icon(Icons.add)),
         ),
@@ -55,9 +56,9 @@ class _AddNotesState extends State<AddNotes> {
                   style: fontW17(),
                 ),
               )
-            : GridView.builder( 
+            : GridView.builder(
                 itemCount: databox.length,
-                gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2),
                 itemBuilder: ((context, index) {
                   String key = databox.keyAt(index).toString();
@@ -133,9 +134,7 @@ class _AddNotesState extends State<AddNotes> {
                     ),
                   );
                 }),
-              )
-        
-        );
+              ));
   }
 
   editbuttonClick(String key, Notes? notes) {
@@ -178,6 +177,10 @@ class _AddNotesState extends State<AddNotes> {
                   key,
                   titleController.text,
                   contentController.text,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackbarDecoraction().kSnakbar(
+                      text: 'Update Data Successfully', col: Colors.green[200]),
                 );
               },
               child: const Text('Save')),

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,8 +10,6 @@ import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
-import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
-// import 'package:tournament_creator/screens/select_tournament/first_page.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_players.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/add_team.dart';
@@ -289,7 +288,7 @@ class _TeamscreenState extends State<Teamscreen> {
                                               navigatorPOP(context);
                                               obj.imageLink = '';
 
-                                              dataSucessSnackbar();
+                                              log('Data edited sucessfully ');
                                               // ignore: use_build_context_synchronously
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
