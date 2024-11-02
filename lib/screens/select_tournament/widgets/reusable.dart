@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 
 tabtext(text) {
   return Tab(
@@ -98,12 +99,14 @@ alertdialog2(
                   } catch (e) {
                     print('Error is $e');
                   }
-
+                  navigatorPOP(ctx);
                   // ignore: use_build_context_synchronously
-                  scaffoldmessenger(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackbarDecoraction().kSnakbar(
+                          text: 'Delete Data Successfully',
+                          col: Colors.green[300]));
                   // navigatorPOP(context);
                   // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
                 },
                 child: const Text('Yes'),
               ),
@@ -111,7 +114,7 @@ alertdialog2(
                   onPressed: () {
                     Navigator.pop(context);
                     // navigatorPOP(context);
-                    print('doc2 is ${doc2}');
+                    print('doc2 is $doc2');
                   },
                   child: const Text('No'))
             ]);

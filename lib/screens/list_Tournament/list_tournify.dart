@@ -272,7 +272,7 @@ class _TournmentListState extends State<TournmentList> {
                                                       limits: limits);     
                                                       
                                                        navigatorPOP(context);
-                                                      dialogShowing(ctx: context);
+                                                     // dialogShowing(ctx: context);
                                                        
                                                     log('Data edited sucessfully ');
                                                     // ignore: use_build_context_synchronously

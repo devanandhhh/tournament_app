@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_creator/auth/components/my_list_tile.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
@@ -159,13 +160,13 @@ class _MyDrawerState extends State<MyDrawer> {
             icon: Icons.security ,
             text: 'A B O U T ',
             onTap: () {
-              navigatorPush(ctx: context, screen: AboutScreen());
+              navigatorPush(ctx: context, screen: const AboutScreen());
             }),
         MyListTile(
             icon: Icons.privacy_tip ,
             text:  'P R I V A C Y   P O L I C Y',
             onTap: () {
-              navigatorPush(ctx: context, screen: PrivacyAndPolicy());
+              navigatorPush(ctx: context, screen: const PrivacyAndPolicy());
             }),
        
         MyListTile(
@@ -177,11 +178,11 @@ class _MyDrawerState extends State<MyDrawer> {
           },
         ),
         const SizedBox(
-          height: 210,
+          height: 170,
         ),
         const Padding(
-          padding: EdgeInsets.all(18.0),
-          child: Divider(),
+          padding: EdgeInsets.only(left: 20,right: 20,bottom: 10),
+          child: Divider(), 
         ),
         Row(
           children: [
@@ -195,9 +196,11 @@ class _MyDrawerState extends State<MyDrawer> {
           ],
         ),
         const Padding(
-          padding: EdgeInsets.all(18.0),
+          padding: EdgeInsets.only(left: 20,right: 20,top: 10),
           child: Divider(),
-        )
+        ),
+        sizedbox30(),
+        Center(child: Text('Version 1.03',style: GoogleFonts.aBeeZee(fontSize: 20,color: Colors.white),)) 
       ]),
     );
   }

@@ -20,7 +20,7 @@ class _ThirdFixtureState extends State<ThirdFixture> {
   bool? isValue;
   @override
   void initState() {
-    flagFunction1();
+  //  flagFunction1();
 
     print(isValue);
     super.initState();

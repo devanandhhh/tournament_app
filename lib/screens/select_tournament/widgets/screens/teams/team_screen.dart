@@ -233,43 +233,11 @@ class _TeamscreenState extends State<Teamscreen> {
                                           child: const Text('Cancel')),
                                       TextButton(
                                           onPressed: () async {
-                                            obj.imageLink.isEmpty
-                                                ? DatabaseFunctions.editteam1(
-                                                    document1: widget.doc1,
-                                                    document2: doc2,
-                                                    teamImage: teamImage,
-                                                    teamNameController:
-                                                        teamNameController,
-                                                    managerNameController:
-                                                        managerNameController,
-                                                    phoneNumberController:
-                                                        phoneNumberController,
-                                                    placeController:
-                                                        placeController,
-                                                    uniquenumber: fileName)
-                                                : dialogShowing(ctx: context);
-                                            uniquenumber = DateTime.now()
-                                                .millisecondsSinceEpoch
-                                                .toString();
-                                            await FirebaseStorage.instance
-                                                .ref()
-                                                .child('TeamImages')
-                                                .child(uniquenumber!)
-                                                .putFile(File(obj.imageLink));
-                                            imageurl = await FirebaseStorage
-                                                .instance
-                                                .ref()
-                                                .child('TeamImages')
-                                                .child(uniquenumber!)
-                                                .getDownloadURL();
-
-                                            try {
-                                              DatabaseFunctions.deleteFileteam(
-                                                  fileName: fileName);
+                                            if (obj.imageLink.isEmpty) {
                                               DatabaseFunctions.editteam1(
                                                   document1: widget.doc1,
                                                   document2: doc2.id,
-                                                  teamImage: imageurl,
+                                                  teamImage: teamImage,
                                                   teamNameController:
                                                       teamNameController,
                                                   managerNameController:
@@ -278,39 +246,86 @@ class _TeamscreenState extends State<Teamscreen> {
                                                       phoneNumberController,
                                                   placeController:
                                                       placeController,
-                                                  uniquenumber: uniquenumber);
+                                                  uniquenumber: fileName);
+                                                  navigatorPOP(context);
 
-                                              teamNameController.clear();
-                                              managerNameController.clear();
-                                              phoneNumberController.clear();
-                                              placeController.clear();
-                                              // ignore: use_build_context_synchronously
-                                              navigatorPOP(context);
-                                              obj.imageLink = '';
-
-                                              log('Data edited sucessfully ');
-                                              // ignore: use_build_context_synchronously
+                                              //showing snakbar
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
-                                                      //updateSucessSnackbar()
                                                       SnackbarDecoraction()
                                                           .kSnakbar(
-                                                text:
-                                                    'Update Data Successfully',
-                                                col: Colors.green[300],
-                                              ));
-                                            } catch (e) {
-                                              print('gott error $e');
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackbarDecoraction().kSnakbar(
+                                                              text:
+                                                                  'Data Updated Successfully',
+                                                              col: Colors
+                                                                  .green[300]));
+                                            } else {
+                                              dialogShowing(ctx: context);
+                                              uniquenumber = DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                                  .toString();
+                                              await FirebaseStorage.instance
+                                                  .ref()
+                                                  .child('TeamImages')
+                                                  .child(uniquenumber!)
+                                                  .putFile(File(obj.imageLink));
+                                              imageurl = await FirebaseStorage
+                                                  .instance
+                                                  .ref()
+                                                  .child('TeamImages')
+                                                  .child(uniquenumber!)
+                                                  .getDownloadURL();
+
+                                              try {
+                                                DatabaseFunctions
+                                                    .deleteFileteam(
+                                                        fileName: fileName);
+                                                DatabaseFunctions.editteam1(
+                                                    document1: widget.doc1,
+                                                    document2: doc2.id,
+                                                    teamImage: imageurl,
+                                                    teamNameController:
+                                                        teamNameController,
+                                                    managerNameController:
+                                                        managerNameController,
+                                                    phoneNumberController:
+                                                        phoneNumberController,
+                                                    placeController:
+                                                        placeController,
+                                                    uniquenumber: uniquenumber);
+
+                                                teamNameController.clear();
+                                                managerNameController.clear();
+                                                phoneNumberController.clear();
+                                                placeController.clear();
+                                                // ignore: use_build_context_synchronously
+                                                navigatorPOP(context);
+                                                obj.imageLink = '';
+
+                                                log('Data edited sucessfully ');
+                                                // ignore: use_build_context_synchronously
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        //updateSucessSnackbar()
+                                                        SnackbarDecoraction()
+                                                            .kSnakbar(
                                                   text:
-                                                      'Please try again ,After some times',
-                                                  col: Colors.red[300],
-                                                ),
-                                              );
+                                                      'Update Data Successfully',
+                                                  col: Colors.green[300],
+                                                ));
+                                              } catch (e) {
+                                                print('gott error $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackbarDecoraction()
+                                                      .kSnakbar(
+                                                    text:
+                                                        'Please try again ,After some times',
+                                                    col: Colors.red[300],
+                                                  ),
+                                                );
+                                              }
+                                              navigatorPOP(context);
                                             }
-                                            navigatorPOP(context);
                                           },
                                           child: const Text('Save'))
                                     ],

@@ -44,24 +44,22 @@ class _AddTeamState extends State<AddTeam> {
       appBar: appbardecorations(name: 'Add Team'),
       backgroundColor: Colors.yellow[100],
       body: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.only(left: 18,right: 18),
         child: SingleChildScrollView(
           child: Column(children: [
             GestureDetector(
-              onTap: () async{
-               await obj.imagePicking();
-                setState(() {}); 
+              onTap: () async {
+                await obj.imagePicking();
+                setState(() {});
               },
-              child: CircleAvatar(backgroundColor: Colors.teal,
+              child: CircleAvatar(
+                backgroundColor: Colors.teal,
                 backgroundImage: obj.imageLink.isEmpty
                     ? Image.asset('assets/addimage.png').image
-                    : Image.file(File(obj.imageLink)).image, 
-             
+                    : Image.file(File(obj.imageLink)).image,
                 radius: 70,
-               
               ),
             ),
-           
             Form(
               key: formKey,
               child: Column(
@@ -95,7 +93,7 @@ class _AddTeamState extends State<AddTeam> {
               child: containerButtonCR(txt: 'Add Team'),
               onTap: () async {
                 if (formKey.currentState!.validate()) {
-                  if ( obj.imageLink.isEmpty) {
+                  if (obj.imageLink.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                       'You Must Select an Image',
@@ -111,13 +109,13 @@ class _AddTeamState extends State<AddTeam> {
                     int documentlength = querySnapshot.size;
                     int iteamCount1 = iteamCount(a: widget.limit);
                     print(' Document Length : $documentlength');
-                    if (obj.imageLink .isNotEmpty) {
+                    if (obj.imageLink.isNotEmpty) {
                       if (documentlength <= iteamCount1 - 1) {
                         //adding image
                         dialogShowing(ctx: context);
-                             uniquefileName =
-                        DateTime.now().microsecondsSinceEpoch.toString();
-                        
+                        uniquefileName =
+                            DateTime.now().microsecondsSinceEpoch.toString();
+
                         await FirebaseStorage.instance
                             .ref()
                             .child('TeamImages')
@@ -146,11 +144,14 @@ class _AddTeamState extends State<AddTeam> {
                         // seletedImage = null;
 
                         // ignore: use_build_context_synchronously
-                        scaffoldmessAdded(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackbarDecoraction().kSnakbar(
+                                text: 'Data Added Successfully',
+                                col: Colors.green[300]));
                         // setState(() {
                         //   image = null;
                         // });
-                        obj.imageLink=''; 
+                        obj.imageLink = '';
                         navigatorPOP(context);
                         navigatorPOP(context);
                       } else {
