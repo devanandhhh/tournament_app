@@ -1,4 +1,4 @@
-![Image Alt]([https://github.com/devanandhhh/Verbinden/blob/abe82f1bb68833816a5f907c0550049e6b63bfe3/Thumbnail.png](https://github.com/devanandhhh/tournament_app/blob/main/Hero%20page%202.png)
+![Image Alt]([https://github.com/devanandhhh/Verbinden/blob/abe82f1bb68833816a5f907c0550049e6b63bfe3/Thumbnail.png](https://github.com/devanandhhh/tournament_app/blob/main/Hero%20page%202.png))
 
 # Tournify - Football Tournament Management Application
 
