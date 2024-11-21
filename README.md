@@ -1,16 +1,9 @@
-# tournament_creator
+# Tournify - Football Tournament Management Application
 
-A new Flutter project.
+Tournify is a comprehensive football tournament management application designed to streamline the process of organizing and tracking tournaments. With its user-friendly interface, users can create tournaments, manage teams and players, and generate match fixtures effortlessly. The app ensures an engaging experience for both organizers and participants, while others can track tournament progress in real time..
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Key Features
+- Create Tournaments: Easily set up new tournaments with essential details.
+- Add Team and Player Details: Add team names and manage player rosters seamlessly.
+- Generate Fixtures: Automatically create match schedules based on tournament format.
+- Search Tournament Status: Allow others to search and view live updates of ongoing tournaments.
