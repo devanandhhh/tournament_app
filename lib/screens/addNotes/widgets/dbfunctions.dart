@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:tournament_creator/hive_model/notes.dart';
+import 'package:tournament_creator/database/hive_model/notes.dart';
 import 'package:tournament_creator/main.dart';
 
 void update(Notes note){

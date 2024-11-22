@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_creator/screens/home/home_screen.dart';
+import 'package:tournament_creator/auth/pages/auth_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,31 +18,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //   body: Container(
-      // decoration: const BoxDecoration(
-      //     image: DecorationImage(
-      //         image: AssetImage('assets/ronaldhino.jpg'), 
-      //         fit: BoxFit.cover)), )
-      // child:const Center(
-      //     child: Text(
-      //   'Tournament Creator',
-      //   style: TextStyle(
-      //     color: Colors.white,
-      //     fontSize: 20,
-      //   ),
-      // )),
-      //child: Text('Tournament Creator',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-   
-         backgroundColor: Colors.yellow[100],
-          body: Center(
-              child: Container(height: 100, width: 100,decoration: BoxDecoration(color: Colors.teal[400],borderRadius: BorderRadius.circular(5)),)),
-        );
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/appSplashSreen.png'),
+              fit: BoxFit.cover),
+        ),
+      ),
+    );
   }
 
   gotoHomescreen() async {
     await Future.delayed(const Duration(seconds: 3));
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (ctx) => const AuthPage()));
   }
 }

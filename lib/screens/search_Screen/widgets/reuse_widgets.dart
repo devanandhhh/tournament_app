@@ -1,11 +1,22 @@
+
+
 import 'package:flutter/material.dart';
 
-searchbarEditContainer({required String searchIteam}) {
-  return Container(
+class SearchBarEditWidget extends StatefulWidget {
+  const SearchBarEditWidget({super.key});
+
+  @override
+  State<SearchBarEditWidget> createState() => _SearchBarEditWidgetState();
+}
+
+class _SearchBarEditWidgetState extends State<SearchBarEditWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
     child: TextFormField(
       decoration: InputDecoration(
           border: OutlineInputBorder(borderSide: BorderSide.none),
-          hintText: searchIteam,
+          hintText: "Search item",
           prefixIcon: Icon(Icons.search)),
     ),
     height: 60,
@@ -14,4 +25,5 @@ searchbarEditContainer({required String searchIteam}) {
         color: Color.fromARGB(255, 216, 214, 198),
         borderRadius: BorderRadius.circular(48)),
   );
+  }
 }

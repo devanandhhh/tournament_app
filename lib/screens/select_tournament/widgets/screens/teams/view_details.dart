@@ -1,6 +1,6 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
 import 'package:tournament_creator/screens/view_details/reuse/reuse.dart';
 
@@ -32,16 +32,41 @@ class ViewTeamDetails extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
-            CircleAvatar(
-              radius: 105,
-              backgroundColor: Colors.teal,
-              child: ClipOval(
-                  child: Image.file(
-                File(imageview),
-                fit: BoxFit.cover,
-                width: 200,
-                height: 200,
-              )),
+            InstaImageViewer(
+              child: CircleAvatar(
+                radius: 105,
+                backgroundColor: Colors.teal,
+                child: ClipOval(
+                    child: Image.network(
+                  imageview,
+                    //-----------------------------
+                          //error builder
+                          errorBuilder: ((context, error, stackTrace) =>
+                              const Text('😢')),
+                          //loading builder
+                          loadingBuilder: (context, child, loadingProgress) {
+                            final totalBytes =
+                                loadingProgress?.expectedTotalBytes;
+                            final bytesLoaded =
+                                loadingProgress?.cumulativeBytesLoaded;
+                            if (totalBytes != null && bytesLoaded != null) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white70,
+                                  value: bytesLoaded / totalBytes,
+                                  color: Colors.teal[900],
+                                  strokeWidth: 5.0,
+                                ),
+                              );
+                            } else {
+                              return child;
+                            }},
+                            //----------------------------
+                  fit: BoxFit.cover,
+                  width: 200,
+                  height: 200,
+                )),
+              ),
             ),
             Text(
               'Team Name ',

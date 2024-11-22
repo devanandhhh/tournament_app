@@ -1,25 +1,28 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tournament_creator/database/dbfuntions.dart';
+import 'package:tournament_creator/database/firebase_model/dbfuntions.dart';
+import 'package:tournament_creator/screens/other/sample.dart';
 import 'package:tournament_creator/screens/addNotes/widgets/refactoring.dart';
 import 'package:tournament_creator/screens/create_tounament/reuse_widgets/reuse_widgets.dart';
-import 'package:tournament_creator/screens/home/reuse_widgets/refactoring.dart';
+import 'package:tournament_creator/screens/home_Screen/reuse_widgets/refactoring.dart';
 import 'package:tournament_creator/screens/list_Tournament/widgets/reuse.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/reusable.dart';
 import 'package:tournament_creator/screens/select_tournament/widgets/screens/teams/view_player_details.dart';
 
 // ignore: must_be_immutable
 class Addplayers extends StatefulWidget {
-  Addplayers({super.key, required this.title, this.doc1, this.doc2});
+  Addplayers(
+      {super.key, required this.title, this.doc1, this.doc2, this.uniqueId});
   String title;
 // ignore: prefer_typing_uninitialized_variables
   var doc1;
 // ignore: prefer_typing_uninitialized_variables
   var doc2;
-  
+  String? uniqueId;
   @override
   State<Addplayers> createState() => _AddplayersState();
 }
@@ -30,8 +33,13 @@ class _AddplayersState extends State<Addplayers> {
   TextEditingController playerAgeController = TextEditingController();
   String? playerImage;
   String? playerID;
-    String? seletedImage;
-
+  String? seletedImage;
+  String? selectedId;
+  String? idProof;
+  String? uniquenumber1;
+  String? uniquenumber2;
+  String? urlImage1;
+  String? urlImage2;
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +58,22 @@ class _AddplayersState extends State<Addplayers> {
                   children: [
                     InkWell(
                       onTap: () async {
-                        String? pickPlayerImage = await pickImageFromGallery();
-                        setState(() {
-                          playerImage = pickPlayerImage;
-                        });
+                        await obj.imagePicking();
+                        setState(() {});
                       },
                       child: Container(
                         height: 170,
                         width: 150,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: FileImage(File(playerImage ?? "")),
+                                image: obj.imageLink.isNotEmpty
+                                    ? FileImage(File(obj.imageLink))
+                                    : Image.asset('assets/person1.jpg').image,
+                                //FileImage(File(playerImage ?? "")),
                                 fit: BoxFit.cover),
                             color: Colors.green[100],
                             borderRadius: BorderRadius.circular(10)),
-                        child: const Center(child: Icon(Icons.add_a_photo)),
+                        //  child: const Center(child: Icon(Icons.add_a_photo)),
                       ),
                     ),
                     Column(
@@ -83,9 +92,12 @@ class _AddplayersState extends State<Addplayers> {
                                 color: Colors.green[100],
                                 borderRadius: BorderRadius.circular(10)),
                             child: TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
                                 controller: playerNameController,
-                                validator: (value) =>
-                                    value!.isEmpty ? 'Name is Required' : null,
+                                validator: (value) => value!.trim().isEmpty
+                                    ? 'Name is Required'
+                                    : null,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
@@ -106,12 +118,12 @@ class _AddplayersState extends State<Addplayers> {
                               onTap: () async {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
-                                    initialDate: DateTime.now(),
+                                    //   initialDate: DateTime.now(),
                                     firstDate: DateTime(1999),
-                                    lastDate: DateTime(2100));
+                                    lastDate: DateTime.now());
                                 if (pickedDate != null) {
-                                  final formatDate =
-                                   DateFormat.yMMMMd('en_US').format(pickedDate);
+                                  final formatDate = DateFormat.yMMMMd('en_US')
+                                      .format(pickedDate);
                                   //  DateFormat('dd-MM-yyyy')
                                   //     .format(pickedDate);
                                   setState(() {
@@ -139,56 +151,115 @@ class _AddplayersState extends State<Addplayers> {
                 sizedbox10(),
                 InkWell(
                   onTap: () async {
-                    String? idProof = await pickImageFromGallery();
-                    setState(() {
-                      playerID = idProof;
-                    });
+                    await obj2.imagePicking2();
+                    setState(() {});
+                    // idProof = await imageFromGallery();
+                    // setState(() {});
+                    // setState(() {
+                    //   playerID = idProof;
+                    // });
                   },
                   child: Container(
                     height: 180,
                     width: 370,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: FileImage(File(playerID ?? '')),
-                            fit: BoxFit.cover),
+                            image: obj2.imagelink2.isNotEmpty
+                                ? FileImage(File(obj2.imagelink2))
+                                : Image.asset('assets/documentmodel.jpg').image,
+                            // FileImage(File(playerID ?? '')),
+                            fit: BoxFit.fill),
                         color: Colors.green[100],
                         borderRadius: BorderRadius.circular(10)),
-                    child: const Center(child: Icon(Icons.add_card)),
+                    //child: const Center(child: Icon(Icons.add_card)),
                   ),
                 ),
                 sizedbox10(),
                 sizedbox10(),
                 InkWell(
                   onTap: () async {
-                    if (formKey.currentState!.validate()) {
-                      if (playerImage != null || playerID != null) {
-                        await FirebaseFirestore.instance
-                            .collection('tournament_details')
-                            .doc(widget.doc1)
-                            .collection('team_details')
-                            .doc(widget.doc2)
-                            .collection('player_details')
-                            .add({
-                          'PlayerPhoto': playerImage,
-                          'PlayerName': playerNameController.text,
-                          'DateOfBirth': playerAgeController.text,
-                          'PlayerId': playerID
-                        });
-                        playerAgeController.clear();
-                        playerNameController.clear();
-                        setState(() {
-                          playerImage = null;
-                          playerID = null;
-                        });
-                        // ignore: use_build_context_synchronously
-                        scaffoldmessAdded(context);
-                      } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Photos is reqired'),
-                          backgroundColor: Colors.red,
-                        ));
+                    int count = await getPlayerCount(widget.doc2);
+                    if (count <= 12) {
+                      if (formKey.currentState!.validate()) {
+                        if (obj.imageLink.isNotEmpty &&
+                            obj2.imagelink2.isNotEmpty) {
+                          dialogShowing(ctx: context);
+
+                          uniquenumber1 =
+                              DateTime.now().millisecondsSinceEpoch.toString();
+
+                          await FirebaseStorage.instance
+                              .ref()
+                              .child('PlayerProfile')
+                              .child(uniquenumber1!)
+                              .putFile(File(obj.imageLink));
+                          urlImage1 = await FirebaseStorage.instance
+                              .ref()
+                              .child('PlayerProfile')
+                              .child(uniquenumber1!)
+                              .getDownloadURL();
+
+                          uniquenumber2 =
+                              DateTime.now().millisecondsSinceEpoch.toString();
+
+                          await FirebaseStorage.instance
+                              .ref()
+                              .child('PlayerDoc')
+                              .child(uniquenumber2!)
+                              .putFile(File(obj2.imagelink2));
+                          urlImage2 = await FirebaseStorage.instance
+                              .ref()
+                              .child('PlayerDoc')
+                              .child(uniquenumber2!)
+                              .getDownloadURL();
+
+                          DatabaseFunctions.addplayer1(
+                              playerImage: urlImage1,
+                              playerNameController: playerNameController,
+                              playerAgeController: playerAgeController,
+                              playerID: urlImage2,
+                              document1: widget.doc1,
+                              document2: widget.doc2,
+                              uniquenumber1: uniquenumber1,
+                              uniquenumber2: uniquenumber2);
+                          playerAgeController.clear();
+                          playerNameController.clear();
+                          setState(() {
+                            // playerImage = null;
+                            // playerID = null;
+                            obj.imageLink = '';
+                            // idProof = null;
+                            obj2.imagelink2 = '';
+                          });
+
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackbarDecoraction().kSnakbar(
+                                  text: 'Delete Added Successfully',
+                                  col: Colors.green[300]));
+                          navigatorPOP(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                const Text('Player photo &proof is reqired'),
+                            backgroundColor: Colors.red[400],
+                          ));
+                        }
                       }
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('You can Only add 13 Players in a Team'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  navigatorPOP(context);
+                                },
+                                child: const Text('OK'))
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -208,11 +279,8 @@ class _AddplayersState extends State<Addplayers> {
                 sizedbox10(),
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('tournament_details')
-                      .doc(widget.doc1)
-                      .collection('team_details')
-                      .doc(widget.doc2)
-                      .collection('player_details')
+                      .collection('players')
+                      .where('teamID', isEqualTo: widget.doc2)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -227,7 +295,9 @@ class _AddplayersState extends State<Addplayers> {
                           String playerphoto = doc3['PlayerPhoto'] ?? '';
                           String playerName = doc3['PlayerName'];
                           String dateOfBirth = doc3['DateOfBirth'];
-                          String playerid = doc3['PlayerId'];
+                          String playerid = doc3['PlayerId'] ?? '';
+                          String filename1 = doc3['uniqueFileName1'];
+                          String filename2 = doc3['uniqueFileName2'];
 
                           TextEditingController playerNameEditController =
                               TextEditingController(text: playerName);
@@ -236,14 +306,14 @@ class _AddplayersState extends State<Addplayers> {
 
                           return ListTile(
                             onTap: () {
-                               navigatorPush(
-                                          ctx: context,
-                                          screen: View_player_details(
-                                              teamName: widget.title,
-                                              playerphoto: playerphoto,
-                                              playerName: playerName,
-                                              playerDoB: dateOfBirth,
-                                              playerProff: playerid));
+                              navigatorPush(
+                                  ctx: context,
+                                  screen: View_player_details(
+                                      teamName: widget.title,
+                                      playerphoto: playerphoto,
+                                      playerName: playerName,
+                                      playerDoB: dateOfBirth,
+                                      playerProff: playerid));
                             },
                             tileColor: Colors.amber[100],
                             shape: RoundedRectangleBorder(
@@ -252,8 +322,31 @@ class _AddplayersState extends State<Addplayers> {
                               radius: 20,
                               backgroundColor: Colors.teal,
                               child: ClipOval(
-                                  child: Image.file(
-                                File(playerphoto),
+                                  child: Image.network(
+                                playerphoto,
+                                //error builder
+                                errorBuilder: ((context, error, stackTrace) =>
+                                    const Text('😢')),
+                                //loading builder
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  final totalBytes =
+                                      loadingProgress?.expectedTotalBytes;
+                                  final bytesLoaded =
+                                      loadingProgress?.cumulativeBytesLoaded;
+                                  if (totalBytes != null &&
+                                      bytesLoaded != null) {
+                                    return CircularProgressIndicator(
+                                      backgroundColor: Colors.white70,
+                                      value: bytesLoaded / totalBytes,
+                                      color: Colors.teal[900],
+                                      strokeWidth: 5.0,
+                                    );
+                                  } else {
+                                    return child;
+                                  }
+                                },
+
                                 fit: BoxFit.cover,
                                 height: 35,
                                 width: 35,
@@ -290,23 +383,24 @@ class _AddplayersState extends State<Addplayers> {
                                                 builder: (context, setState) {
                                                   return SingleChildScrollView(
                                                     child: Column(children: [
-                                                      CircleAvatar(
-                                                        backgroundImage:
-                                                            FileImage(File(
-                                                                playerphoto)),
-                                                        radius: 70,
-                                                        child: InkWell(
-                                                          onTap: () async {
-                                                            String?
-                                                                editdetails =
-                                                                await pickImageFromGallery();
-                                                            setState(
-                                                              () {
-                                                                playerphoto =
-                                                                    editdetails!;
-                                                              },
-                                                            );
-                                                          },
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          await obj
+                                                              .imagePicking();
+                                                          setState(
+                                                            () {},
+                                                          );
+                                                        },
+                                                        child: CircleAvatar(
+                                                          backgroundImage: obj
+                                                                  .imageLink
+                                                                  .isEmpty
+                                                              ? Image.network(
+                                                                      playerphoto)
+                                                                  .image
+                                                              : FileImage(File(
+                                                                  obj.imageLink)),
+                                                          radius: 70,
                                                         ),
                                                       ),
                                                       sizedbox10(),
@@ -321,16 +415,11 @@ class _AddplayersState extends State<Addplayers> {
                                                                     'Player Name'),
                                                       ),
                                                       sizedbox10(),
-                                                      DatePickerForAge(controller: playerAgeEditController, labeltxt: 'Date Of Birth'),
-                                                      // TextFormField(
-                                                      //   controller:
-                                                      //       playerAgeEditController,
-                                                      //   decoration: const InputDecoration(
-                                                      //       border:
-                                                      //           OutlineInputBorder(),
-                                                      //       labelText:
-                                                      //           'Date of birth'),
-                                                      // ),
+                                                      DatePickerForAge(
+                                                          controller:
+                                                              playerAgeEditController,
+                                                          labeltxt:
+                                                              'Date Of Birth'),
                                                       sizedbox10(),
                                                       Column(
                                                         crossAxisAlignment:
@@ -340,33 +429,29 @@ class _AddplayersState extends State<Addplayers> {
                                                           const Text(
                                                               'Player proof'),
                                                           sizedbox10(),
-                                                          SizedBox(
+                                                          Container(
                                                             width: 300,
                                                             height: 200,
+                                                            decoration: BoxDecoration(
+                                                                image: DecorationImage(
+                                                                    image: obj2
+                                                                            .imagelink2
+                                                                            .isEmpty
+                                                                        ? Image.network(playerid)
+                                                                            .image
+                                                                        : FileImage(
+                                                                            File(obj2.imagelink2)))),
                                                             child:
                                                                 GestureDetector(
                                                               onTap: () async {
-                                                                String?
-                                                                    editproof =
-                                                                    await pickImageFromGallery();
+                                                                await obj2
+                                                                    .imagePicking2();
                                                                 setState(
-                                                                  () {
-                                                                    playerid =
-                                                                        editproof!;
-                                                                  },
+                                                                  () {},
                                                                 );
                                                               },
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                child: Image
-                                                                    .file(File(
-                                                                        playerid)),
-                                                              ),
                                                             ),
-                                                          )
+                                                          ),
                                                         ],
                                                       )
                                                     ]),
@@ -377,29 +462,224 @@ class _AddplayersState extends State<Addplayers> {
                                                 TextButton(
                                                     onPressed: () {
                                                       navigatorPOP(context);
-                                                      setState(() {
-                                                      seletedImage=playerphoto;
-                                                      });
 
+                                                      obj.imageLink = '';
+                                                      obj2.imagelink2 = '';
                                                     },
                                                     child:
-                                                        const Text('Cancel')),                                       
+                                                        const Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
-                                                      await DatabaseFunctions.editPlayer(
-                                                          document1:
-                                                              widget.doc1,
-                                                          document2:
-                                                              widget.doc2,
-                                                          document3ID: doc3.id,
-                                                          playerphoto:
-                                                              playerphoto,
-                                                          playerNameEditController:
-                                                              playerNameEditController,
-                                                          playerAgeEditController:
-                                                              playerAgeEditController,
-                                                          playerid: playerid,
+                                                      dialogShowing(
                                                           ctx: context);
+                                                      // uniquenumber = DateTime.now().millisecondsSinceEpoch.toString();
+                                                      if (obj.imageLink
+                                                              .isEmpty &&
+                                                          obj2.imagelink2
+                                                              .isEmpty) {
+                                                        DatabaseFunctions.editplayer1(
+                                                            document3: doc3.id,
+                                                            playerphoto:
+                                                                playerphoto,
+                                                            playerNameEditController:
+                                                                playerNameEditController,
+                                                            playerAgeEditController:
+                                                                playerAgeEditController,
+                                                            playerid: playerid,
+                                                            uniquenumber1:
+                                                                filename1,
+                                                            uniquenumber2:
+                                                                filename2);
+                                                      } else if (obj.imageLink
+                                                              .isNotEmpty &&
+                                                          obj2.imagelink2
+                                                              .isEmpty) {
+                                                        await DatabaseFunctions
+                                                            .deleteFile(
+                                                                fileName:
+                                                                    filename1,
+                                                                foldername:
+                                                                    'PlayerProfile');
+                                                        uniquenumber1 = DateTime
+                                                                .now()
+                                                            .millisecondsSinceEpoch
+                                                            .toString();
+                                                        await FirebaseStorage
+                                                            .instance
+                                                            .ref()
+                                                            .child(
+                                                                'PlayerProfile')
+                                                            .child(
+                                                                uniquenumber1!)
+                                                            .putFile(File(
+                                                                obj.imageLink));
+                                                        urlImage1 = await FirebaseStorage
+                                                            .instance
+                                                            .ref()
+                                                            .child(
+                                                                'PlayerProfile')
+                                                            .child(
+                                                                uniquenumber1!)
+                                                            .getDownloadURL();
+                                                        DatabaseFunctions.editplayer1(
+                                                            document3: doc3.id,
+                                                            playerphoto:
+                                                                urlImage1,
+                                                            playerNameEditController:
+                                                                playerNameEditController,
+                                                            playerAgeEditController:
+                                                                playerAgeEditController,
+                                                            playerid: playerid,
+                                                            uniquenumber1:
+                                                                uniquenumber1,
+                                                            uniquenumber2:
+                                                                filename2);
+                                                      } else if (obj.imageLink
+                                                              .isEmpty &&
+                                                          obj2.imagelink2
+                                                              .isNotEmpty) {
+                                                        await DatabaseFunctions
+                                                            .deleteFile(
+                                                                fileName:
+                                                                    filename2,
+                                                                foldername:
+                                                                    'PlayerDoc');
+                                                        uniquenumber2 = DateTime
+                                                                .now()
+                                                            .millisecondsSinceEpoch
+                                                            .toString();
+                                                        await FirebaseStorage
+                                                            .instance
+                                                            .ref()
+                                                            .child('PlayerDoc')
+                                                            .child(
+                                                                uniquenumber2!)
+                                                            .putFile(File(obj2
+                                                                .imagelink2));
+                                                        urlImage2 =
+                                                            await FirebaseStorage
+                                                                .instance
+                                                                .ref()
+                                                                .child(
+                                                                    'PlayerDoc')
+                                                                .child(
+                                                                    uniquenumber2!)
+                                                                .getDownloadURL();
+                                                        DatabaseFunctions.editplayer1(
+                                                            document3: doc3.id,
+                                                            playerphoto:
+                                                                playerphoto,
+                                                            playerNameEditController:
+                                                                playerNameEditController,
+                                                            playerAgeEditController:
+                                                                playerAgeEditController,
+                                                            playerid: urlImage2,
+                                                            uniquenumber1:
+                                                                filename1,
+                                                            uniquenumber2:
+                                                                uniquenumber2);
+                                                      } else if (obj.imageLink
+                                                              .isNotEmpty &&
+                                                          obj2.imagelink2
+                                                              .isNotEmpty) {
+                                                        try {
+                                                          await DatabaseFunctions
+                                                              .deleteFile(
+                                                                  fileName:
+                                                                      filename1,
+                                                                  foldername:
+                                                                      'PlayerProfile');
+                                                          await DatabaseFunctions
+                                                              .deleteFile(
+                                                                  fileName:
+                                                                      filename2,
+                                                                  foldername:
+                                                                      'PlayerDoc');
+                                                          uniquenumber1 = DateTime
+                                                                  .now()
+                                                              .millisecondsSinceEpoch
+                                                              .toString();
+
+                                                          uniquenumber2 = DateTime
+                                                                  .now()
+                                                              .millisecondsSinceEpoch
+                                                              .toString();
+
+                                                          await FirebaseStorage
+                                                              .instance
+                                                              .ref()
+                                                              .child(
+                                                                  'PlayerProfile')
+                                                              .child(
+                                                                  uniquenumber1!)
+                                                              .putFile(File(obj
+                                                                  .imageLink));
+                                                          urlImage1 = await FirebaseStorage
+                                                              .instance
+                                                              .ref()
+                                                              .child(
+                                                                  'PlayerProfile')
+                                                              .child(
+                                                                  uniquenumber1!)
+                                                              .getDownloadURL();
+                                                          await FirebaseStorage
+                                                              .instance
+                                                              .ref()
+                                                              .child(
+                                                                  'PlayerDoc')
+                                                              .child(
+                                                                  uniquenumber2!)
+                                                              .putFile(File(obj2
+                                                                  .imagelink2));
+                                                          urlImage2 = await FirebaseStorage
+                                                              .instance
+                                                              .ref()
+                                                              .child(
+                                                                  'PlayerDoc')
+                                                              .child(
+                                                                  uniquenumber2!)
+                                                              .getDownloadURL();
+                                                          DatabaseFunctions.editplayer1(
+                                                              document3:
+                                                                  doc3.id,
+                                                              playerphoto:
+                                                                  urlImage1,
+                                                              playerNameEditController:
+                                                                  playerNameEditController,
+                                                              playerAgeEditController:
+                                                                  playerAgeEditController,
+                                                              playerid:
+                                                                  urlImage2,
+                                                              uniquenumber1:
+                                                                  uniquenumber1,
+                                                              uniquenumber2:
+                                                                  uniquenumber2);
+                                                        } catch (e) {
+                                                          print(e);
+                                                        }
+                                                      }
+
+                                                      playerNameEditController
+                                                          .clear();
+                                                      playerAgeEditController
+                                                          .clear();
+                                                      obj.imageLink = '';
+                                                      obj2.imagelink2 = '';
+                                                      // ignore: use_build_context_synchronously
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              //updateSucessSnackbar()
+                                                              SnackbarDecoraction().kSnakbar(
+                                                                  text:
+                                                                      'Updata Data Successfully',
+                                                                  col: Colors
+                                                                          .green[
+                                                                      300]));
+
+                                                      // ignore: use_build_context_synchronously
+                                                      navigatorPOP(context);
+                                                      navigatorPOP(context);
                                                     },
                                                     child: const Text('Save'))
                                               ],
@@ -423,19 +703,45 @@ class _AddplayersState extends State<Addplayers> {
                                                     onPressed: () {
                                                       navigatorPOP(context);
                                                     },
-                                                    child: Text('Cancel')),
+                                                    child:
+                                                        const Text('Cancel')),
                                                 TextButton(
                                                     onPressed: () async {
-                                                      await DatabaseFunctions
-                                                          .deletePlayer(
-                                                              document1:
-                                                                  widget.doc1,
-                                                              document2:
-                                                                  widget.doc2,
-                                                              documentID:
-                                                                  doc3.id,
-                                                              ctx: context);
-                                                    
+                                                      print('here');
+                                                      try {
+                                                        DatabaseFunctions
+                                                            .deleteFile(
+                                                                fileName:
+                                                                    filename1,
+                                                                foldername:
+                                                                    'PlayerProfile');
+                                                        DatabaseFunctions
+                                                            .deleteFile(
+                                                                fileName:
+                                                                    filename2,
+                                                                foldername:
+                                                                    'PlayerDoc');
+                                                      } catch (e) {
+                                                        print(
+                                                            ' error    $e error on delete player');
+                                                      }
+                                                      print('skip');
+
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection('players')
+                                                          .doc(doc3.id)
+                                                          .delete();
+                                                      navigatorPOP(context);
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackbarDecoraction()
+                                                              .kSnakbar(
+                                                                  text:
+                                                                      'Delete Data Successfully',
+                                                                  col: Colors
+                                                                          .green[
+                                                                      300]));
                                                     },
                                                     child: const Text('Ok'))
                                               ],
